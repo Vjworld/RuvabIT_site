@@ -1,0 +1,31 @@
+# Robots.txt for Ruvab IT - ruvabit.com
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Allow Google AdSense crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+# Allow Google Analytics crawler
+User-agent: Google-Analytics
+Allow: /
+
+# Allow Google AdSense crawler
+User-agent: AdsBot-Google
+Allow: /
+
+# Allow Google AdSense mobile crawler
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+# Sitemap location
+Sitemap: https://ruvabit.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
