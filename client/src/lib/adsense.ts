@@ -4,6 +4,14 @@ declare global {
   }
 }
 
+// Track initialization globally to prevent duplicates across hot reloads
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+    __adSenseInitialized?: boolean;
+  }
+}
+
 export const initAdSense = () => {
   const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-4204204667108655';
 
@@ -12,10 +20,28 @@ export const initAdSense = () => {
     return;
   }
 
+  // Prevent duplicate initialization using window property
+  if (window.__adSenseInitialized) {
+    return;
+  }
+
   // Initialize AdSense if not already loaded
   if (!window.adsbygoogle) {
     window.adsbygoogle = [];
-    
+  }
+  
+  // Add AdSense verification meta tag
+  const existingMeta = document.querySelector('meta[name="google-adsense-account"]');
+  if (!existingMeta) {
+    const metaTag = document.createElement('meta');
+    metaTag.name = 'google-adsense-account';
+    metaTag.content = clientId;
+    document.head.appendChild(metaTag);
+  }
+  
+  // Check if script is already loaded
+  const existingScript = document.querySelector(`script[src*="adsbygoogle.js"]`);
+  if (!existingScript) {
     // Add AdSense script to the head
     const script = document.createElement('script');
     script.async = true;
@@ -28,17 +54,10 @@ export const initAdSense = () => {
     };
     
     document.head.appendChild(script);
-    
-    // Initialize auto ads
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: clientId,
-        enable_page_level_ads: true
-      });
-    } catch (error) {
-      console.error('Error initializing AdSense:', error);
-    }
   }
+  
+  // Mark as initialized to prevent duplicate script loading
+  window.__adSenseInitialized = true;
 };
 
 export const pushAd = (adConfig?: any) => {
