@@ -7,4 +7,4 @@ Allow: /
 User-agent: Mediapartners-Google
 Allow: /
 
-Sitemap: https://ruvabit.com/sitemap.xml
+Sitemap: https://ruvab.it/sitemap.xml
