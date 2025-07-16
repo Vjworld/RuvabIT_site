@@ -30,33 +30,25 @@ export const initAdSense = () => {
     window.adsbygoogle = [];
   }
   
-  // Add AdSense verification meta tag
-  const existingMeta = document.querySelector('meta[name="google-adsense-account"]');
-  if (!existingMeta) {
-    const metaTag = document.createElement('meta');
-    metaTag.name = 'google-adsense-account';
-    metaTag.content = clientId;
-    document.head.appendChild(metaTag);
+  // AdSense script and meta tag are now in HTML
+  // Check if we already have page-level ads configuration
+  const hasPageLevelAds = window.adsbygoogle && Array.isArray(window.adsbygoogle) && window.adsbygoogle.some((item: any) => 
+    item && typeof item === 'object' && item.enable_page_level_ads === true
+  );
+  
+  // Only initialize page-level ads if not already done
+  if (!hasPageLevelAds) {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: clientId,
+        enable_page_level_ads: true
+      });
+    } catch (error) {
+      console.error('Error initializing AdSense page-level ads:', error);
+    }
   }
   
-  // Check if script is already loaded
-  const existingScript = document.querySelector(`script[src*="adsbygoogle.js"]`);
-  if (!existingScript) {
-    // Add AdSense script to the head
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
-    script.crossOrigin = 'anonymous';
-    
-    // Add error handling
-    script.onerror = () => {
-      console.error('Failed to load AdSense script');
-    };
-    
-    document.head.appendChild(script);
-  }
-  
-  // Mark as initialized to prevent duplicate script loading
+  // Mark as initialized to prevent duplicate initialization
   window.__adSenseInitialized = true;
 };
 

@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
+import { initAdSense } from "./lib/adsense";
 
 import Home from "@/pages/Home";
 import Privacy from "@/pages/Privacy";
@@ -39,6 +40,11 @@ function App() {
 
     if (!import.meta.env.VITE_ADSENSE_CLIENT_ID) {
       console.warn('Missing required AdSense key: VITE_ADSENSE_CLIENT_ID');
+    } else {
+      // Only initialize AdSense in production or when explicitly needed
+      if (import.meta.env.NODE_ENV === 'production' || import.meta.env.VITE_ADSENSE_CLIENT_ID !== 'ca-pub-4204204667108655') {
+        initAdSense();
+      }
     }
   }, []);
 
