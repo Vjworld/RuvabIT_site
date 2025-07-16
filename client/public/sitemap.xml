@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ruvab.it/</loc>
+    <loc>https://ruvab.it.com/</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ruvab.it/privacy</loc>
+    <loc>https://ruvab.it.com/privacy</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ruvab.it/terms</loc>
+    <loc>https://ruvab.it.com/terms</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
