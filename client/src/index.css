@@ -155,3 +155,77 @@ html {
     line-height: 1.1;
   }
 }
+
+/* ReactQuill editor styling */
+.ql-editor {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 200px;
+}
+
+.ql-toolbar {
+  border-top: 1px solid hsl(var(--border));
+  border-left: 1px solid hsl(var(--border));
+  border-right: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+
+.ql-container {
+  border-left: 1px solid hsl(var(--border));
+  border-right: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+
+.dark .ql-editor {
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.dark .ql-container {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-picker {
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-toolbar .ql-picker-options {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+}
+
+.dark .ql-toolbar .ql-picker-item:hover {
+  background: hsl(var(--accent));
+}
+
+.dark .ql-snow .ql-tooltip {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-snow .ql-tooltip input {
+  background: hsl(var(--input));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+.dark .ql-snow .ql-tooltip a {
+  color: hsl(var(--primary));
+}

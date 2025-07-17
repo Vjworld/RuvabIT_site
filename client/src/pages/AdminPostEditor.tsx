@@ -14,6 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AlertCircle, ArrowLeft, Save, Eye } from 'lucide-react';
 import { BlogPost, InsertBlogPost, UpdateBlogPost } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface AdminPostEditorProps {
   isEditing?: boolean;
@@ -39,6 +41,34 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
   const [error, setError] = useState('');
   const [tagInput, setTagInput] = useState('');
 
+  // ReactQuill configuration
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['link', 'image', 'video'],
+      ['clean']
+    ],
+  };
+
+  const quillFormats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video',
+    'align', 'color', 'background',
+    'script', 'code-block'
+  ];
+
   const { data: post, isLoading: isLoadingPost } = useQuery<BlogPost>({
     queryKey: [`/api/admin/posts/${postId}`],
     enabled: isEditing && !!postId,
@@ -63,15 +93,9 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
   const saveMutation = useMutation({
     mutationFn: async (data: InsertBlogPost | UpdateBlogPost) => {
       if (isEditing && postId) {
-        return await apiRequest(`/api/admin/posts/${postId}`, {
-          method: 'PUT',
-          body: JSON.stringify(data),
-        });
+        return await apiRequest('PUT', `/api/admin/posts/${postId}`, data);
       } else {
-        return await apiRequest('/api/admin/posts', {
-          method: 'POST',
-          body: JSON.stringify(data),
-        });
+        return await apiRequest('POST', '/api/admin/posts', data);
       }
     },
     onSuccess: () => {
@@ -222,14 +246,17 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
 
                 <div className="space-y-2">
                   <Label htmlFor="content">Content *</Label>
-                  <Textarea
-                    id="content"
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    placeholder="Write your blog post content here..."
-                    rows={12}
-                    required
-                  />
+                  <div className="bg-white dark:bg-gray-800 rounded-md border">
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.content || ''}
+                      onChange={(content) => setFormData({ ...formData, content })}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      placeholder="Write your blog post content here..."
+                      style={{ height: '300px', marginBottom: '42px' }}
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
