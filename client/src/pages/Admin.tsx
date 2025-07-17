@@ -11,7 +11,7 @@ import { BlogPost } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 
 export default function Admin() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -22,9 +22,7 @@ export default function Admin() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/admin/posts/${id}`, {
-        method: 'DELETE',
-      });
+      await apiRequest('DELETE', `/api/admin/posts/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/posts'] });
@@ -83,10 +81,12 @@ export default function Admin() {
                 New Post
               </Button>
             </Link>
-            <Button variant="outline" onClick={logout} className="flex items-center gap-2">
-              <LogOut className="w-4 h-4" />
-              Logout
-            </Button>
+            <Link href="/logout">
+              <Button variant="outline" className="flex items-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
+            </Link>
           </div>
         </div>
 

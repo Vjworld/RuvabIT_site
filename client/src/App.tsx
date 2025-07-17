@@ -29,6 +29,7 @@ import BlogPage from "@/pages/BlogPage";
 import BlogPost from "@/pages/BlogPost";
 import BlogPostDetail from "@/pages/BlogPostDetail";
 import Login from "@/pages/Login";
+import Logout from "@/pages/Logout";
 import Admin from "@/pages/Admin";
 import AdminPostEditor from "@/pages/AdminPostEditor";
 import CaseStudies from "@/pages/CaseStudies";
@@ -75,6 +76,7 @@ function Router() {
       
       {/* Admin Pages */}
       <Route path="/login" component={Login} />
+      <Route path="/logout" component={Logout} />
       <Route path="/admin" component={Admin} />
       <Route path="/admin-dashboard" component={Admin} />
       <Route path="/admin/posts/new" component={() => <AdminPostEditor />} />

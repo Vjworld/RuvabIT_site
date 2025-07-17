@@ -130,9 +130,24 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
       slug,
       tags,
       authorId: user?.id || 1,
+      publishedAt: formData.isPublished ? new Date().toISOString() : null,
     };
 
     saveMutation.mutate(postData);
+  };
+
+  // Auto-generate slug from title
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    setFormData({ ...formData, title });
+    
+    // Auto-generate slug if not manually set
+    if (!formData.slug || formData.slug === '') {
+      const autoSlug = title.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      setFormData(prev => ({ ...prev, title, slug: autoSlug }));
+    }
   };
 
   const categories = [
@@ -216,7 +231,7 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={handleTitleChange}
                       placeholder="Enter post title"
                       required
                     />

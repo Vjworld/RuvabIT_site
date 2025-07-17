@@ -80,7 +80,7 @@ export class MemStorage implements IStorage {
     const post: BlogPost = {
       ...insertPost,
       id,
-      publishedAt: now,
+      publishedAt: insertPost.isPublished ? now : now, // Always set publishedAt for sorting
       updatedAt: now,
       tags: insertPost.tags || [],
       isPublished: insertPost.isPublished || false,
@@ -97,6 +97,10 @@ export class MemStorage implements IStorage {
       ...existingPost,
       ...updatePost,
       updatedAt: new Date(),
+      // Update publishedAt only if status changed to published
+      publishedAt: updatePost.isPublished && !existingPost.isPublished 
+        ? new Date() 
+        : existingPost.publishedAt,
     };
     this.blogPosts.set(id, updatedPost);
     return updatedPost;
