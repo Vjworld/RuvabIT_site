@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Calendar, User, ArrowRight, Tag } from "lucide-react";
+import { Search, Calendar, User, ArrowRight, Tag, Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { blogPosts, categories } from "@/data/blogPosts";
+import { BlogPost } from "@shared/schema";
 
 const BlogPage = () => {
   const [location] = useLocation();
@@ -16,6 +17,12 @@ const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  const { data: blogPosts = [], isLoading, error } = useQuery<BlogPost[]>({
+    queryKey: ['/api/blog/posts'],
+  });
+
+  const categories = ["All", "Technology", "AI & Machine Learning", "Business Intelligence", "Automation", "Data Analytics", "Digital Transformation", "Cybersecurity", "Cloud Computing", "Software Development", "Industry News"];
+
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -24,6 +31,38 @@ const BlogPage = () => {
       selectedCategory === "All" || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const formatDate = (date: string | Date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <p className="text-red-600">Failed to load blog posts. Please try again later.</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,54 +126,55 @@ const BlogPage = () => {
       </section>
 
       {/* Featured Post */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-8 lg:p-12">
-                <div className="flex items-center mb-4">
-                  <Tag className="h-5 w-5 text-blue-600 mr-2" />
-                  <span className="text-blue-600 font-medium">
-                    Featured Article
-                  </span>
+      {blogPosts.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="p-8 lg:p-12">
+                  <div className="flex items-center mb-4">
+                    <Tag className="h-5 w-5 text-blue-600 mr-2" />
+                    <span className="text-blue-600 font-medium">
+                      Featured Article
+                    </span>
+                  </div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    {blogPosts[0].title}
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                    {blogPosts[0].excerpt}
+                  </p>
+                  <div className="flex items-center mb-6 text-sm text-gray-500">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    <span className="mr-4">{formatDate(blogPosts[0].publishedAt)}</span>
+                    <span>{blogPosts[0].category}</span>
+                  </div>
+                  <Link
+                    to={`/blog/${blogPosts[0].slug}`}
+                    className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                  >
+                    Read Article
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
                 </div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                  {blogPosts[0].title}
-                </h2>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  {blogPosts[0].excerpt}
-                </p>
-                <div className="flex items-center mb-6 text-sm text-gray-500">
-                  <User className="h-4 w-4 mr-1" />
-                  <span className="mr-4">{blogPosts[0].author}</span>
-                  <Calendar className="h-4 w-4 mr-1" />
-                  <span className="mr-4">{blogPosts[0].date}</span>
-                  <span>{blogPosts[0].readTime}</span>
-                </div>
-                <Link
-                  to={`/blog/${blogPosts[0].slug}`}
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                >
-                  Read Article
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </div>
-              <div className="relative">
-                <img
-                  src={blogPosts[0].image}
-                  alt={blogPosts[0].title}
-                  className="w-full h-64 lg:h-full object-cover"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
-                    {blogPosts[0].category}
-                  </span>
+                <div className="relative">
+                  <div className="w-full h-64 lg:h-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                    <div className="text-white text-center">
+                      <Tag className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                      <p className="text-lg font-medium">{blogPosts[0].category}</p>
+                    </div>
+                  </div>
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
+                      {blogPosts[0].category}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Blog Posts Grid */}
       <section className="py-16 bg-white">
@@ -157,11 +197,12 @@ const BlogPage = () => {
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
                 <div className="relative">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-48 object-cover"
-                  />
+                  <div className="w-full h-48 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                    <div className="text-white text-center">
+                      <Tag className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm font-medium">{post.category}</p>
+                    </div>
+                  </div>
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
                       {post.category}
@@ -176,11 +217,9 @@ const BlogPage = () => {
                     {post.excerpt}
                   </p>
                   <div className="flex items-center text-sm text-gray-500 mb-4">
-                    <User className="h-4 w-4 mr-1" />
-                    <span className="mr-4">{post.author}</span>
                     <Calendar className="h-4 w-4 mr-1" />
-                    <span className="mr-4">{post.date}</span>
-                    <span>{post.readTime}</span>
+                    <span className="mr-4">{formatDate(post.publishedAt)}</span>
+                    <span>{post.tags.length > 0 ? post.tags.join(', ') : post.category}</span>
                   </div>
                   <Link
                     to={`/blog/${post.slug}`}

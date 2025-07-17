@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initAdSense } from "./lib/adsense";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 import Home from "@/pages/Home";
 import Privacy from "@/pages/Privacy";
@@ -25,6 +26,10 @@ import CareersPage from "@/pages/CareersPage";
 import CookiePolicy from "@/pages/CookiePolicy";
 import BlogPage from "@/pages/BlogPage";
 import BlogPost from "@/pages/BlogPost";
+import BlogPostDetail from "@/pages/BlogPostDetail";
+import Login from "@/pages/Login";
+import Admin from "@/pages/Admin";
+import AdminPostEditor from "@/pages/AdminPostEditor";
 import CaseStudies from "@/pages/CaseStudies";
 import HelpCenter from "@/pages/HelpCenter";
 import Documentation from "@/pages/Documentation";
@@ -62,7 +67,13 @@ function Router() {
       
       {/* Content Pages */}
       <Route path="/blog" component={BlogPage} />
-      <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/blog/:slug" component={BlogPostDetail} />
+      
+      {/* Admin Pages */}
+      <Route path="/login" component={Login} />
+      <Route path="/admin" component={Admin} />
+      <Route path="/admin/posts/new" component={() => <AdminPostEditor />} />
+      <Route path="/admin/posts/:id/edit" component={() => <AdminPostEditor isEditing={true} />} />
       <Route path="/case-studies" component={CaseStudies} />
       <Route path="/careers" component={CareersPage} />
       
@@ -119,9 +130,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
-          <Router />
-          <Toaster />
-          <CookieBanner />
+          <AuthProvider>
+            <Router />
+            <Toaster />
+            <CookieBanner />
+          </AuthProvider>
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>

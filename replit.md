@@ -42,7 +42,8 @@ Preferred communication style: Simple, everyday language.
 - **Product Showcase**: Trend Solver and LangScribe product presentations
 - **Service Listings**: AI implementation, business intelligence, automation services
 - **Contact Forms**: Lead generation with form validation
-- **Blog Section**: Content marketing with categorized articles
+- **Blog Management**: Full admin system for creating, editing, and publishing blog posts
+- **Content Management**: Dynamic blog system with categorization and tagging
 
 ### SEO & Analytics
 - **Google Analytics**: Page view tracking and event analytics
@@ -58,11 +59,27 @@ Preferred communication style: Simple, everyday language.
 
 ### Database Schema
 ```typescript
-// Users table (basic setup)
+// Users table with admin support
 users: {
   id: serial (primary key)
   username: text (unique)
   password: text
+  isAdmin: boolean (default: false)
+}
+
+// Blog posts table
+blogPosts: {
+  id: serial (primary key)
+  title: text
+  slug: text (unique)
+  excerpt: text
+  content: text
+  category: text
+  tags: text[] (array)
+  publishedAt: timestamp
+  updatedAt: timestamp
+  isPublished: boolean (default: false)
+  authorId: integer (foreign key to users.id)
 }
 ```
 
