@@ -1,0 +1,456 @@
+import React, { useState } from "react";
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from "lucide-react";
+import { useToast } from "../hooks/useToast";
+import Toast from "../components/Toast";
+import {
+  trackContactFormSubmission,
+  trackFormSubmission,
+} from "../utils/analytics";
+
+const ContactPage = () => {
+  const { toasts, info } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Track form submission
+    trackContactFormSubmission(formData.subject || "general");
+    trackFormSubmission("contact_form", true);
+
+    // Handle form submission (implement your API call here)
+    console.log("Form submitted:", formData);
+
+    // Show success message (you can customize this)
+    info(
+      "Form Submitted",
+      "Thank you for your message. We'll get back to you within 24 hours.",
+      5000,
+    );
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLiveChatClick = () => {
+    info(
+      "Live Chat Currently Unavailable",
+      "Our support agents are currently assisting other customers. Please use the contact form below and we'll respond within 2 hours during business hours.",
+      8000,
+    );
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Toast Container */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        {toasts.map((toast) => (
+          <Toast key={toast.id} {...toast} />
+        ))}
+      </div>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Get in Touch
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto">
+              Ready to transform your business with our technology solutions?
+              We're here to help you succeed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form & Info */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Contact Form */}
+            <div className="bg-white p-8 rounded-2xl shadow-xl">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Send us a Message
+              </h2>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="company"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Your company name"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Subject *
+                  </label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    required
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="sales">Sales & Pricing</option>
+                    <option value="support">Technical Support</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="demo">Request Demo</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={6}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Tell us about your project or question..."
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                >
+                  <Send className="h-5 w-5 mr-2" />
+                  Send Message
+                </button>
+              </form>
+            </div>
+
+            {/* Contact Info */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                  Contact Information
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Get in touch with our team through any of these channels.
+                  We're here to help you achieve your technology goals.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      Headquarters
+                    </h3>
+                    <p className="text-gray-600">
+                      123 Technology Drive
+                      <br />
+                      San Francisco, CA 94105
+                      <br />
+                      United States
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      Phone Support
+                    </h3>
+                    <p className="text-gray-600">
+                      Sales: +1 (555) 123-4567
+                      <br />
+                      Support: +1 (555) 123-4568
+                      <br />
+                      Toll-free: 1-800-RUVAB-IT
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      Email
+                    </h3>
+                    <p className="text-gray-600">
+                      General: info@ruvabit.com
+                      <br />
+                      Sales: sales@ruvabit.com
+                      <br />
+                      Support: support@ruvabit.com
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Clock className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      Business Hours
+                    </h3>
+                    <p className="text-gray-600">
+                      Monday - Friday: 9:00 AM - 6:00 PM PST
+                      <br />
+                      Saturday: 10:00 AM - 4:00 PM PST
+                      <br />
+                      Sunday: Closed
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Live Chat */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border border-blue-200">
+                <div className="flex items-center mb-3">
+                  <MessageSquare className="h-6 w-6 text-blue-600 mr-2" />
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Live Chat Support
+                  </h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Need immediate assistance? Our live chat support is available
+                  during business hours.
+                </p>
+                <button
+                  onClick={handleLiveChatClick}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Start Live Chat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Office Locations */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Global Offices
+            </h2>
+            <p className="text-xl text-gray-600">
+              Find us around the world with local support and expertise
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                San Francisco
+              </h3>
+              <p className="text-gray-600 mb-3">
+                123 Technology Drive
+                <br />
+                San Francisco, CA 94105
+              </p>
+              <p className="text-sm text-blue-600">Headquarters</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                New York
+              </h3>
+              <p className="text-gray-600 mb-3">
+                456 Innovation Ave
+                <br />
+                New York, NY 10001
+              </p>
+              <p className="text-sm text-green-600">East Coast Office</p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                London
+              </h3>
+              <p className="text-gray-600 mb-3">
+                789 Tech Street
+                <br />
+                London, UK EC1A 1AA
+              </p>
+              <p className="text-sm text-purple-600">European Office</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-gray-600">
+              Quick answers to common questions about our services
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                How quickly can you respond to support requests?
+              </h3>
+              <p className="text-gray-600">
+                We typically respond to support requests within 2-4 hours during
+                business hours. Enterprise customers receive priority support
+                with response times under 1 hour.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Do you offer custom development services?
+              </h3>
+              <p className="text-gray-600">
+                Yes, we provide custom software development, AI implementation,
+                and technology consulting services tailored to your specific
+                business needs.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                What industries do you serve?
+              </h3>
+              <p className="text-gray-600">
+                We work with companies across various industries including
+                technology, healthcare, finance, e-commerce, manufacturing, and
+                professional services.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Can I schedule a demo of your products?
+              </h3>
+              <p className="text-gray-600">
+                Absolutely! Contact our sales team to schedule a personalized
+                demo of Trend Explorer, LangScribe, or any of our other
+                solutions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            Let's discuss how Ruvab IT can help transform your business with
+            innovative technology solutions.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors">
+              Schedule Free Consultation
+            </button>
+            <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors">
+              View Our Services
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default ContactPage;

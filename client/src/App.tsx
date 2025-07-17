@@ -13,6 +13,22 @@ import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import NotFound from "@/pages/not-found";
 import CookieBanner from "@/components/CookieBanner";
+import AIAnalytics from "@/pages/AIAnalytics";
+import ProcessAutomation from "@/pages/ProcessAutomation";
+import AIImplementation from "@/pages/AIImplementation";
+import BusinessIntelligence from "@/pages/BusinessIntelligence";
+import CloudSolutions from "@/pages/CloudSolutions";
+import Cybersecurity from "@/pages/Cybersecurity";
+import Consulting from "@/pages/Consulting";
+import CareersPage from "@/pages/CareersPage";
+import CookiePolicy from "@/pages/CookiePolicy";
+import BlogPage from "@/pages/BlogPage";
+import BlogPost from "@/pages/BlogPost";
+import CaseStudies from "@/pages/CaseStudies";
+import HelpCenter from "@/pages/HelpCenter";
+import Documentation from "@/pages/Documentation";
+import APIDocumentation from "@/pages/APIDocumentation";
+import DataSecurityPolicy from "@/pages/DataSecurityPolicy";
 
 function Router() {
   // Track page views when routes change
@@ -23,6 +39,31 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
+      
+      {/* Service Pages */}
+      <Route path="/ai-analytics" component={AIAnalytics} />
+      <Route path="/process-automation" component={ProcessAutomation} />
+      <Route path="/ai-implementation" component={AIImplementation} />
+      <Route path="/business-intelligence" component={BusinessIntelligence} />
+      <Route path="/cloud-solutions" component={CloudSolutions} />
+      <Route path="/cybersecurity" component={Cybersecurity} />
+      <Route path="/consulting" component={Consulting} />
+      
+      {/* Content Pages */}
+      <Route path="/blog" component={BlogPage} />
+      <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/case-studies" component={CaseStudies} />
+      <Route path="/careers" component={CareersPage} />
+      
+      {/* Support Pages */}
+      <Route path="/help" component={HelpCenter} />
+      <Route path="/documentation" component={Documentation} />
+      <Route path="/api-documentation" component={APIDocumentation} />
+      
+      {/* Policy Pages */}
+      <Route path="/cookie-policy" component={CookiePolicy} />
+      <Route path="/data-security" component={DataSecurityPolicy} />
+      
       <Route component={NotFound} />
     </Switch>
   );

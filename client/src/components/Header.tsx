@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function Header() {
+function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
 
@@ -95,3 +95,6 @@ export default function Header() {
     </header>
   );
 }
+
+export { Header };
+export default Header;

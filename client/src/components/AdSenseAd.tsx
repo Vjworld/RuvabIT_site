@@ -2,15 +2,15 @@ import { useEffect, useRef } from 'react';
 import { pushAd } from '@/lib/adsense';
 
 interface AdSenseAdProps {
-  adSlot: string;
+  adSlot?: string;
   adFormat?: 'auto' | 'rectangle' | 'vertical' | 'horizontal';
   adLayout?: 'in-article' | 'in-feed';
   className?: string;
   style?: React.CSSProperties;
 }
 
-export default function AdSenseAd({
-  adSlot,
+function AdSenseAd({
+  adSlot = "7834958237",
   adFormat = 'auto',
   adLayout,
   className = '',
@@ -82,3 +82,6 @@ export default function AdSenseAd({
     </div>
   );
 }
+
+export { AdSenseAd };
+export default AdSenseAd;
