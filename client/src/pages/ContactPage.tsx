@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from "lucide-react";
-import { useToast } from "../hooks/useToast";
-import Toast from "../components/Toast";
-import {
-  trackContactFormSubmission,
-  trackFormSubmission,
-} from "../utils/analytics";
+import { useToast } from "@/hooks/use-toast";
+
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const ContactPage = () => {
-  const { toasts, info } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,19 +24,14 @@ const ContactPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Track form submission
-    trackContactFormSubmission(formData.subject || "general");
-    trackFormSubmission("contact_form", true);
-
     // Handle form submission (implement your API call here)
     console.log("Form submitted:", formData);
 
-    // Show success message (you can customize this)
-    info(
-      "Form Submitted",
-      "Thank you for your message. We'll get back to you within 24 hours.",
-      5000,
-    );
+    // Show success message
+    toast({
+      title: "Form Submitted",
+      description: "Thank you for your message. We'll get back to you within 24 hours.",
+    });
   };
 
   const handleChange = (
@@ -47,21 +46,22 @@ const ContactPage = () => {
   };
 
   const handleLiveChatClick = () => {
-    info(
-      "Live Chat Currently Unavailable",
-      "Our support agents are currently assisting other customers. Please use the contact form below and we'll respond within 2 hours during business hours.",
-      8000,
-    );
+    toast({
+      title: "Live Chat Currently Unavailable",
+      description: "Our support agents are currently assisting other customers. Please use the contact form below and we'll respond within 2 hours during business hours.",
+    });
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Toast Container */}
-      <div className="fixed top-4 right-4 z-50 space-y-2">
-        {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} />
-        ))}
-      </div>
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Contact Us | Get in Touch with Ruvab IT</title>
+        <meta name="description" content="Contact Ruvab IT for technology solutions, AI services, and business consulting. Get expert support for your digital transformation needs." />
+        <meta name="keywords" content="contact, support, consulting, technology solutions, AI services, business intelligence" />
+        <link rel="canonical" href="https://ruvab.it.com/contact" />
+      </Helmet>
+
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20">
@@ -449,6 +449,8 @@ const ContactPage = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

@@ -7,27 +7,21 @@ import {
   CheckCircle,
   Clock,
 } from "lucide-react";
-import SEOHead from "../components/SEOHead";
-import { useSEO } from "../hooks/useSEO";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const CancellationRefundPolicy = () => {
-  useSEO({
-    title: "Cancellation & Refund Policy - Ruvab IT",
-    description:
-      "Learn about Ruvab IT's cancellation and refund policies for digital services, subscription plans, and custom development projects. Fair and transparent refund terms.",
-    keywords:
-      "cancellation policy, refund policy, subscription cancellation, money back guarantee, Ruvab IT refunds",
-    type: "website",
-  });
-
   return (
-    <div className="min-h-screen bg-white">
-      <SEOHead
-        title="Cancellation & Refund Policy - Ruvab IT"
-        description="Learn about Ruvab IT's cancellation and refund policies for digital services, subscription plans, and custom development projects. Fair and transparent refund terms."
-        keywords="cancellation policy, refund policy, subscription cancellation, money back guarantee, Ruvab IT refunds"
-        type="website"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Cancellation & Refund Policy - Ruvab IT</title>
+        <meta name="description" content="Learn about Ruvab IT's cancellation and refund policies for digital services, subscription plans, and custom development projects. Fair and transparent refund terms." />
+        <meta name="keywords" content="cancellation policy, refund policy, subscription cancellation, money back guarantee, Ruvab IT refunds" />
+        <link rel="canonical" href="https://ruvab.it.com/cancellation-refund-policy" />
+      </Helmet>
+
+      <Header />
 
       {/* Header */}
       <section className="bg-gray-50 py-12 border-b">
@@ -610,6 +604,7 @@ const CancellationRefundPolicy = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import { Link } from 'wouter';
+import { GoToTop } from './GoToTop';
 
 function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div>
             <h3 className="text-2xl font-bold mb-4">Ruvab IT</h3>
             <p className="text-gray-400 mb-4">
@@ -32,30 +33,40 @@ function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Products</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#products" className="hover:text-white transition-colors">Trend Solver</a></li>
-              <li><a href="#products" className="hover:text-white transition-colors">LangScribe</a></li>
-              <li><a href="#products" className="hover:text-white transition-colors">AI Analytics</a></li>
-              <li><a href="#products" className="hover:text-white transition-colors">Process Automation</a></li>
+              <li><Link href="/trend-solver"><span className="hover:text-white transition-colors cursor-pointer">Trend Solver</span></Link></li>
+              <li><Link href="/langscribe"><span className="hover:text-white transition-colors cursor-pointer">LangScribe</span></Link></li>
+              <li><Link href="/ai-analytics"><span className="hover:text-white transition-colors cursor-pointer">AI Analytics</span></Link></li>
+              <li><Link href="/process-automation"><span className="hover:text-white transition-colors cursor-pointer">Process Automation</span></Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#services" className="hover:text-white transition-colors">AI Implementation</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Business Intelligence</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Cloud Solutions</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Consulting</a></li>
+              <li><Link href="/ai-implementation"><span className="hover:text-white transition-colors cursor-pointer">AI Implementation</span></Link></li>
+              <li><Link href="/business-intelligence"><span className="hover:text-white transition-colors cursor-pointer">Business Intelligence</span></Link></li>
+              <li><Link href="/cloud-solutions"><span className="hover:text-white transition-colors cursor-pointer">Cloud Solutions</span></Link></li>
+              <li><Link href="/consulting"><span className="hover:text-white transition-colors cursor-pointer">Consulting</span></Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#blog" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#careers" className="hover:text-white transition-colors">Careers</a></li>
+              <li><Link href="/about"><span className="hover:text-white transition-colors cursor-pointer">About Us</span></Link></li>
+              <li><Link href="/blog"><span className="hover:text-white transition-colors cursor-pointer">Blog</span></Link></li>
+              <li><Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer">Contact</span></Link></li>
+              <li><Link href="/careers"><span className="hover:text-white transition-colors cursor-pointer">Careers</span></Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Support</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li><Link href="/help"><span className="hover:text-white transition-colors cursor-pointer">Help Center</span></Link></li>
+              <li><Link href="/documentation"><span className="hover:text-white transition-colors cursor-pointer">Documentation</span></Link></li>
+              <li><Link href="/api-documentation"><span className="hover:text-white transition-colors cursor-pointer">API Docs</span></Link></li>
+              <li><Link href="/case-studies"><span className="hover:text-white transition-colors cursor-pointer">Case Studies</span></Link></li>
             </ul>
           </div>
         </div>
@@ -72,11 +83,14 @@ function Footer() {
               <Link href="/terms">
                 <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Terms of Service</span>
               </Link>
-              <a href="#cookies" className="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
+              <Link href="/cookie-policy">
+                <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Cookie Policy</span>
+              </Link>
             </div>
           </div>
         </div>
       </div>
+      <GoToTop />
     </footer>
   );
 }

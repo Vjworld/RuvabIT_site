@@ -1,24 +1,20 @@
 import React from 'react';
 import { FileText, Globe, Zap, Users, CheckCircle, Star, Languages } from 'lucide-react';
-import SEOHead from '../components/SEOHead';
-import { useSEO } from '../hooks/useSEO';
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const LangScribe = () => {
-  useSEO({
-    title: 'LangScribe - AI Content Creation & Translation',
-    description: 'Transform your content creation with LangScribe\'s advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported.',
-    keywords: 'content creation, AI writing, translation, language processing, multilingual content, automated writing',
-    type: 'product'
-  });
-
   return (
-    <div className="min-h-screen">
-      <SEOHead
-        title="LangScribe - AI Content Creation & Translation"
-        description="Transform your content creation with LangScribe's advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported."
-        keywords="content creation, AI writing, translation, language processing, multilingual content, automated writing"
-        type="product"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>LangScribe - AI Content Creation & Translation | Ruvab IT</title>
+        <meta name="description" content="Transform your content creation with LangScribe's advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported." />
+        <meta name="keywords" content="content creation, AI writing, translation, language processing, multilingual content, automated writing" />
+        <link rel="canonical" href="https://ruvab.it.com/langscribe" />
+      </Helmet>
+      
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 text-white py-20">
@@ -355,6 +351,7 @@ const LangScribe = () => {
           </button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -1,67 +1,61 @@
 import React from "react";
 import {
-  FileText,
-  Globe,
+  TrendingUp,
+  BarChart3,
+  PieChart,
   Zap,
   Users,
   CheckCircle,
   Star,
-  Languages,
+  Globe,
 } from "lucide-react";
-import SEOHead from "../components/SEOHead";
-import { useSEO } from "../hooks/useSEO";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
-const LangScribe = () => {
-  useSEO({
-    title: "LangScribe - AI Content Creation & Translation",
-    description:
-      "Transform your content creation with LangScribe's advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported.",
-    keywords:
-      "content creation, AI writing, translation, language processing, multilingual content, automated writing",
-    type: "product",
-  });
-
+const TrendSolver = () => {
   return (
-    <div className="min-h-screen">
-      <SEOHead
-        title="LangScribe - AI Content Creation & Translation"
-        description="Transform your content creation with LangScribe's advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported."
-        keywords="content creation, AI writing, translation, language processing, multilingual content, automated writing"
-        type="product"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>TrendSolver - AI Analytics & Business Intelligence | Ruvab IT</title>
+        <meta name="description" content="Advanced AI-powered analytics and business intelligence platform. Get actionable insights from your data with TrendSolver's cutting-edge algorithms." />
+        <meta name="keywords" content="AI analytics, business intelligence, data analysis, predictive analytics, trend analysis, dashboard" />
+        <link rel="canonical" href="https://ruvab.it.com/trendsolver" />
+      </Helmet>
+      
+      <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 text-white py-20">
+      <section className="bg-gradient-to-br from-purple-900 via-purple-800 to-purple-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center mb-4">
-                <FileText className="h-12 w-12 text-green-300 mr-4" />
-                <h1 className="text-5xl font-bold">LangScribe</h1>
+                <TrendingUp className="h-12 w-12 text-purple-300 mr-4" />
+                <h1 className="text-5xl font-bold">TrendSolver</h1>
               </div>
-              <p className="text-2xl text-green-100 mb-8 leading-relaxed">
-                Transform your content creation with advanced language
-                processing, translation, and AI-powered writing assistance.
+              <p className="text-2xl text-purple-100 mb-8 leading-relaxed">
+                Advanced AI-powered analytics and business intelligence platform. Get actionable insights from your data with cutting-edge algorithms.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
                   onClick={() =>
-                    window.open("https://langscribe.ruvab.it.com", "_blank")
+                    window.open("https://trendsolver.ruvab.it.com", "_blank")
                   }
-                  className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
+                  className="bg-white text-purple-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-colors"
                 >
-                  Try Free Today
+                  Start Free Trial
                 </button>
-                <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-green-900 transition-colors">
+                <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-purple-900 transition-colors">
                   Watch Demo
                 </button>
               </div>
               <div className="flex items-center space-x-6">
                 <div className="flex items-center">
                   <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="ml-1 text-green-100">4.8/5 rating</span>
+                  <span className="ml-1 text-purple-100">4.9/5 rating</span>
                 </div>
-                <div className="text-green-100">50+ languages supported</div>
+                <div className="text-purple-100">Real-time analytics</div>
               </div>
             </div>
             <div className="relative">
@@ -401,27 +395,27 @@ const LangScribe = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-4">
-            Ready to Transform Your Content?
+            Ready to Transform Your Analytics?
           </h2>
-          <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
-            Join thousands of content creators using LangScribe to produce
-            high-quality content faster.
+          <p className="text-xl text-purple-100 mb-8 max-w-3xl mx-auto">
+            Join thousands of businesses using TrendSolver to make data-driven decisions and accelerate growth.
           </p>
           <button
             onClick={() =>
-              window.open("https://langscribe.ruvab.it.com", "_blank")
+              window.open("https://trendsolver.ruvab.it.com", "_blank")
             }
-            className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
+            className="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-colors"
           >
             Start Your Free 14-Day Trial
           </button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
 
-export default LangScribe;
+export default TrendSolver;

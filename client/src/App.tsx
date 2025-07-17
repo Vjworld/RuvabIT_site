@@ -29,6 +29,16 @@ import HelpCenter from "@/pages/HelpCenter";
 import Documentation from "@/pages/Documentation";
 import APIDocumentation from "@/pages/APIDocumentation";
 import DataSecurityPolicy from "@/pages/DataSecurityPolicy";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
+import ServicesPage from "@/pages/ServicesPage";
+import TrendSolver from "@/pages/TrendSolver";
+import LangScribe from "@/pages/LangScribe";
+import HelpDocumentation from "@/pages/HelpDocumentation";
+import ComingSoon from "@/pages/ComingSoon";
+import Disclaimer from "@/pages/Disclaimer";
+import CancellationRefundPolicy from "@/pages/CancellationRefundPolicy";
+import ShippingDeliveryPolicy from "@/pages/ShippingDeliveryPolicy";
 
 function Router() {
   // Track page views when routes change
@@ -60,9 +70,25 @@ function Router() {
       <Route path="/documentation" component={Documentation} />
       <Route path="/api-documentation" component={APIDocumentation} />
       
+      {/* Company Pages */}
+      <Route path="/about" component={AboutPage} />
+      <Route path="/contact" component={ContactPage} />
+      <Route path="/services" component={ServicesPage} />
+      
+      {/* Product Pages */}
+      <Route path="/trend-solver" component={TrendSolver} />
+      <Route path="/langscribe" component={LangScribe} />
+      
       {/* Policy Pages */}
       <Route path="/cookie-policy" component={CookiePolicy} />
       <Route path="/data-security" component={DataSecurityPolicy} />
+      <Route path="/disclaimer" component={Disclaimer} />
+      <Route path="/cancellation-refund" component={CancellationRefundPolicy} />
+      <Route path="/shipping-delivery" component={ShippingDeliveryPolicy} />
+      
+      {/* Additional Pages */}
+      <Route path="/help-documentation" component={HelpDocumentation} />
+      <Route path="/coming-soon" component={ComingSoon} />
       
       <Route component={NotFound} />
     </Switch>

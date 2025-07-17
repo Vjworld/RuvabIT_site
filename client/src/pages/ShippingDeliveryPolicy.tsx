@@ -7,27 +7,21 @@ import {
   CheckCircle,
   AlertTriangle,
 } from "lucide-react";
-import SEOHead from "../components/SEOHead";
-import { useSEO } from "../hooks/useSEO";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const ShippingDeliveryPolicy = () => {
-  useSEO({
-    title: "Shipping & Delivery Policy - Ruvab IT Digital Services",
-    description:
-      "Learn about Ruvab IT's digital service delivery, software deployment timelines, and support delivery policies. Instant access to digital products and services.",
-    keywords:
-      "shipping policy, delivery policy, digital services, software delivery, deployment timeline, Ruvab IT delivery",
-    type: "website",
-  });
-
   return (
-    <div className="min-h-screen bg-white">
-      <SEOHead
-        title="Shipping & Delivery Policy - Ruvab IT Digital Services"
-        description="Learn about Ruvab IT's digital service delivery, software deployment timelines, and support delivery policies. Instant access to digital products and services."
-        keywords="shipping policy, delivery policy, digital services, software delivery, deployment timeline, Ruvab IT delivery"
-        type="website"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Shipping & Delivery Policy - Ruvab IT Digital Services</title>
+        <meta name="description" content="Learn about Ruvab IT's digital service delivery, software deployment timelines, and support delivery policies. Instant access to digital products and services." />
+        <meta name="keywords" content="shipping policy, delivery policy, digital services, software delivery, deployment timeline, Ruvab IT delivery" />
+        <link rel="canonical" href="https://ruvab.it.com/shipping-delivery-policy" />
+      </Helmet>
+
+      <Header />
 
       {/* Header */}
       <section className="bg-gray-50 py-12 border-b">
@@ -541,6 +535,7 @@ const ShippingDeliveryPolicy = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

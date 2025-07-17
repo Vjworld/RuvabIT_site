@@ -1,26 +1,20 @@
 import React from "react";
 import { AlertTriangle, Info, Scale, FileText } from "lucide-react";
-import SEOHead from "../components/SEOHead";
-import { useSEO } from "../hooks/useSEO";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const Disclaimer = () => {
-  useSEO({
-    title: "Disclaimer - Ruvab IT Legal Information",
-    description:
-      "Important legal disclaimers and limitations of liability for Ruvab IT services, products, and website content. Read our terms and conditions.",
-    keywords:
-      "disclaimer, legal notice, liability limitations, terms conditions, Ruvab IT legal, warranty disclaimer",
-    type: "website",
-  });
-
   return (
-    <div className="min-h-screen bg-white">
-      <SEOHead
-        title="Disclaimer - Ruvab IT Legal Information"
-        description="Important legal disclaimers and limitations of liability for Ruvab IT services, products, and website content. Read our terms and conditions."
-        keywords="disclaimer, legal notice, liability limitations, terms conditions, Ruvab IT legal, warranty disclaimer"
-        type="website"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Disclaimer - Ruvab IT Legal Information</title>
+        <meta name="description" content="Important legal disclaimers and limitations of liability for Ruvab IT services, products, and website content. Read our terms and conditions." />
+        <meta name="keywords" content="disclaimer, legal notice, liability limitations, terms conditions, Ruvab IT legal, warranty disclaimer" />
+        <link rel="canonical" href="https://ruvab.it.com/disclaimer" />
+      </Helmet>
+
+      <Header />
 
       {/* Header */}
       <section className="bg-gray-50 py-12 border-b">
@@ -597,6 +591,7 @@ const Disclaimer = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

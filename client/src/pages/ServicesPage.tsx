@@ -9,10 +9,22 @@ import {
   CheckCircle,
   ArrowRight,
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const ServicesPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Our Services | Technology Solutions & AI Services | Ruvab IT</title>
+        <meta name="description" content="Comprehensive technology solutions including AI implementation, cloud services, cybersecurity, and business intelligence to transform your business." />
+        <meta name="keywords" content="technology services, AI implementation, cloud solutions, cybersecurity, business intelligence, consulting" />
+        <link rel="canonical" href="https://ruvab.it.com/services" />
+      </Helmet>
+
+      <Header />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -450,6 +462,7 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,11 +15,30 @@ function Header() {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Products', href: '/#products' },
-    { name: 'Services', href: '/#services' },
-    { name: 'About', href: '/#about' },
-    { name: 'Blog', href: '/#blog' },
-    { name: 'Contact', href: '/#contact' },
+    { 
+      name: 'Products', 
+      href: '/#products',
+      submenu: [
+        { name: 'Trend Solver', href: '/trend-solver' },
+        { name: 'LangScribe', href: '/langscribe' },
+      ]
+    },
+    { 
+      name: 'Services', 
+      href: '/services',
+      submenu: [
+        { name: 'AI Analytics', href: '/ai-analytics' },
+        { name: 'Process Automation', href: '/process-automation' },
+        { name: 'AI Implementation', href: '/ai-implementation' },
+        { name: 'Business Intelligence', href: '/business-intelligence' },
+        { name: 'Cloud Solutions', href: '/cloud-solutions' },
+        { name: 'Cybersecurity', href: '/cybersecurity' },
+        { name: 'Consulting', href: '/consulting' },
+      ]
+    },
+    { name: 'About', href: '/about' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const handleNavClick = (href: string) => {

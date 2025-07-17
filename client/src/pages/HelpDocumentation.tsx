@@ -10,21 +10,15 @@ import {
   Star,
   ExternalLink,
 } from "lucide-react";
-import SEOHead from "../components/SEOHead";
-import { useSEO } from "../hooks/useSEO";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const HelpDocumentation = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  useSEO({
-    title: "Help & Documentation - Ruvab IT Support Center",
-    description:
-      "Comprehensive help documentation, tutorials, and support resources for Ruvab IT products. Find answers to common questions and learn how to maximize your technology solutions.",
-    keywords:
-      "help documentation, support, tutorials, FAQ, user guides, technical support, Ruvab IT help",
-    type: "website",
-  });
+  // Remove useSEO call since we'll use Helmet directly
 
   const categories = [
     "All",
@@ -145,13 +139,15 @@ const HelpDocumentation = () => {
   });
 
   return (
-    <div className="min-h-screen">
-      <SEOHead
-        title="Help & Documentation - Ruvab IT Support Center"
-        description="Comprehensive help documentation, tutorials, and support resources for Ruvab IT products. Find answers to common questions and learn how to maximize your technology solutions."
-        keywords="help documentation, support, tutorials, FAQ, user guides, technical support, Ruvab IT help"
-        type="website"
-      />
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Help & Documentation - Ruvab IT Support Center</title>
+        <meta name="description" content="Comprehensive help documentation, tutorials, and support resources for Ruvab IT products. Find answers to common questions and learn how to maximize your technology solutions." />
+        <meta name="keywords" content="help documentation, support, tutorials, FAQ, user guides, technical support, Ruvab IT help" />
+        <link rel="canonical" href="https://ruvab.it.com/help-documentation" />
+      </Helmet>
+      
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20">
@@ -473,6 +469,7 @@ const HelpDocumentation = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
