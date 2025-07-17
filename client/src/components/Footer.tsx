@@ -86,6 +86,9 @@ function Footer() {
               <Link href="/cookie-policy">
                 <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Cookie Policy</span>
               </Link>
+              <Link href="/login">
+                <span className="text-gray-500 hover:text-gray-400 text-xs transition-colors cursor-pointer opacity-50">System</span>
+              </Link>
             </div>
           </div>
         </div>

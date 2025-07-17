@@ -79,7 +79,7 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
       if (isEditing) {
         queryClient.invalidateQueries({ queryKey: [`/api/admin/posts/${postId}`] });
       }
-      window.location.href = '/admin';
+      window.location.href = '/admin-dashboard';
     },
     onError: (error) => {
       setError(error.message || 'Failed to save post');
@@ -156,7 +156,7 @@ export default function AdminPostEditor({ isEditing = false }: AdminPostEditorPr
         <div className="flex items-center gap-4 mb-8">
           <Button
             variant="outline"
-            onClick={() => window.location.href = '/admin'}
+            onClick={() => window.location.href = '/admin-dashboard'}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />

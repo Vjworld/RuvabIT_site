@@ -23,7 +23,7 @@ export default function Login() {
     const success = await login(username, password);
     
     if (success) {
-      window.location.href = '/admin';
+      window.location.href = '/admin-dashboard';
     } else {
       setError('Invalid username or password');
     }

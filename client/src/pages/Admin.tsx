@@ -77,7 +77,7 @@ export default function Admin() {
             <p className="text-gray-600 dark:text-gray-400">Welcome, {user.username}</p>
           </div>
           <div className="flex gap-2">
-            <Link href="/admin/posts/new">
+            <Link href="/admin-dashboard/posts/new">
               <Button className="flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 New Post
@@ -170,7 +170,7 @@ export default function Admin() {
                               <Eye className="w-4 h-4" />
                             </Button>
                           </Link>
-                          <Link href={`/admin/posts/${post.id}/edit`}>
+                          <Link href={`/admin-dashboard/posts/${post.id}/edit`}>
                             <Button size="sm" variant="outline">
                               <Edit className="w-4 h-4" />
                             </Button>

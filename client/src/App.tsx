@@ -9,6 +9,7 @@ import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { initAdSense } from "./lib/adsense";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { useAdminAccess } from "./hooks/useAdminAccess";
 
 import Home from "@/pages/Home";
 import Privacy from "@/pages/Privacy";
@@ -50,6 +51,9 @@ function Router() {
   // Track page views when routes change
   useAnalytics();
   
+  // Enable keyboard shortcuts for admin access
+  useAdminAccess();
+  
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -72,8 +76,11 @@ function Router() {
       {/* Admin Pages */}
       <Route path="/login" component={Login} />
       <Route path="/admin" component={Admin} />
+      <Route path="/admin-dashboard" component={Admin} />
       <Route path="/admin/posts/new" component={() => <AdminPostEditor />} />
       <Route path="/admin/posts/:id/edit" component={() => <AdminPostEditor isEditing={true} />} />
+      <Route path="/admin-dashboard/posts/new" component={() => <AdminPostEditor />} />
+      <Route path="/admin-dashboard/posts/:id/edit" component={() => <AdminPostEditor isEditing={true} />} />
       <Route path="/case-studies" component={CaseStudies} />
       <Route path="/careers" component={CareersPage} />
       
