@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import { Search, Calendar, User, ArrowRight, Tag } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { blogPosts, categories } from "@/data/blogPosts";
 
 const BlogPage = () => {
-  const [searchParams] = useSearchParams();
-  const initialSearch = searchParams.get("search") || "";
+  const [location] = useLocation();
+  
+  // Extract search params from URL manually since wouter doesn't have useSearchParams
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialSearch = urlParams.get("search") || "";
 
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -20,7 +26,16 @@ const BlogPage = () => {
   });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Tech Insights & Analysis | Ruvab IT Blog</title>
+        <meta name="description" content="Stay ahead of the curve with expert insights on technology trends, best practices, and industry innovations from Ruvab IT." />
+        <meta name="keywords" content="technology blog, AI trends, tech insights, industry analysis, innovation, Ruvab IT articles" />
+        <link rel="canonical" href="https://ruvab.it.com/blog" />
+      </Helmet>
+
+      <Header />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -210,6 +225,7 @@ const BlogPage = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

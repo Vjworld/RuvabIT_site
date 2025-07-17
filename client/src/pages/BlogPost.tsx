@@ -1,27 +1,37 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'wouter';
 import { Calendar, User, Clock, ArrowLeft, Share2, ThumbsUp, MessageCircle } from 'lucide-react';
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { blogPosts } from "@/data/blogPosts";
 
 const BlogPost = () => {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = params.slug;
 
   const post = blogPosts.find((p) => p.slug === slug);
   
   if (!post) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Helmet>
+          <title>Post Not Found | Ruvab IT Blog</title>
+          <meta name="description" content="The blog post you're looking for doesn't exist." />
+        </Helmet>
+        <Header />
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Post Not Found</h1>
           <p className="text-gray-600 mb-6">The blog post you're looking for doesn't exist.</p>
           <Link 
-            to="/blog"
+            href="/blog"
             className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Blog
           </Link>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -30,7 +40,16 @@ const BlogPost = () => {
   const relatedPosts = blogPosts.filter(p => p.slug !== slug).slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>{post.title} | Ruvab IT Blog</title>
+        <meta name="description" content={post.excerpt} />
+        <meta name="keywords" content={`${post.category}, technology, AI, ${post.title}`} />
+        <link rel="canonical" href={`https://ruvab.it.com/blog/${post.slug}`} />
+      </Helmet>
+
+      <Header />
+
       {/* Breadcrumb Navigation */}
       <div className="bg-gray-50 py-4 border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -223,6 +242,7 @@ const BlogPost = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

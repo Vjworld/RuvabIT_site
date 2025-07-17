@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "wouter";
 import {
   Clock,
   Home,
@@ -9,16 +9,19 @@ import {
   Linkedin,
   Youtube,
 } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const ComingSoon = () => {
-  const navigate = useNavigate();
+  const [location, setLocation] = useLocation();
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          navigate("/");
+          setLocation("/");
           return 0;
         }
         return prev - 1;
@@ -26,14 +29,20 @@ const ComingSoon = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [setLocation]);
 
   const handleGoHome = () => {
-    navigate("/");
+    setLocation("/");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <Helmet>
+        <title>Coming Soon | Ruvab IT</title>
+        <meta name="description" content="This page is currently under development. We're working hard to bring you an amazing experience." />
+        <link rel="canonical" href="https://ruvab.it.com/coming-soon" />
+      </Helmet>
+      
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Icon */}
         <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -82,7 +91,7 @@ const ComingSoon = () => {
             Go to Homepage Now
           </button>
           <Link
-            to="/contact"
+            href="/contact"
             className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-600 hover:text-white transition-colors flex items-center justify-center"
           >
             Contact Us
@@ -138,7 +147,7 @@ const ComingSoon = () => {
           <p className="text-gray-500 text-sm">
             Want to be notified when this page is ready?{" "}
             <Link
-              to="/contact"
+              href="/contact"
               className="text-blue-600 hover:text-blue-700 underline"
             >
               Get in touch
