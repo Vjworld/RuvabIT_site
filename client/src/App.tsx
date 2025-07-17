@@ -36,7 +36,7 @@ import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
 import HelpDocumentation from "@/pages/HelpDocumentation";
-import ComingSoon from "@/pages/ComingSoon";
+
 import Disclaimer from "@/pages/Disclaimer";
 import CancellationRefundPolicy from "@/pages/CancellationRefundPolicy";
 import ShippingDeliveryPolicy from "@/pages/ShippingDeliveryPolicy";
@@ -89,7 +89,6 @@ function Router() {
       
       {/* Additional Pages */}
       <Route path="/help-documentation" component={HelpDocumentation} />
-      <Route path="/coming-soon" component={ComingSoon} />
       
       <Route component={NotFound} />
     </Switch>

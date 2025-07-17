@@ -2,22 +2,28 @@ import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Mail } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <Link href="/">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
-          
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
-          <p className="text-gray-600">Last updated: January 15, 2024</p>
-        </div>
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Privacy Policy | Data Protection & User Rights | Ruvab IT</title>
+        <meta name="description" content="Learn how Ruvab IT protects your privacy and personal data. Our comprehensive privacy policy covers data collection, usage, and your rights." />
+        <meta name="keywords" content="privacy policy, data protection, GDPR, user rights, data collection, personal information" />
+        <link rel="canonical" href="https://ruvab.it.com/privacy" />
+      </Helmet>
+
+      <Header />
+
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
+            <p className="text-gray-600">Last updated: January 17, 2025</p>
+          </div>
 
         <Card>
           <CardContent className="p-8">
@@ -90,14 +96,24 @@ export default function Privacy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Changes to This Policy</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Google AdSense and Advertising</h2>
+                <p className="text-gray-700 mb-4">
+                  This website uses Google AdSense to display advertisements. Google may use cookies to serve ads based on your visits to this and other websites. You can opt out of personalized advertising by visiting Google's Ads Settings or by visiting the Network Advertising Initiative opt-out page.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Third-party vendors, including Google, may show your ads on sites across the Internet. We and third-party vendors use first-party cookies and third-party cookies together to inform, optimize, and serve ads based on your past visits to our website.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Changes to This Policy</h2>
                 <p className="text-gray-700 mb-4">
                   We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Contact Us</h2>
                 <p className="text-gray-700 mb-4">
                   If you have any questions about this Privacy Policy, please contact us at:
                 </p>
@@ -111,7 +127,10 @@ export default function Privacy() {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

@@ -78,7 +78,10 @@ function AdSenseAd({
 
   return (
     <div ref={adRef} className="flex justify-center py-8">
-      <ins {...adProps} />
+      <div className="text-center">
+        <p className="text-xs text-gray-500 mb-2">Advertisement</p>
+        <ins {...adProps} />
+      </div>
     </div>
   );
 }
