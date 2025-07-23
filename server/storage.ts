@@ -1,9 +1,30 @@
-import { users, blogPosts, type User, type InsertUser, type BlogPost, type InsertBlogPost, type UpdateBlogPost } from "@shared/schema";
+import { 
+  users, 
+  blogPosts, 
+  pageContents, 
+  navigationItems, 
+  componentSettings,
+  type User, 
+  type InsertUser, 
+  type BlogPost, 
+  type InsertBlogPost, 
+  type UpdateBlogPost,
+  type PageContent,
+  type InsertPageContent,
+  type UpdatePageContent,
+  type NavigationItem,
+  type InsertNavigationItem,
+  type UpdateNavigationItem,
+  type ComponentSetting,
+  type InsertComponentSetting,
+  type UpdateComponentSetting
+} from "@shared/schema";
 
 // modify the interface with any CRUD methods
 // you might need
 
 export interface IStorage {
+  // User methods
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
@@ -15,19 +36,52 @@ export interface IStorage {
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
   updateBlogPost(id: number, post: UpdateBlogPost): Promise<BlogPost | undefined>;
   deleteBlogPost(id: number): Promise<boolean>;
+  
+  // Page content methods
+  getPageContents(): Promise<PageContent[]>;
+  getPageContent(pageKey: string): Promise<PageContent | undefined>;
+  createPageContent(content: InsertPageContent): Promise<PageContent>;
+  updatePageContent(pageKey: string, content: UpdatePageContent): Promise<PageContent | undefined>;
+  deletePageContent(pageKey: string): Promise<boolean>;
+  
+  // Navigation methods
+  getNavigationItems(): Promise<NavigationItem[]>;
+  getNavigationItem(id: number): Promise<NavigationItem | undefined>;
+  createNavigationItem(item: InsertNavigationItem): Promise<NavigationItem>;
+  updateNavigationItem(id: number, item: UpdateNavigationItem): Promise<NavigationItem | undefined>;
+  deleteNavigationItem(id: number): Promise<boolean>;
+  
+  // Component settings methods
+  getComponentSettings(): Promise<ComponentSetting[]>;
+  getComponentSetting(componentKey: string): Promise<ComponentSetting | undefined>;
+  createComponentSetting(setting: InsertComponentSetting): Promise<ComponentSetting>;
+  updateComponentSetting(componentKey: string, setting: UpdateComponentSetting): Promise<ComponentSetting | undefined>;
+  deleteComponentSetting(componentKey: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private blogPosts: Map<number, BlogPost>;
+  private pageContents: Map<string, PageContent>;
+  private navigationItems: Map<number, NavigationItem>;
+  private componentSettings: Map<string, ComponentSetting>;
   currentUserId: number;
   currentBlogPostId: number;
+  currentNavigationId: number;
+  currentPageContentId: number;
+  currentComponentSettingId: number;
 
   constructor() {
     this.users = new Map();
     this.blogPosts = new Map();
+    this.pageContents = new Map();
+    this.navigationItems = new Map();
+    this.componentSettings = new Map();
     this.currentUserId = 1;
     this.currentBlogPostId = 1;
+    this.currentNavigationId = 1;
+    this.currentPageContentId = 1;
+    this.currentComponentSettingId = 1;
     
     // Create default admin user
     this.createUser({
@@ -36,8 +90,11 @@ export class MemStorage implements IStorage {
     }).then(user => {
       this.users.set(user.id, { ...user, isAdmin: true });
       
-      // Create sample blog posts
+      // Create sample blog posts and CMS data
       this.createSamplePosts(user.id);
+      this.createDefaultPageContents(user.id);
+      this.createDefaultNavigation();
+      this.createDefaultComponentSettings(user.id);
     });
   }
 
@@ -108,6 +165,125 @@ export class MemStorage implements IStorage {
 
   async deleteBlogPost(id: number): Promise<boolean> {
     return this.blogPosts.delete(id);
+  }
+
+  // Page content methods
+  async getPageContents(): Promise<PageContent[]> {
+    return Array.from(this.pageContents.values());
+  }
+
+  async getPageContent(pageKey: string): Promise<PageContent | undefined> {
+    return this.pageContents.get(pageKey);
+  }
+
+  async createPageContent(insertContent: InsertPageContent): Promise<PageContent> {
+    const id = this.currentPageContentId++;
+    const now = new Date();
+    const content: PageContent = {
+      ...insertContent,
+      id,
+      updatedAt: now,
+      isActive: insertContent.isActive ?? true,
+    };
+    this.pageContents.set(insertContent.pageKey, content);
+    return content;
+  }
+
+  async updatePageContent(pageKey: string, updateContent: UpdatePageContent): Promise<PageContent | undefined> {
+    const existingContent = this.pageContents.get(pageKey);
+    if (!existingContent) return undefined;
+
+    const updatedContent: PageContent = {
+      ...existingContent,
+      ...updateContent,
+      updatedAt: new Date(),
+    };
+    this.pageContents.set(pageKey, updatedContent);
+    return updatedContent;
+  }
+
+  async deletePageContent(pageKey: string): Promise<boolean> {
+    return this.pageContents.delete(pageKey);
+  }
+
+  // Navigation methods
+  async getNavigationItems(): Promise<NavigationItem[]> {
+    return Array.from(this.navigationItems.values()).sort((a, b) => a.position - b.position);
+  }
+
+  async getNavigationItem(id: number): Promise<NavigationItem | undefined> {
+    return this.navigationItems.get(id);
+  }
+
+  async createNavigationItem(insertItem: InsertNavigationItem): Promise<NavigationItem> {
+    const id = this.currentNavigationId++;
+    const now = new Date();
+    const item: NavigationItem = {
+      ...insertItem,
+      id,
+      updatedAt: now,
+      parentId: insertItem.parentId ?? null,
+      position: insertItem.position ?? 0,
+      isVisible: insertItem.isVisible ?? true,
+    };
+    this.navigationItems.set(id, item);
+    return item;
+  }
+
+  async updateNavigationItem(id: number, updateItem: UpdateNavigationItem): Promise<NavigationItem | undefined> {
+    const existingItem = this.navigationItems.get(id);
+    if (!existingItem) return undefined;
+
+    const updatedItem: NavigationItem = {
+      ...existingItem,
+      ...updateItem,
+      updatedAt: new Date(),
+    };
+    this.navigationItems.set(id, updatedItem);
+    return updatedItem;
+  }
+
+  async deleteNavigationItem(id: number): Promise<boolean> {
+    return this.navigationItems.delete(id);
+  }
+
+  // Component settings methods
+  async getComponentSettings(): Promise<ComponentSetting[]> {
+    return Array.from(this.componentSettings.values());
+  }
+
+  async getComponentSetting(componentKey: string): Promise<ComponentSetting | undefined> {
+    return this.componentSettings.get(componentKey);
+  }
+
+  async createComponentSetting(insertSetting: InsertComponentSetting): Promise<ComponentSetting> {
+    const id = this.currentComponentSettingId++;
+    const now = new Date();
+    const setting: ComponentSetting = {
+      ...insertSetting,
+      id,
+      updatedAt: now,
+      isActive: insertSetting.isActive ?? true,
+    };
+    this.componentSettings.set(insertSetting.componentKey, setting);
+    return setting;
+  }
+
+  async updateComponentSetting(componentKey: string, updateSetting: UpdateComponentSetting): Promise<ComponentSetting | undefined> {
+    const existingSetting = this.componentSettings.get(componentKey);
+    if (!existingSetting) return undefined;
+
+    const updatedSetting: ComponentSetting = {
+      ...existingSetting,
+      ...updateSetting,
+      updatedAt: new Date(),
+    };
+    this.componentSettings.set(componentKey, updatedSetting);
+    return updatedSetting;
+  }
+
+  async deleteComponentSetting(componentKey: string): Promise<boolean> {
+    return this.componentSettings.delete(componentKey);
   }
 
   private async createSamplePosts(authorId: number) {
@@ -186,6 +362,95 @@ Looking ahead, artificial intelligence and machine learning will play increasing
 
     for (const postData of samplePosts) {
       await this.createBlogPost(postData);
+    }
+  }
+
+  private async createDefaultPageContents(authorId: number) {
+    const defaultContents = [
+      {
+        pageKey: 'hero',
+        title: 'Hero Section',
+        content: {
+          mainTitle: 'Transform Your Business with',
+          highlightTitle: 'Advanced Technology Solutions',
+          description: 'Harness the power of AI, machine learning, and automation to solve complex business problems and drive growth with our innovative technology solutions.',
+          primaryButton: { text: 'Start Free Trial', href: '/trend-solver' },
+          secondaryButton: { text: 'Watch Demo', action: 'demo' },
+          backgroundImage: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600'
+        },
+        isActive: true,
+        updatedBy: authorId,
+      },
+      {
+        pageKey: 'about',
+        title: 'About Section',
+        content: {
+          title: 'About Ruvab IT',
+          description1: 'Founded with a vision to bridge the gap between cutting-edge technology and practical business solutions, Ruvab IT has been at the forefront of digital transformation for over a decade.',
+          description2: 'Our team of expert engineers, data scientists, and consultants work collaboratively to deliver innovative solutions that drive measurable business results. We specialize in AI implementation, data analytics, and process automation.',
+          stats: [
+            { value: '500+', label: 'Projects Completed' },
+            { value: '98%', label: 'Client Satisfaction' },
+            { value: '10+', label: 'Years Experience' },
+            { value: '50+', label: 'Expert Team' }
+          ],
+          button: { text: 'Learn More About Us', href: '/about' },
+          image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600'
+        },
+        isActive: true,
+        updatedBy: authorId,
+      }
+    ];
+
+    for (const contentData of defaultContents) {
+      await this.createPageContent(contentData);
+    }
+  }
+
+  private async createDefaultNavigation() {
+    const defaultNavItems = [
+      { label: 'Home', href: '/', type: 'link', parentId: null, position: 1, isVisible: true },
+      { label: 'Products', href: '/#products', type: 'dropdown', parentId: null, position: 2, isVisible: true },
+      { label: 'Services', href: '/services', type: 'dropdown', parentId: null, position: 3, isVisible: true },
+      { label: 'About', href: '/about', type: 'link', parentId: null, position: 4, isVisible: true },
+      { label: 'Blog', href: '/blog', type: 'link', parentId: null, position: 5, isVisible: true },
+      { label: 'Contact', href: '/contact', type: 'link', parentId: null, position: 6, isVisible: true },
+    ];
+
+    for (const navItem of defaultNavItems) {
+      await this.createNavigationItem(navItem);
+    }
+  }
+
+  private async createDefaultComponentSettings(authorId: number) {
+    const defaultSettings = [
+      {
+        componentKey: 'hero-buttons',
+        settings: {
+          primaryButton: { enabled: true, text: 'Start Free Trial', href: '/trend-solver', style: 'primary' },
+          secondaryButton: { enabled: true, text: 'Watch Demo', action: 'demo', style: 'outline' }
+        },
+        isActive: true,
+        updatedBy: authorId,
+      },
+      {
+        componentKey: 'contact-form',
+        settings: {
+          fields: [
+            { name: 'name', label: 'Full Name', type: 'text', required: true },
+            { name: 'email', label: 'Email Address', type: 'email', required: true },
+            { name: 'company', label: 'Company', type: 'text', required: false },
+            { name: 'message', label: 'Message', type: 'textarea', required: true }
+          ],
+          submitButton: { text: 'Send Message', style: 'primary' }
+        },
+        isActive: true,
+        updatedBy: authorId,
+      }
+    ];
+
+    for (const settingData of defaultSettings) {
+      await this.createComponentSetting(settingData);
     }
   }
 }

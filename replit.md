@@ -45,6 +45,13 @@ Preferred communication style: Simple, everyday language.
 - **Blog Management**: Full admin system for creating, editing, and publishing blog posts
 - **Content Management**: Dynamic blog system with categorization and tagging
 
+### Administrator CMS Features
+- **Page Content Management**: Edit hero sections, about content, and other page elements through JSON-based configuration
+- **Navigation Management**: Add, edit, delete, and reorder navigation menu items with visibility controls
+- **Component Settings**: Configure dynamic components like buttons, forms, and layout elements
+- **Real-time Updates**: Changes are immediately reflected on the live website
+- **User Authentication**: Admin-only access with username/password: admin/admin123
+
 ### SEO & Analytics
 - **Google Analytics**: Page view tracking and event analytics
 - **SEO Optimization**: Meta tags, Open Graph, Twitter Cards, structured data
@@ -80,6 +87,39 @@ blogPosts: {
   updatedAt: timestamp
   isPublished: boolean (default: false)
   authorId: integer (foreign key to users.id)
+}
+
+// CMS page content management
+pageContents: {
+  id: serial (primary key)
+  pageKey: text (unique) // e.g., 'hero', 'about', 'services'
+  title: text
+  content: json // flexible JSON structure for content
+  isActive: boolean (default: true)
+  updatedAt: timestamp
+  updatedBy: integer (foreign key to users.id)
+}
+
+// Navigation and link management
+navigationItems: {
+  id: serial (primary key)
+  label: text
+  href: text
+  type: text // 'link', 'dropdown', 'button'
+  parentId: integer (nullable, self-reference)
+  position: integer (default: 0)
+  isVisible: boolean (default: true)
+  updatedAt: timestamp
+}
+
+// Component configuration
+componentSettings: {
+  id: serial (primary key)
+  componentKey: text (unique) // e.g., 'hero-buttons', 'contact-form'
+  settings: json // JSON for component configuration
+  isActive: boolean (default: true)
+  updatedAt: timestamp
+  updatedBy: integer (foreign key to users.id)
 }
 ```
 
