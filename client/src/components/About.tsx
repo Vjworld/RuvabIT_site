@@ -4,6 +4,7 @@ import { trackEvent } from '@/lib/analytics';
 export default function About() {
   const handleLearnMore = () => {
     trackEvent('learn_more', 'about', 'about_button');
+    window.location.href = '/about';
   };
 
   return (
