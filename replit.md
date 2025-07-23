@@ -50,7 +50,7 @@ Preferred communication style: Simple, everyday language.
 - **Navigation Management**: Add, edit, delete, and reorder navigation menu items with visibility controls
 - **Component Settings**: Configure dynamic components like buttons, forms, and layout elements
 - **Real-time Updates**: Changes are immediately reflected on the live website
-- **User Authentication**: Admin-only access with username/password: admin/admin123
+- **User Authentication**: Admin-only access with username/password: vsadmin/@dminruv_@b
 
 ### SEO & Analytics
 - **Google Analytics**: Page view tracking and event analytics

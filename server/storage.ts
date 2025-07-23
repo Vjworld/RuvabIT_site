@@ -85,8 +85,8 @@ export class MemStorage implements IStorage {
     
     // Create default admin user
     this.createUser({
-      username: "admin",
-      password: "admin123", // In production, this should be hashed
+      username: "vsadmin",
+      password: "@dminruv_@b", // In production, this should be hashed
     }).then(user => {
       this.users.set(user.id, { ...user, isAdmin: true });
       

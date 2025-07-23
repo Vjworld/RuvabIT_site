@@ -75,7 +75,7 @@ export default function Admin() {
             <p className="text-gray-600 dark:text-gray-400">Welcome, {user.username}</p>
           </div>
           <div className="flex gap-2">
-            <Link href="/admin/cms">
+            <Link href="/admin/vscms">
               <Button variant="outline" className="flex items-center gap-2">
                 <Edit className="w-4 h-4" />
                 CMS

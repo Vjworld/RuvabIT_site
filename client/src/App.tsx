@@ -80,7 +80,7 @@ function Router() {
       <Route path="/logout" component={Logout} />
       <Route path="/admin" component={Admin} />
       <Route path="/admin-dashboard" component={Admin} />
-      <Route path="/admin/cms" component={AdminCMS} />
+      <Route path="/admin/vscms" component={AdminCMS} />
       <Route path="/admin/posts/new" component={() => <AdminPostEditor />} />
       <Route path="/admin/posts/:id/edit" component={() => <AdminPostEditor isEditing={true} />} />
       <Route path="/admin-dashboard/posts/new" component={() => <AdminPostEditor />} />
