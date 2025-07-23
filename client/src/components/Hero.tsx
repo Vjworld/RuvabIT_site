@@ -18,34 +18,34 @@ export default function Hero() {
 
   return (
     <div>
-      <section id="home" className="bg-gradient-to-br from-blue-50 to-white py-20">
+      <section id="home" className="bg-gradient-to-br from-blue-50 to-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="hero-title font-bold text-gray-900 mb-6 leading-tight">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="hero-title font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
                 Transform Your Business with{' '}
                 <span className="text-primary">Advanced Technology Solutions</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Harness the power of AI, machine learning, and automation to solve complex business problems and drive growth with our innovative technology solutions.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Button
                   onClick={handleStartTrial}
-                  className="bg-primary text-white px-8 py-3 text-lg font-semibold hover:bg-blue-700 transition-colors"
+                  className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
                 >
                   Start Free Trial
                 </Button>
                 <Button
                   onClick={handleWatchDemo}
                   variant="outline"
-                  className="border-primary text-primary px-8 py-3 text-lg font-semibold hover:bg-blue-50 transition-colors"
+                  className="border-primary text-primary px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto"
                 >
                   Watch Demo
                 </Button>
               </div>
             </div>
-            <div>
+            <div className="mt-8 lg:mt-0">
               <div className="relative">
                 <img
                   src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"

@@ -56,11 +56,11 @@ function Header() {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Link href="/">
-                <span className="text-2xl font-bold text-primary cursor-pointer">Ruvab IT</span>
+                <span className="text-xl sm:text-2xl font-bold text-primary cursor-pointer">Ruvab IT</span>
               </Link>
             </div>
           </div>
@@ -83,7 +83,7 @@ function Header() {
           <div className="hidden md:block">
             <Button 
               onClick={() => window.location.href = '/contact'}
-              className="bg-primary text-white hover:bg-blue-700 transition-colors"
+              className="bg-primary text-white hover:bg-blue-700 transition-colors text-sm"
             >
               Get Started
             </Button>
@@ -95,9 +95,9 @@ function Header() {
               variant="ghost"
               size="sm"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-600 hover:text-primary"
+              className="text-gray-600 hover:text-primary p-2"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? <X className="h-5 w-5 sm:h-6 sm:w-6" /> : <Menu className="h-5 w-5 sm:h-6 sm:w-6" />}
             </Button>
           </div>
         </div>
@@ -106,17 +106,28 @@ function Header() {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+          <div className="px-3 pt-2 pb-4 space-y-1 bg-white border-t shadow-lg">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <span
                   onClick={() => handleNavClick(item.href)}
-                  className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-primary cursor-pointer"
+                  className="block px-3 py-3 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
                 >
                   {item.name}
                 </span>
               </Link>
             ))}
+            <div className="pt-2 mt-2 border-t border-gray-200">
+              <Button 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  window.location.href = '/contact';
+                }}
+                className="bg-primary text-white hover:bg-blue-700 transition-colors w-full text-sm"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </div>
       )}
