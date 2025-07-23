@@ -8,6 +8,8 @@ import {
   CheckCircle,
   Star,
   Globe,
+  Languages,
+  FileText,
 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
