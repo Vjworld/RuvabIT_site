@@ -56,9 +56,8 @@ export const componentSettings = pgTable("component_settings", {
   updatedBy: integer("updated_by").references(() => users.id).notNull(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
 });
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({

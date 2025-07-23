@@ -68,9 +68,9 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const user: User = {
       id: this.nextUserId++,
-      ...insertUser,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      username: insertUser.username,
+      password: insertUser.password,
+      isAdmin: insertUser.isAdmin ?? false,
     };
     this.users.push(user);
     return user;
@@ -92,7 +92,14 @@ export class MemStorage implements IStorage {
   async createBlogPost(insertBlogPost: InsertBlogPost): Promise<BlogPost> {
     const blogPost: BlogPost = {
       id: this.nextBlogPostId++,
-      ...insertBlogPost,
+      title: insertBlogPost.title,
+      slug: insertBlogPost.slug,
+      excerpt: insertBlogPost.excerpt,
+      content: insertBlogPost.content,
+      category: insertBlogPost.category,
+      tags: insertBlogPost.tags ?? [],
+      authorId: insertBlogPost.authorId,
+      isPublished: insertBlogPost.isPublished ?? false,
       publishedAt: new Date(),
       updatedAt: new Date(),
     };
@@ -132,7 +139,11 @@ export class MemStorage implements IStorage {
   async createPageContent(insertContent: InsertPageContent): Promise<PageContent> {
     const content: PageContent = {
       id: this.nextPageContentId++,
-      ...insertContent,
+      pageKey: insertContent.pageKey,
+      title: insertContent.title,
+      content: insertContent.content,
+      isActive: insertContent.isActive ?? true,
+      updatedBy: insertContent.updatedBy,
       updatedAt: new Date(),
     };
     this.pageContents.push(content);
@@ -167,7 +178,12 @@ export class MemStorage implements IStorage {
   async createNavigationItem(insertItem: InsertNavigationItem): Promise<NavigationItem> {
     const item: NavigationItem = {
       id: this.nextNavigationItemId++,
-      ...insertItem,
+      label: insertItem.label,
+      href: insertItem.href,
+      type: insertItem.type,
+      parentId: insertItem.parentId ?? null,
+      position: insertItem.position ?? 0,
+      isVisible: insertItem.isVisible ?? true,
       updatedAt: new Date(),
     };
     this.navigationItems.push(item);
@@ -206,7 +222,10 @@ export class MemStorage implements IStorage {
   async createComponentSetting(insertSetting: InsertComponentSetting): Promise<ComponentSetting> {
     const setting: ComponentSetting = {
       id: this.nextComponentSettingId++,
-      ...insertSetting,
+      componentKey: insertSetting.componentKey,
+      settings: insertSetting.settings,
+      isActive: insertSetting.isActive ?? true,
+      updatedBy: insertSetting.updatedBy,
       updatedAt: new Date(),
     };
     this.componentSettings.push(setting);
@@ -235,15 +254,19 @@ export class MemStorage implements IStorage {
 
   // Initialize default data
   async initializeDefaultData(): Promise<void> {
+    console.log("Storage: Starting initialization...");
+    
     // Create default admin user
     const adminUser = await this.createUser({
       username: 'vsadmin',
       password: '@dminruv_@b', // In production, this should be hashed
       isAdmin: true,
     });
+    console.log("Storage: Created admin user");
 
     // Create default blog posts
     await this.createDefaultBlogPosts(adminUser.id);
+    console.log("Storage: Created default blog posts, total posts:", this.blogPosts.length);
     
     // Create default page contents
     await this.createDefaultPageContents(adminUser.id);
@@ -253,6 +276,8 @@ export class MemStorage implements IStorage {
     
     // Create default component settings
     await this.createDefaultComponentSettings(adminUser.id);
+    
+    console.log("Storage: Initialization complete");
   }
 
   private async createDefaultBlogPosts(authorId: number) {
