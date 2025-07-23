@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TrendingUp,
   BarChart3,
@@ -14,8 +14,11 @@ import {
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import DemoTour from "@/components/DemoTour";
 
 const TrendSolver = () => {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -49,7 +52,7 @@ const TrendSolver = () => {
                   Start Free Trial
                 </button>
                 <button 
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => setIsDemoOpen(true)}
                   className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-purple-900 transition-colors"
                 >
                   Watch Demo
@@ -419,6 +422,8 @@ const TrendSolver = () => {
         </div>
       </section>
       <Footer />
+      
+      <DemoTour isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>
   );
 };
