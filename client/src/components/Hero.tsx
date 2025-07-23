@@ -4,10 +4,12 @@ import { trackEvent } from '@/lib/analytics';
 export default function Hero() {
   const handleStartTrial = () => {
     trackEvent('start_trial', 'engagement', 'hero_button');
+    window.location.href = '/trend-solver';
   };
 
   const handleWatchDemo = () => {
     trackEvent('watch_demo', 'engagement', 'hero_button');
+    window.location.href = '/contact';
   };
 
   return (

@@ -81,7 +81,10 @@ function Header() {
           </div>
           
           <div className="hidden md:block">
-            <Button className="bg-primary text-white hover:bg-blue-700 transition-colors">
+            <Button 
+              onClick={() => window.location.href = '/contact'}
+              className="bg-primary text-white hover:bg-blue-700 transition-colors"
+            >
               Get Started
             </Button>
           </div>

@@ -582,10 +582,16 @@ const Disclaimer = () => {
             disclaimer or terms of service.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-orange-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-50 transition-colors">
+            <button 
+              onClick={() => window.location.href = '/contact'}
+              className="bg-white text-orange-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-50 transition-colors"
+            >
               Contact Legal Team
             </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-orange-600 transition-colors">
+            <button 
+              onClick={() => window.location.href = '/terms'}
+              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-orange-600 transition-colors"
+            >
               View All Policies
             </button>
           </div>

@@ -4,6 +4,11 @@ import { trackEvent } from '@/lib/analytics';
 export default function Products() {
   const handleLearnMore = (product: string) => {
     trackEvent('learn_more', 'product', product);
+    if (product === 'trend_solver') {
+      window.location.href = '/trend-solver';
+    } else if (product === 'langscribe') {
+      window.location.href = '/langscribe';
+    }
   };
 
   return (

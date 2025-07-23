@@ -218,10 +218,18 @@ export default function AIAnalytics() {
             Join thousands of businesses that trust our AI analytics platform to drive their success.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => window.location.href = '/trend-solver'}
+            >
               Start Free Trial
             </Button>
-            <Button size="lg" variant="outline">
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={() => window.location.href = '/contact'}
+            >
               Contact Sales
             </Button>
           </div>
