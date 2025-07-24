@@ -105,39 +105,40 @@ export default function BlogPostDetail() {
             </Link>
           </div>
 
-          {/* Article Header */}
-          <header className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Badge variant="default">{post.category}</Badge>
-              {post.tags.map((tag) => (
-                <Badge key={tag} variant="secondary">
-                  {tag}
+          {/* Featured Image Header */}
+          <div 
+            className="relative w-full h-80 md:h-96 bg-gradient-to-br from-blue-600/90 to-purple-600/90 rounded-lg mb-8 bg-cover bg-center bg-no-repeat overflow-hidden"
+            style={{
+              backgroundImage: post.featuredImage 
+                ? `linear-gradient(to bottom right, rgba(37, 99, 235, 0.9), rgba(126, 34, 206, 0.9)), url(${post.featuredImage})`
+                : undefined
+            }}
+          >
+            <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                  {post.category}
                 </Badge>
-              ))}
-            </div>
-            
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-              {post.title}
-            </h1>
-            
-            <div className="flex items-center gap-6 text-gray-600 dark:text-gray-400">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                <span>{formatDate(post.publishedAt)}</span>
+                {post.tags.slice(0, 3).map((tag) => (
+                  <Badge key={tag} variant="outline" className="bg-white/10 text-white border-white/30">
+                    {tag}
+                  </Badge>
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <Tag className="w-5 h-5" />
-                <span>{post.category}</span>
-              </div>
-            </div>
-          </header>
-
-          {/* Featured Image Placeholder */}
-          <div className="mb-8">
-            <div className="w-full h-64 md:h-80 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <div className="text-white text-center">
-                <Tag className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-xl font-medium">{post.category}</p>
+              
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight drop-shadow-lg">
+                {post.title}
+              </h1>
+              
+              <div className="flex items-center gap-6 text-white/90">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  <span>{formatDate(post.publishedAt)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Tag className="w-5 h-5" />
+                  <span>{post.category}</span>
+                </div>
               </div>
             </div>
           </div>

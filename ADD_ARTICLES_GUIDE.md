@@ -10,6 +10,7 @@
   title: "Your Article Title",
   slug: "your-article-slug", // URL-friendly (lowercase-with-hyphens)
   excerpt: "Brief 2-3 sentence summary of your article",
+  featuredImage: "https://images.unsplash.com/photo-1234567890?w=1200&h=600&fit=crop&q=80", // Background image URL (optional)
   content: `# Your Article Title
   
 Your full article content here using Markdown formatting:
@@ -50,9 +51,20 @@ Multiple paragraphs work perfectly.`,
 - **Title**: Clear and descriptive
 - **Slug**: Lowercase with hyphens (auto-generated if not provided)
 - **Excerpt**: 2-3 sentences that summarize the article
+- **Featured Image**: URL to a background image (optional) - recommended size 1200x600px
 - **Content**: Use Markdown formatting for best results
 - **Category**: Group related articles (e.g., "AI & ML", "Business", "Technology")
 - **Tags**: Help with organization and SEO
+
+## Featured Image Options
+
+You can use images from:
+1. **Unsplash** (free): `https://images.unsplash.com/photo-ID?w=1200&h=600&fit=crop&q=80`
+2. **Your own images**: Upload to a cloud service and use the URL
+3. **Stock photo sites**: Any direct image URL works
+4. **Leave blank**: A default gradient will be used
+
+**Recommended image dimensions**: 1200x600 pixels for best results
 
 ## Content Formatting Examples
 

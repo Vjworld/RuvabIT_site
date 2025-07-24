@@ -10,6 +10,7 @@ export const blogPosts = pgTable("blog_posts", {
   content: text("content").notNull(),
   category: text("category").notNull(),
   tags: text("tags").array().default([]).notNull(),
+  featuredImage: text("featured_image"), // URL or path to the background image
   publishedAt: timestamp("published_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   isPublished: boolean("is_published").default(false).notNull(),

@@ -8,6 +8,7 @@ const articles = [
     title: "Your Article Title",
     slug: "your-article-slug", // URL-friendly version (lowercase, hyphens)
     excerpt: "Brief summary of your article (2-3 sentences)",
+    featuredImage: "https://images.unsplash.com/photo-1234567890?w=1200&h=600&fit=crop&q=80", // Background image URL (optional)
     content: `# Your Article Title
     
 Your full article content here. You can use:
@@ -32,6 +33,7 @@ More content here.`,
     title: "Getting Started with Your New Blog",
     slug: "getting-started-blog",
     excerpt: "Learn how to add and manage your blog articles on the Ruvab IT website with this simple guide.",
+    featuredImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=600&fit=crop&q=80",
     content: `# Getting Started with Your New Blog
 
 Welcome to your blog management system! This guide will help you understand how to add new articles.

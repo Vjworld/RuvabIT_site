@@ -39,6 +39,7 @@ export class MemStorage implements IStorage {
       content: insertBlogPost.content,
       category: insertBlogPost.category,
       tags: insertBlogPost.tags ?? [],
+      featuredImage: insertBlogPost.featuredImage ?? null,
       authorId: insertBlogPost.authorId,
       isPublished: insertBlogPost.isPublished ?? false,
       publishedAt: new Date(),
@@ -65,6 +66,7 @@ export class MemStorage implements IStorage {
         title: "The Future of AI in Business Automation",
         slug: "future-ai-business-automation",
         excerpt: "Explore how artificial intelligence is revolutionizing business processes and creating new opportunities for growth and efficiency across industries.",
+        featuredImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop&q=80",
         content: `# The Future of AI in Business Automation
 
 Artificial Intelligence is transforming the business landscape at an unprecedented pace. From streamlining operations to enhancing customer experiences, AI-powered automation is becoming the backbone of modern enterprises.
@@ -96,6 +98,7 @@ The future of AI in business automation promises even more sophisticated applica
         title: "Data-Driven Decision Making in 2025",
         slug: "data-driven-decision-making-2025",
         excerpt: "Learn how to leverage data analytics to make informed business decisions and drive strategic growth in the digital age.",
+        featuredImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop&q=80",
         content: `# Data-Driven Decision Making in 2025
 
 In today's data-rich environment, organizations that harness the power of data analytics gain a significant competitive advantage. Data-driven decision making has evolved from a nice-to-have capability to a business imperative.
@@ -131,6 +134,7 @@ As we move forward, artificial intelligence and machine learning will play incre
         title: "Cloud Migration Best Practices",
         slug: "cloud-migration-best-practices",
         excerpt: "Discover essential strategies for successful cloud migration and how to maximize the benefits of cloud technologies.",
+        featuredImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop&q=80",
         content: `# Cloud Migration Best Practices
 
 Cloud migration has become a strategic priority for organizations seeking to modernize their IT infrastructure, reduce costs, and improve scalability. However, successful migration requires careful planning and execution.

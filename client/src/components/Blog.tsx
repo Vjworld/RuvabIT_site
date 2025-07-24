@@ -94,11 +94,23 @@ export default function Blog() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayPosts.map((post) => (
               <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <img
-                  src={getDefaultImage(post.category)}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                />
+                <div 
+                  className="w-full h-48 bg-gradient-to-br from-blue-600/90 to-purple-600/90 bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
+                  style={{
+                    backgroundImage: post.featuredImage 
+                      ? `linear-gradient(to bottom right, rgba(37, 99, 235, 0.9), rgba(126, 34, 206, 0.9)), url(${post.featuredImage})`
+                      : undefined
+                  }}
+                >
+                  {!post.featuredImage && (
+                    <div className="text-white text-center">
+                      <svg className="w-12 h-12 mx-auto mb-2 opacity-75" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 6L9 17l-5-5"/>
+                      </svg>
+                      <p className="font-medium">{post.category}</p>
+                    </div>
+                  )}
+                </div>
                 <div className="p-6">
                   <div className={`text-sm font-semibold mb-2 ${getCategoryColor(post.category)}`}>
                     {post.category}
