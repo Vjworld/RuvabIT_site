@@ -116,7 +116,7 @@ function App() {
       console.warn('Missing required AdSense key: VITE_ADSENSE_CLIENT_ID');
     } else {
       // Only initialize AdSense in production or when explicitly needed
-      if (import.meta.env.NODE_ENV === 'production' || import.meta.env.VITE_ADSENSE_CLIENT_ID !== 'ca-pub-4204204667108655') {
+      if (import.meta.env.NODE_ENV === 'production' || import.meta.env.VITE_ADSENSE_CLIENT_ID !== 'ca-pub-XXXXXXXXXXXXXXXXX') {
         initAdSense();
       }
     }

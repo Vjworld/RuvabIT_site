@@ -171,9 +171,9 @@ componentSettings: {
 - HTTPS support for analytics and ads
 
 ### Key Environment Variables
-- `DATABASE_URL`: PostgreSQL connection string
-- `VITE_GA_MEASUREMENT_ID`: Google Analytics tracking ID
-- `VITE_ADSENSE_CLIENT_ID`: Google AdSense client ID
+- `DATABASE_URL`: PostgreSQL connection string (example: postgresql://username:password@hostname:port/database)
+- `VITE_GA_MEASUREMENT_ID`: Google Analytics tracking ID (example: G-XXXXXXXXXX)
+- `VITE_ADSENSE_CLIENT_ID`: Google AdSense client ID (example: ca-pub-XXXXXXXXXXXXXXXXX)
 - `NODE_ENV`: Environment mode (development/production)
 
 ### Performance Optimizations
