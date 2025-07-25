@@ -123,43 +123,17 @@ const AboutPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <div className="flex justify-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
               <img 
                 src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300" 
-                alt="CEO" 
-                className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+                alt="Vaibhav Selukar - Founder" 
+                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Sarah Johnson</h3>
-              <p className="text-blue-600 font-medium mb-3">CEO & Co-Founder</p>
-              <p className="text-gray-600 text-sm">
-                Former VP of Engineering at Google with 15+ years in tech leadership and AI development.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img 
-                src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300" 
-                alt="CTO" 
-                className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Michael Chen</h3>
-              <p className="text-green-600 font-medium mb-3">CTO & Co-Founder</p>
-              <p className="text-gray-600 text-sm">
-                Machine learning expert and former Principal Engineer at Microsoft with PhD in Computer Science.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <img 
-                src="https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=300" 
-                alt="CPO" 
-                className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Emily Rodriguez</h3>
-              <p className="text-purple-600 font-medium mb-3">Chief Product Officer</p>
-              <p className="text-gray-600 text-sm">
-                Product strategy expert with 12+ years building user-centric solutions at leading tech companies.
+              <h3 className="text-2xl font-semibold text-gray-900 mb-2">Vaibhav Selukar</h3>
+              <p className="text-blue-600 font-medium mb-4">Founder | Solopreneur</p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Passionate Professional | Driving Growth Through Innovation. Highly motivated professional with 6+ years of experience driving growth through innovation, digital transformation, and stakeholder-driven solutions. Certified Professional Scrum Master, Agile Delivery Specialist, Remote-Ready Leader in Scrum, Kanban, Hybrid Models, Driving High-Performance Teams in SaaS, BFSI, EduTech, Wellness Tech Domains.
               </p>
             </div>
           </div>
@@ -195,61 +169,7 @@ const AboutPage = () => {
             </div>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-blue-700 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Industry Recognition</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  TechCrunch Startup of the Year 2023
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  Forbes 30 Under 30 (2 team members)
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  AI Excellence Award 2024
-                </li>
-              </ul>
-            </div>
 
-            <div className="bg-blue-700 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Certifications</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  ISO 27001 Security Certified
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  SOC 2 Type II Compliant
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  GDPR Compliant
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-blue-700 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3">Partnerships</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  AWS Advanced Technology Partner
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  Google Cloud Partner
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-blue-300 mr-2" />
-                  Microsoft Gold Partner
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
 
