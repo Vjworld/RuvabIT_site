@@ -33,15 +33,25 @@ const AboutPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">About Vaibhav Selukar</h2>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Founder Solopreneur Product Builder Growth Explorer</h3>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Founded in 2020, Ruvab IT began with a simple mission: to make advanced technology accessible to businesses of all sizes. Our founders, experienced software engineers and data scientists, recognized the growing need for intelligent solutions that could help companies stay competitive in an increasingly digital world.
+                It all started with a simple idea — that digital innovation should be lean, purposeful, and scalable. Over the past 6+ years, I've turned that belief into action. My journey spans SaaS, BFSI, EduTech, ITeS, and Wellness Tech, where I've launched MVPs not just to test the waters but to stir the waves.
               </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                What started as a small team of passionate developers has grown into a comprehensive technology solutions provider, serving thousands of clients worldwide. Our commitment to innovation and customer success has driven us to create industry-leading products that solve real business problems.
+                As a solo founder, I've worn every hat — strategist, designer, debugger, marketer — building products like <em>LangScribe</em>, a transcribing app, and the <em>TrendSolver</em>, designed for real-world trend analysis for content creators. These weren't just projects, they were experiments in impact: quick to build, easy to adapt, and ready to monetize.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Today, we continue to push the boundaries of what's possible with AI, machine learning, and data analytics, always with our customers' success at the heart of everything we do.
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                I thrive on the challenge of turning market gaps into solutions that deliver actual ROI. Whether it's automating workflows, integrating APIs, or crafting content strategies for scale, my approach is rooted in agility, curiosity, and a bias for execution.
+              </p>
+              <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+                This journey isn't just about tech — it's about believing that solo builders can spark bold change.
+              </p>
+              <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+                And
+              </p>
+              <p className="text-lg text-gray-600 leading-relaxed font-medium">
+                I'm just getting started to — <strong>"Build lean. Monetize smart. Scale boldly."</strong>
               </p>
             </div>
             <div>
@@ -126,7 +136,7 @@ const AboutPage = () => {
           <div className="flex justify-center">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
               <img 
-                src="/attached_assets/vs_1753464088001.jpg" 
+                src="/vs_profile.jpg" 
                 alt="Vaibhav Selukar - Founder" 
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />
