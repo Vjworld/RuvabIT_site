@@ -44,12 +44,10 @@ const TrendSolver = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
-                  onClick={() =>
-                    window.open("https://trendsolver.ruvab.it.com", "_blank")
-                  }
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-white text-purple-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-colors"
                 >
-                  Start Free Trial
+                  Request Demo
                 </button>
                 <button 
                   onClick={() => setIsDemoOpen(true)}

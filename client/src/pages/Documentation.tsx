@@ -33,11 +33,19 @@ export default function Documentation() {
             and maximize the value of our technology solutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              onClick={() => window.location.href = '/help-documentation'}
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Browse Documentation
             </Button>
-            <Button size="lg" variant="outline">
-              API Reference
+            <Button 
+              onClick={() => window.location.href = '/contact'}
+              size="lg" 
+              variant="outline"
+            >
+              Contact for API Access
             </Button>
           </div>
         </section>

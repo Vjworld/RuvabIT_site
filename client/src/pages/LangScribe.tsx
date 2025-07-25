@@ -30,13 +30,16 @@ const LangScribe = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button 
-                  onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
                 >
-                  Try Free Today
+                  Request Demo
                 </button>
-                <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-green-900 transition-colors">
-                  Watch Demo
+                <button 
+                  onClick={() => window.location.href = '/about'}
+                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-green-900 transition-colors"
+                >
+                  Learn More
                 </button>
               </div>
               <div className="flex items-center space-x-6">

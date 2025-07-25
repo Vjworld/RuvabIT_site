@@ -69,14 +69,14 @@ function Router() {
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostDetail} />
       
-
+      {/* Additional Content Pages */}
       <Route path="/case-studies" component={CaseStudies} />
-      <Route path="/careers" component={CareersPage} />
+      {/* <Route path="/careers" component={CareersPage} /> */}
       
       {/* Support Pages */}
       <Route path="/help" component={HelpCenter} />
       <Route path="/documentation" component={Documentation} />
-      <Route path="/api-documentation" component={APIDocumentation} />
+      {/* <Route path="/api-documentation" component={APIDocumentation} /> */}
       
       {/* Company Pages */}
       <Route path="/about" component={AboutPage} />
@@ -96,6 +96,13 @@ function Router() {
       
       {/* Additional Pages */}
       <Route path="/help-documentation" component={HelpDocumentation} />
+      
+      {/* Admin routes - commented out for production */}
+      {/* <Route path="/admin" component={Admin} /> */}
+      {/* <Route path="/admin/cms" component={AdminCMS} /> */}
+      {/* <Route path="/admin/post-editor" component={AdminPostEditor} /> */}
+      {/* <Route path="/login" component={Login} /> */}
+      {/* <Route path="/logout" component={Logout} /> */}
       
       <Route component={NotFound} />
     </Switch>

@@ -36,7 +36,10 @@ const ServicesPage = () => {
               Comprehensive technology solutions designed to transform your
               business and drive sustainable growth.
             </p>
-            <button className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-indigo-50 transition-colors">
+            <button 
+              onClick={() => window.location.href = '/contact'}
+              className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-indigo-50 transition-colors"
+            >
               Get Free Consultation
             </button>
           </div>

@@ -56,7 +56,7 @@ function Footer() {
               <li><Link href="/about"><span className="hover:text-white transition-colors cursor-pointer">About Us</span></Link></li>
               <li><Link href="/blog"><span className="hover:text-white transition-colors cursor-pointer">Blog</span></Link></li>
               <li><Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer">Contact</span></Link></li>
-              <li><Link href="/careers"><span className="hover:text-white transition-colors cursor-pointer">Careers</span></Link></li>
+              {/* <li><Link href="/careers"><span className="hover:text-white transition-colors cursor-pointer">Careers</span></Link></li> */}
             </ul>
           </div>
           
@@ -65,7 +65,7 @@ function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/help"><span className="hover:text-white transition-colors cursor-pointer">Help Center</span></Link></li>
               <li><Link href="/documentation"><span className="hover:text-white transition-colors cursor-pointer">Documentation</span></Link></li>
-              <li><Link href="/api-documentation"><span className="hover:text-white transition-colors cursor-pointer">API Docs</span></Link></li>
+              {/* <li><Link href="/api-documentation"><span className="hover:text-white transition-colors cursor-pointer">API Docs</span></Link></li> */}
               <li><Link href="/case-studies"><span className="hover:text-white transition-colors cursor-pointer">Case Studies</span></Link></li>
             </ul>
           </div>
@@ -86,9 +86,9 @@ function Footer() {
               <Link href="/cookie-policy">
                 <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Cookie Policy</span>
               </Link>
-              <Link href="/login">
+              {/* <Link href="/login">
                 <span className="text-gray-500 hover:text-gray-400 text-xs transition-colors cursor-pointer opacity-50">System</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

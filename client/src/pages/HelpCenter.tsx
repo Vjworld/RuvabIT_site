@@ -47,7 +47,12 @@ export default function HelpCenter() {
                 <p className="text-muted-foreground mb-4">
                   Get instant help from our support team through live chat.
                 </p>
-                <Button className="w-full">Start Chat</Button>
+                <Button 
+                  onClick={() => window.location.href = '/contact'}
+                  className="w-full"
+                >
+                  Contact Support
+                </Button>
               </CardContent>
             </Card>
 
