@@ -135,17 +135,71 @@ const AboutPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
-              <img 
-                src={vsProfileImage} 
-                alt="Vaibhav Selukar - Founder" 
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="text-2xl font-semibold text-gray-900 mb-2">Vaibhav Selukar</h3>
-              <p className="text-blue-600 font-medium mb-4">Founder | Solopreneur | MVP Builder | Monetization Maverick</p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Turning ideas into income, one MVP at a time. With 6+ years leading digital growth across SaaS, BFSI, EduTech, and Wellness Tech, I craft lean products that solve real problems and scale fast. From RattaMaar to the WhatsApp Broadcast Scheduler, I build with agility, automate for impact, and launch for ROI. Certified in Scrum and armed with a bias for execution — I thrive where business vision meets tech muscle.
-              </p>
+            <div className="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-1 rounded-3xl shadow-2xl max-w-lg transform hover:scale-105 transition-all duration-300">
+              {/* Animated border gradient */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 rounded-3xl opacity-75 animate-pulse"></div>
+              
+              {/* Main card content */}
+              <div className="relative bg-white dark:bg-gray-900 rounded-3xl p-8 text-center">
+                {/* Profile section with floating effect */}
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-600 rounded-full w-36 h-36 mx-auto blur-md opacity-30"></div>
+                  <img 
+                    src={vsProfileImage} 
+                    alt="Vaibhav Selukar - Founder" 
+                    className="relative w-36 h-36 rounded-full mx-auto object-cover border-4 border-white shadow-xl"
+                  />
+                  {/* Status indicator */}
+                  <div className="absolute bottom-2 right-1/2 transform translate-x-12 bg-green-500 w-6 h-6 rounded-full border-4 border-white flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
+                  </div>
+                </div>
+
+                {/* Name with gradient text */}
+                <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                  Vaibhav Selukar
+                </h3>
+                
+                {/* Multi-line title with badges */}
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Founder</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">Solopreneur</span>
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">MVP Builder</span>
+                  <span className="px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-sm font-medium">Monetization Maverick</span>
+                </div>
+
+                {/* Quote-style description */}
+                <div className="relative">
+                  <div className="absolute -top-2 -left-2 text-6xl text-blue-200 font-serif">"</div>
+                  <div className="absolute -bottom-6 -right-2 text-6xl text-blue-200 font-serif">"</div>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed px-4 italic">
+                    Turning ideas into income, one MVP at a time. With 6+ years leading digital growth across SaaS, BFSI, EduTech, and Wellness Tech, I craft lean products that solve real problems and scale fast. From LangScribe to the TrendSolver, I build with agility, automate for impact, and launch for ROI. Certified in Scrum and armed with a bias for execution — I thrive where business vision meets tech muscle.
+                  </p>
+                </div>
+
+                {/* Achievement indicators */}
+                <div className="flex justify-center space-x-6 mt-8 pt-6 border-t border-gray-200">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">6+</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">Years</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-600">4+</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">Domains</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">∞</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wide">Ideas</div>
+                  </div>
+                </div>
+
+                {/* Call to action button */}
+                <div className="mt-6">
+                  <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                    Connect & Collaborate
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
