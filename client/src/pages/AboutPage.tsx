@@ -32,9 +32,52 @@ const AboutPage = () => {
       {/* Company Story */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Company Introduction */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">About Ruvab IT</h2>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                Founded with a vision to bridge the gap between cutting-edge technology and practical business solutions, <strong>Ruvab IT</strong> represents the evolution of digital innovation through lean, scalable, and purpose-driven development. What started as a solo founder's mission has grown into a comprehensive technology solutions provider that specializes in transforming ideas into income-generating digital products.
+              </p>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                Our approach is fundamentally different from traditional tech companies. We don't just build software—we craft <em>Minimum Viable Products (MVPs)</em> that are designed for rapid market validation, quick iteration, and immediate monetization potential. Our expertise spans across <strong>SaaS platforms</strong>, <strong>BFSI solutions</strong>, <strong>EduTech innovations</strong>, and <strong>Wellness Tech applications</strong>, with each project rooted in real-world problem-solving and ROI-focused outcomes.
+              </p>
+              <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                At Ruvab IT, we've pioneered a unique methodology that combines <strong>agile development</strong>, <strong>process automation</strong>, and <strong>AI implementation</strong> to deliver solutions that not only meet current market demands but anticipate future trends. Our team of expert engineers, data scientists, and consultants work collaboratively under a unified philosophy: <strong>"Build lean. Monetize smart. Scale boldly."</strong>
+              </p>
+              
+              {/* Company Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-t border-b border-gray-200">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-blue-600 mb-2">25+</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">MVPs Launched</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-600 mb-2">95%</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Market Validation Rate</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-purple-600 mb-2">6+</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Years Experience</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-orange-600 mb-2">4+</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Industry Domains</div>
+                </div>
+              </div>
+              
+              <div className="mt-8">
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  <strong>Our specialization</strong> lies in AI implementation, data analytics, and process automation—not as abstract concepts, but as practical tools that drive measurable business results. From <em>LangScribe's</em> intelligent transcription capabilities to <em>TrendSolver's</em> real-time trend analysis for content creators, every solution we develop is tested, validated, and optimized for market success.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Founder Story */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-20">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">About Vaibhav Selukar</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Meet the Founder</h2>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Founder Solopreneur Product Builder Growth Explorer</h3>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 It all started with a simple idea — that digital innovation should be lean, purposeful, and scalable. Over the past 6+ years, I've turned that belief into action. My journey spans SaaS, BFSI, EduTech, ITeS, and Wellness Tech, where I've launched MVPs not just to test the waters but to stir the waves.
