@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import vsProfileImage from "@/assets/vs_profile.jpg";
+import teamMeetingImage from "@/assets/team_meeting.png";
 
 const AboutPage = () => {
   return (
@@ -74,35 +75,42 @@ const AboutPage = () => {
             </div>
           </div>
           
-          {/* Founder Story */}
+          {/* Founder Story - Personal Journey */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-20">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Meet the Founder</h2>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Founder Solopreneur Product Builder Growth Explorer</h3>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">About Vaibhav Selukar</h2>
+              <h3 className="text-xl font-semibold text-gray-700 mb-6">Founder Solopreneur Product Builder Growth Explorer</h3>
+              
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 It all started with a simple idea — that digital innovation should be lean, purposeful, and scalable. Over the past 6+ years, I've turned that belief into action. My journey spans SaaS, BFSI, EduTech, ITeS, and Wellness Tech, where I've launched MVPs not just to test the waters but to stir the waves.
               </p>
+              
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 As a solo founder, I've worn every hat — strategist, designer, debugger, marketer — building products like <em>LangScribe</em>, a transcribing app, and the <em>TrendSolver</em>, designed for real-world trend analysis for content creators. These weren't just projects, they were experiments in impact: quick to build, easy to adapt, and ready to monetize.
               </p>
+              
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 I thrive on the challenge of turning market gaps into solutions that deliver actual ROI. Whether it's automating workflows, integrating APIs, or crafting content strategies for scale, my approach is rooted in agility, curiosity, and a bias for execution.
               </p>
-              <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+              
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 This journey isn't just about tech — it's about believing that solo builders can spark bold change.
               </p>
+              
               <p className="text-lg text-gray-600 mb-4 leading-relaxed">
                 And
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed font-medium">
+              
+              <p className="text-lg text-gray-700 leading-relaxed font-medium">
                 I'm just getting started to — <strong>"Build lean. Monetize smart. Scale boldly."</strong>
               </p>
             </div>
+            
             <div>
               <img 
-                src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800" 
-                alt="Our Team" 
-                className="rounded-lg shadow-lg"
+                src={teamMeetingImage}
+                alt="Collaborative Innovation - Building Solutions Together" 
+                className="rounded-lg shadow-xl w-full h-auto object-cover"
               />
             </div>
           </div>
