@@ -29,11 +29,136 @@ export default function BlogPostDetail() {
   };
 
   const formatContent = (content: string) => {
-    return content.split('\n\n').map((paragraph, index) => (
-      <p key={index} className="mb-4 text-gray-700 dark:text-gray-300 leading-relaxed">
-        {paragraph}
-      </p>
-    ));
+    const parts = content.split('\n\n');
+    return parts.map((part, index) => {
+      // Handle images
+      if (part.startsWith('![')) {
+        const imageMatch = part.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+        if (imageMatch) {
+          const [, alt, src] = imageMatch;
+          return (
+            <div key={index} className="my-8">
+              <img 
+                src={src} 
+                alt={alt} 
+                className="w-full max-w-4xl mx-auto rounded-lg shadow-lg"
+                loading="lazy"
+              />
+            </div>
+          );
+        }
+      }
+      
+      // Handle headings
+      if (part.startsWith('### ')) {
+        return (
+          <h3 key={index} className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-4">
+            {part.substring(4)}
+          </h3>
+        );
+      }
+      
+      if (part.startsWith('## ')) {
+        return (
+          <h2 key={index} className="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-6">
+            {part.substring(3)}
+          </h2>
+        );
+      }
+      
+      if (part.startsWith('# ')) {
+        return (
+          <h1 key={index} className="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-6">
+            {part.substring(2)}
+          </h1>
+        );
+      }
+      
+      // Handle lists
+      if (part.includes('- **') || part.includes('* **')) {
+        const listItems = part.split('\n').filter(line => line.trim().startsWith('- ') || line.trim().startsWith('* '));
+        if (listItems.length > 0) {
+          return (
+            <ul key={index} className="mb-6 space-y-2">
+              {listItems.map((item, itemIndex) => {
+                const cleanItem = item.replace(/^[*-]\s*/, '');
+                const boldMatch = cleanItem.match(/\*\*([^*]+)\*\*:\s*(.*)/);
+                if (boldMatch) {
+                  const [, boldText, normalText] = boldMatch;
+                  return (
+                    <li key={itemIndex} className="flex items-start">
+                      <span className="text-blue-600 mr-2">•</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        <span className="font-semibold">{boldText}</span>: {normalText}
+                      </span>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={itemIndex} className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span className="text-gray-700 dark:text-gray-300">{cleanItem}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }
+      }
+      
+      // Handle numbered lists
+      if (/^\d+\./.test(part.trim())) {
+        const listItems = part.split('\n').filter(line => /^\d+\./.test(line.trim()));
+        if (listItems.length > 0) {
+          return (
+            <ol key={index} className="mb-6 space-y-2 list-decimal list-inside">
+              {listItems.map((item, itemIndex) => {
+                const cleanItem = item.replace(/^\d+\.\s*/, '');
+                const boldMatch = cleanItem.match(/\*\*([^*]+)\*\*:\s*(.*)/);
+                if (boldMatch) {
+                  const [, boldText, normalText] = boldMatch;
+                  return (
+                    <li key={itemIndex} className="text-gray-700 dark:text-gray-300 ml-4">
+                      <span className="font-semibold">{boldText}</span>: {normalText}
+                    </li>
+                  );
+                }
+                return (
+                  <li key={itemIndex} className="text-gray-700 dark:text-gray-300 ml-4">
+                    {cleanItem}
+                  </li>
+                );
+              })}
+            </ol>
+          );
+        }
+      }
+      
+      // Handle bold text in paragraphs
+      const formatBoldText = (text: string) => {
+        return text.split(/(\*\*[^*]+\*\*)/).map((segment, segIndex) => {
+          if (segment.startsWith('**') && segment.endsWith('**')) {
+            return (
+              <span key={segIndex} className="font-semibold">
+                {segment.slice(2, -2)}
+              </span>
+            );
+          }
+          return segment;
+        });
+      };
+      
+      // Regular paragraphs
+      if (part.trim()) {
+        return (
+          <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed">
+            {formatBoldText(part)}
+          </p>
+        );
+      }
+      
+      return null;
+    }).filter(Boolean);
   };
 
   if (isLoading) {
