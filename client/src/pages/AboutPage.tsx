@@ -3,6 +3,7 @@ import { Users, Target, Award, Zap, CheckCircle } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import vsProfileImage from "@/assets/vs_profile.jpg";
 
 const AboutPage = () => {
   return (
@@ -136,14 +137,14 @@ const AboutPage = () => {
           <div className="flex justify-center">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
               <img 
-                src="/vs_profile.jpg" 
+                src={vsProfileImage} 
                 alt="Vaibhav Selukar - Founder" 
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />
               <h3 className="text-2xl font-semibold text-gray-900 mb-2">Vaibhav Selukar</h3>
-              <p className="text-blue-600 font-medium mb-4">Founder | Solopreneur</p>
+              <p className="text-blue-600 font-medium mb-4">Founder | Solopreneur | MVP Builder | Monetization Maverick</p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Passionate Professional | Driving Growth Through Innovation. Highly motivated professional with 6+ years of experience driving growth through innovation, digital transformation, and stakeholder-driven solutions. Certified Professional Scrum Master, Agile Delivery Specialist, Remote-Ready Leader in Scrum, Kanban, Hybrid Models, Driving High-Performance Teams in SaaS, BFSI, EduTech, Wellness Tech Domains.
+                Turning ideas into income, one MVP at a time. With 6+ years leading digital growth across SaaS, BFSI, EduTech, and Wellness Tech, I craft lean products that solve real problems and scale fast. From RattaMaar to the WhatsApp Broadcast Scheduler, I build with agility, automate for impact, and launch for ROI. Certified in Scrum and armed with a bias for execution — I thrive where business vision meets tech muscle.
               </p>
             </div>
           </div>
