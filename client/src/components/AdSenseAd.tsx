@@ -66,7 +66,7 @@ function AdSenseAd({
   const adProps: any = {
     className: `adsbygoogle ${className}`,
     style: adStyles,
-    'data-ad-client': import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-XXXXXXXXXXXXXXXXX',
+    'data-ad-client': import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-4204204667108655',
     'data-ad-slot': adSlot,
     'data-ad-format': adFormat,
     'data-full-width-responsive': 'true'
