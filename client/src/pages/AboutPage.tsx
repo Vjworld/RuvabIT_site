@@ -126,7 +126,7 @@ const AboutPage = () => {
           <div className="flex justify-center">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
               <img 
-                src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300" 
+                src="/attached_assets/vs_1753464088001.jpg" 
                 alt="Vaibhav Selukar - Founder" 
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />
