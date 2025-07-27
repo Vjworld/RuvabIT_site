@@ -30,10 +30,10 @@ const LangScribe = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button 
-                  onClick={() => window.location.href = '/contact'}
+                  onClick={() => window.open('/langscribe/', '_blank')}
                   className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
                 >
-                  Request Demo
+                  Launch LangScribe
                 </button>
                 <button 
                   onClick={() => window.location.href = '/about'}
