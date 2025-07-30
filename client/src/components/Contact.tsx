@@ -60,15 +60,15 @@ export default function Contact() {
     <section id="contact" data-tour="contact" className="py-12 sm:py-16 lg:py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Get in Touch</h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">Get in Touch</h2>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Ready to transform your business with cutting-edge technology? Let's discuss how we can help you achieve your goals.
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h3>
             <div className="space-y-6">
               <div className="flex items-start">
                 <MapPin className="w-6 h-6 text-primary mt-1 mr-4 flex-shrink-0" />

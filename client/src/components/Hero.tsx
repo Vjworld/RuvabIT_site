@@ -32,14 +32,14 @@ export default function Hero() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Button
                   onClick={() => window.open('https://trendsolver.ruvab.it.com', '_blank')}
-                  className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
+                  className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto border-0 shadow-lg hover:shadow-xl"
                 >
                   Launch TrendSolver
                 </Button>
                 <Button
                   onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
                   variant="outline"
-                  className="border-primary text-primary px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto"
+                  className="border-2 border-primary text-primary bg-white dark:bg-gray-800 px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-full sm:w-auto shadow-lg hover:shadow-xl"
                 >
                   Launch LangScribe
                 </Button>

@@ -68,7 +68,8 @@ export default function Products() {
               </li>
             </ul>
             <Button
-              className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all w-full text-sm sm:text-base group-hover:shadow-lg transform group-hover:scale-105"
+              onClick={() => window.open('https://trendsolver.ruvab.it.com', '_blank')}
+              className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all w-full text-sm sm:text-base group-hover:shadow-lg transform group-hover:scale-105 border-0"
             >
               <Zap className="h-4 w-4 mr-2" />
               Launch TrendSolver
@@ -115,7 +116,8 @@ export default function Products() {
               </li>
             </ul>
             <Button
-              className="bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 transition-all w-full text-sm sm:text-base group-hover:shadow-lg transform group-hover:scale-105"
+              onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
+              className="bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 transition-all w-full text-sm sm:text-base group-hover:shadow-lg transform group-hover:scale-105 border-0"
             >
               <Zap className="h-4 w-4 mr-2" />
               Launch LangScribe
