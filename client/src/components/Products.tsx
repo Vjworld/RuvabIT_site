@@ -5,9 +5,9 @@ export default function Products() {
   const handleLearnMore = (product: string) => {
     trackEvent('learn_more', 'product', product);
     if (product === 'trend_solver') {
-      window.location.href = '/trend-solver';
+      window.open('https://trend-solver-vjvaibhu.replit.app', '_blank');
     } else if (product === 'langscribe') {
-      window.location.href = '/langscribe';
+      window.open('https://sanskrit-scribe-vaibhavgreenash.replit.app', '_blank');
     }
   };
 
@@ -53,7 +53,7 @@ export default function Products() {
               onClick={() => handleLearnMore('trend_solver')}
               className="bg-primary text-white hover:bg-blue-700 transition-colors w-full text-sm sm:text-base"
             >
-              Learn More
+              Launch TrendSolver
             </Button>
           </div>
           
@@ -88,7 +88,7 @@ export default function Products() {
               onClick={() => handleLearnMore('langscribe')}
               className="bg-purple-600 text-white hover:bg-purple-700 transition-colors w-full"
             >
-              Learn More
+              Launch LangScribe
             </Button>
           </div>
         </div>

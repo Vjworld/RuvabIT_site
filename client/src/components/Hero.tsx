@@ -31,13 +31,13 @@ export default function Hero() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Button
-                  onClick={() => window.open('/trendsolver/', '_blank')}
+                  onClick={() => window.open('https://trend-solver-vjvaibhu.replit.app', '_blank')}
                   className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
                 >
                   Launch TrendSolver
                 </Button>
                 <Button
-                  onClick={() => window.open('/langscribe/', '_blank')}
+                  onClick={() => window.open('https://sanskrit-scribe-vaibhavgreenash.replit.app', '_blank')}
                   variant="outline"
                   className="border-primary text-primary px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto"
                 >

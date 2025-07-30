@@ -30,7 +30,7 @@ const LangScribe = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button 
-                  onClick={() => window.open('/langscribe/', '_blank')}
+                  onClick={() => window.open('https://sanskrit-scribe-vaibhavgreenash.replit.app', '_blank')}
                   className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
                 >
                   Launch LangScribe
@@ -347,10 +347,10 @@ const LangScribe = () => {
             Join thousands of content creators using LangScribe to produce high-quality content faster.
           </p>
           <button 
-            onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
+            onClick={() => window.open('https://sanskrit-scribe-vaibhavgreenash.replit.app', '_blank')}
             className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
           >
-            Start Your Free 14-Day Trial
+            Launch LangScribe
           </button>
         </div>
       </section>

@@ -44,7 +44,7 @@ const TrendSolver = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
-                  onClick={() => window.open('/trendsolver/', '_blank')}
+                  onClick={() => window.open('https://trend-solver-vjvaibhu.replit.app', '_blank')}
                   className="bg-white text-purple-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-colors"
                 >
                   Launch TrendSolver
@@ -411,11 +411,11 @@ const TrendSolver = () => {
           </p>
           <button
             onClick={() =>
-              window.open("https://trendsolver.ruvab.it.com", "_blank")
+              window.open("https://trend-solver-vjvaibhu.replit.app", "_blank")
             }
             className="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-50 transition-colors"
           >
-            Start Your Free 14-Day Trial
+            Launch TrendSolver
           </button>
         </div>
       </section>
