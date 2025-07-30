@@ -36,7 +36,6 @@ import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
 import HelpDocumentation from "@/pages/HelpDocumentation";
-import { TourLauncher } from "@/components/OnboardingTour";
 
 import Disclaimer from "@/pages/Disclaimer";
 import CancellationRefundPolicy from "@/pages/CancellationRefundPolicy";
@@ -127,7 +126,6 @@ function App() {
           <Router />
           <Toaster />
           <CookieBanner />
-          <TourLauncher />
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>

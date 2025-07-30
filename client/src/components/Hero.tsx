@@ -18,28 +18,28 @@ export default function Hero() {
 
   return (
     <div>
-      <section id="home" data-tour="hero" className="bg-gradient-to-br from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 sm:py-16 lg:py-20">
+      <section id="home" className="bg-gradient-to-br from-blue-50 to-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left">
-              <h1 className="hero-title font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 leading-tight">
+              <h1 className="hero-title font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
                 Transform Your Business with{' '}
-                <span className="text-primary dark:text-blue-400">Advanced Technology Solutions</span>
+                <span className="text-primary">Advanced Technology Solutions</span>
               </h1>
-              <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Harness the power of AI, machine learning, and automation to solve complex business problems and drive growth with our innovative technology solutions.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Button
                   onClick={() => window.open('https://trendsolver.ruvab.it.com', '_blank')}
-                  className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto border-0 shadow-lg hover:shadow-xl"
+                  className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
                 >
                   Launch TrendSolver
                 </Button>
                 <Button
                   onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
                   variant="outline"
-                  className="border-2 border-primary text-primary bg-white dark:bg-gray-800 px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors w-full sm:w-auto shadow-lg hover:shadow-xl"
+                  className="border-primary text-primary px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto"
                 >
                   Launch LangScribe
                 </Button>

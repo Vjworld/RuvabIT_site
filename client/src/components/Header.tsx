@@ -8,8 +8,6 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import ThemeSwitcher from '@/components/ThemeSwitcher';
-import { TourButton } from '@/components/TourButton';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -82,12 +80,10 @@ function Header() {
             </div>
           </div>
           
-          <div className="hidden md:flex items-center gap-3">
-            <ThemeSwitcher />
-            <TourButton />
+          <div className="hidden md:block">
             <Button 
               onClick={() => window.location.href = '/contact'}
-              className="bg-primary text-white hover:bg-blue-700 transition-colors text-sm border-0 shadow-md hover:shadow-lg"
+              className="bg-primary text-white hover:bg-blue-700 transition-colors text-sm"
             >
               Get Started
             </Button>
@@ -110,28 +106,24 @@ function Header() {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-3 pt-2 pb-4 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg">
+          <div className="px-3 pt-2 pb-4 space-y-1 bg-white border-t shadow-lg">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
                 <span
                   onClick={() => handleNavClick(item.href)}
-                  className="block px-3 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
+                  className="block px-3 py-3 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
                 >
                   {item.name}
                 </span>
               </Link>
             ))}
-            <div className="pt-2 mt-2 border-t border-gray-200 dark:border-gray-700 space-y-2">
-              <div className="flex gap-2">
-                <ThemeSwitcher />
-                <TourButton />
-              </div>
+            <div className="pt-2 mt-2 border-t border-gray-200">
               <Button 
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   window.location.href = '/contact';
                 }}
-                className="bg-primary text-white hover:bg-blue-700 transition-colors w-full text-sm border-0"
+                className="bg-primary text-white hover:bg-blue-700 transition-colors w-full text-sm"
               >
                 Get Started
               </Button>
