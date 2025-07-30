@@ -8,6 +8,7 @@ import {
   DropdownMenuItem, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -80,7 +81,8 @@ function Header() {
             </div>
           </div>
           
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeSwitcher />
             <Button 
               onClick={() => window.location.href = '/contact'}
               className="bg-primary text-white hover:bg-blue-700 transition-colors text-sm"

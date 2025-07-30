@@ -18,7 +18,7 @@ export default function Blog() {
   };
 
   const getCategoryColor = (category: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       'AI & ML': 'text-accent',
       'Data Analytics': 'text-purple-600',
       'Cloud Computing': 'text-orange-600',
@@ -34,7 +34,7 @@ export default function Blog() {
   };
 
   const getDefaultImage = (category: string) => {
-    const images = {
+    const images: Record<string, string> = {
       'AI & ML': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400',
       'Data Analytics': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400',
       'Cloud Computing': 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400',
@@ -63,11 +63,11 @@ export default function Blog() {
     .slice(0, 3);
 
   return (
-    <section id="blog" className="py-20 bg-gray-50">
+    <section id="blog" data-tour="blog" className="py-20 bg-gray-50 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Latest Insights</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Latest Insights</h2>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Stay updated with the latest trends in technology, AI, and digital transformation through our expert analysis and insights.
           </p>
         </div>
