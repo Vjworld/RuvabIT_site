@@ -200,8 +200,8 @@ componentSettings: {
   - **Home Page Hero**: Launch buttons now open applications directly in new tabs
   - **Products Page**: "Launch" buttons replace "Learn More" with direct application links
   - **Individual Product Pages**: All CTA buttons now link to actual applications
-  - **Trend Solver**: All buttons → `https://trend-solver-vjvaibhu.replit.app`
-  - **LangScribe**: All buttons → `https://sanskrit-scribe-vaibhavgreenash.replit.app`
+  - **Trend Solver**: All buttons → `https://trendsolver.ruvab.it.com`
+  - **LangScribe**: All buttons → `https://langscribe.ruvab.it.com`
 - **Optimized Codebase**: Reduced bundle size by removing unused code and files
 - **User Experience**: Seamless access to applications with proper React page content
 - **Consistent Branding**: All buttons now use "Launch [Product]" instead of generic "Learn More" text

@@ -5,9 +5,9 @@ export default function Products() {
   const handleLearnMore = (product: string) => {
     trackEvent('learn_more', 'product', product);
     if (product === 'trend_solver') {
-      window.open('https://trend-solver-vjvaibhu.replit.app', '_blank');
+      window.open('https://trendsolver.ruvab.it.com', '_blank');
     } else if (product === 'langscribe') {
-      window.open('https://sanskrit-scribe-vaibhavgreenash.replit.app', '_blank');
+      window.open('https://langscribe.ruvab.it.com', '_blank');
     }
   };
 
