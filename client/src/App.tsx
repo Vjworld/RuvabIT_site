@@ -22,16 +22,13 @@ import BusinessIntelligence from "@/pages/BusinessIntelligence";
 import CloudSolutions from "@/pages/CloudSolutions";
 import Cybersecurity from "@/pages/Cybersecurity";
 import Consulting from "@/pages/Consulting";
-import CareersPage from "@/pages/CareersPage";
 import CookiePolicy from "@/pages/CookiePolicy";
 import BlogPage from "@/pages/BlogPage";
-import BlogPost from "@/pages/BlogPost";
 import BlogPostDetail from "@/pages/BlogPostDetail";
 
 import CaseStudies from "@/pages/CaseStudies";
 import HelpCenter from "@/pages/HelpCenter";
 import Documentation from "@/pages/Documentation";
-import APIDocumentation from "@/pages/APIDocumentation";
 import DataSecurityPolicy from "@/pages/DataSecurityPolicy";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
@@ -71,12 +68,10 @@ function Router() {
       
       {/* Additional Content Pages */}
       <Route path="/case-studies" component={CaseStudies} />
-      {/* <Route path="/careers" component={CareersPage} /> */}
       
       {/* Support Pages */}
       <Route path="/help" component={HelpCenter} />
       <Route path="/documentation" component={Documentation} />
-      {/* <Route path="/api-documentation" component={APIDocumentation} /> */}
       
       {/* Company Pages */}
       <Route path="/about" component={AboutPage} />
@@ -97,12 +92,7 @@ function Router() {
       {/* Additional Pages */}
       <Route path="/help-documentation" component={HelpDocumentation} />
       
-      {/* Admin routes - commented out for production */}
-      {/* <Route path="/admin" component={Admin} /> */}
-      {/* <Route path="/admin/cms" component={AdminCMS} /> */}
-      {/* <Route path="/admin/post-editor" component={AdminPostEditor} /> */}
-      {/* <Route path="/login" component={Login} /> */}
-      {/* <Route path="/logout" component={Logout} /> */}
+
       
       <Route component={NotFound} />
     </Switch>
