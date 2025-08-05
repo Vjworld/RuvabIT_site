@@ -90,7 +90,7 @@ export default function Contact() {
                 <Mail className="w-6 h-6 text-primary mt-1 mr-4 flex-shrink-0" />
                 <div>
                   <div className="font-semibold text-gray-900">Email</div>
-                  <div className="text-gray-600">info@ruvabit.com</div>
+                  <div className="text-gray-600">support@ruvabit.com</div>
                 </div>
               </div>
             </div>
