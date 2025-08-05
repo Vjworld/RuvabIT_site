@@ -1,9 +1,10 @@
 import { 
   type BlogPost, type InsertBlogPost, type User, type InsertUser,
-  type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex
+  type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex,
+  type NewsletterLead, type InsertNewsletterLead
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex } from "@shared/schema";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads } from "@shared/schema";
 import { eq, like, or, desc, and } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
@@ -32,6 +33,11 @@ export interface IStorage {
   // Search operations
   searchContent(query: SearchQuery): Promise<SearchIndex[]>;
   updateSearchIndex(contentType: string, contentId: number, title: string, content: string): Promise<void>;
+
+  // Newsletter operations
+  createNewsletterLead(insertLead: InsertNewsletterLead): Promise<NewsletterLead>;
+  getNewsletterLeads(): Promise<NewsletterLead[]>;
+  getNewsletterLead(email: string): Promise<NewsletterLead | undefined>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -193,6 +199,52 @@ export class DatabaseStorage implements IStorage {
         .where(eq(users.id, userId));
     } catch (error) {
       console.error("Error updating user password:", error);
+      throw error;
+    }
+  }
+
+  // Newsletter operations
+  async createNewsletterLead(insertLead: InsertNewsletterLead): Promise<NewsletterLead> {
+    try {
+      const [lead] = await db
+        .insert(newsletterLeads)
+        .values(insertLead)
+        .onConflictDoUpdate({
+          target: newsletterLeads.email,
+          set: {
+            subscriptionDate: new Date(),
+            isActive: true,
+          },
+        })
+        .returning();
+      return lead;
+    } catch (error) {
+      console.error("Error creating newsletter lead:", error);
+      throw error;
+    }
+  }
+
+  async getNewsletterLeads(): Promise<NewsletterLead[]> {
+    try {
+      return await db
+        .select()
+        .from(newsletterLeads)
+        .orderBy(desc(newsletterLeads.createdAt));
+    } catch (error) {
+      console.error("Error fetching newsletter leads:", error);
+      throw error;
+    }
+  }
+
+  async getNewsletterLead(email: string): Promise<NewsletterLead | undefined> {
+    try {
+      const [lead] = await db
+        .select()
+        .from(newsletterLeads)
+        .where(eq(newsletterLeads.email, email));
+      return lead;
+    } catch (error) {
+      console.error("Error fetching newsletter lead:", error);
       throw error;
     }
   }

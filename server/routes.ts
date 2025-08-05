@@ -385,6 +385,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Newsletter subscription routes
+  app.post("/api/newsletter/subscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+      }
+      
+      // Get user agent and IP for tracking
+      const userAgent = req.get('User-Agent') || 'Unknown';
+      const ipAddress = req.ip || req.connection.remoteAddress || 'Unknown';
+      
+      const lead = await storage.createNewsletterLead({
+        email: email.toLowerCase().trim(),
+        source: "website",
+        userAgent,
+        ipAddress,
+        isActive: true,
+      });
+      
+      res.json({ 
+        success: true, 
+        message: "Successfully subscribed to newsletter",
+        lead: {
+          id: lead.id,
+          email: lead.email,
+          subscriptionDate: lead.subscriptionDate
+        }
+      });
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  // Admin route to view newsletter leads
+  app.get("/api/admin/newsletter/leads", requireAuth, async (req, res) => {
+    try {
+      const leads = await storage.getNewsletterLeads();
+      res.json(leads);
+    } catch (error) {
+      console.error("Get newsletter leads error:", error);
+      res.status(500).json({ message: "Failed to fetch newsletter leads" });
+    }
+  });
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {

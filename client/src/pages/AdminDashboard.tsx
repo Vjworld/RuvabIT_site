@@ -22,12 +22,15 @@ import {
   Save,
   X,
   Lock,
-  KeyRound
+  KeyRound,
+  Mail,
+  Calendar,
+  Download
 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import type { BlogPost, User, PageContent } from "@shared/schema";
+import type { BlogPost, User, PageContent, NewsletterLead } from "@shared/schema";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -108,7 +111,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="posts" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Blog Posts
@@ -120,6 +123,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="search" className="flex items-center gap-2">
               <Search className="w-4 h-4" />
               Search
+            </TabsTrigger>
+            <TabsTrigger value="newsletter" className="flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              Newsletter
             </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
@@ -214,6 +221,18 @@ export default function AdminDashboard() {
               <h2 className="text-xl font-semibold">Search & Analytics</h2>
             </div>
             <SearchTest />
+          </TabsContent>
+
+          {/* Newsletter Leads */}
+          <TabsContent value="newsletter" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Newsletter Leads</h2>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Download className="w-4 h-4" />
+                Export CSV
+              </Button>
+            </div>
+            <NewsletterLeadsManager />
           </TabsContent>
 
           {/* User Management */}
@@ -549,6 +568,227 @@ function SearchTest() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+// Newsletter Leads Manager Component
+function NewsletterLeadsManager() {
+  const { data: leads = [], isLoading } = useQuery<NewsletterLead[]>({
+    queryKey: ["/api/admin/newsletter/leads"],
+  });
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading newsletter leads...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Mail className="w-5 h-5" />
+          Newsletter Subscribers ({leads.length})
+        </CardTitle>
+        <CardDescription>
+          Manage and view all newsletter subscriptions from your website
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {leads.length === 0 ? (
+          <div className="text-center py-8">
+            <Mail className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground">No newsletter subscribers yet</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Subscribers will appear here when they sign up on your website
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {/* Summary Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">{leads.length}</div>
+                <div className="text-sm text-blue-700 dark:text-blue-300">Total Subscribers</div>
+              </div>
+              <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  {leads.filter(lead => lead.isActive).length}
+                </div>
+                <div className="text-sm text-green-700 dark:text-green-300">Active Subscribers</div>
+              </div>
+              <div className="bg-purple-50 dark:bg-purple-950 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">
+                  {leads.filter(lead => 
+                    new Date(lead.subscriptionDate!).toDateString() === new Date().toDateString()
+                  ).length}
+                </div>
+                <div className="text-sm text-purple-700 dark:text-purple-300">Today's Subscriptions</div>
+              </div>
+            </div>
+
+            {/* Leads Table */}
+            <div className="border rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-muted">
+                    <tr>
+                      <th className="text-left p-3 font-medium">Email</th>
+                      <th className="text-left p-3 font-medium">Status</th>
+                      <th className="text-left p-3 font-medium">Source</th>
+                      <th className="text-left p-3 font-medium">Subscription Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leads.map((lead) => (
+                      <tr key={lead.id} className="border-t hover:bg-muted/50">
+                        <td className="p-3">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-medium">{lead.email}</span>
+                          </div>
+                        </td>
+                        <td className="p-3">
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              lead.isActive
+                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                            }`}
+                          >
+                            {lead.isActive ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td className="p-3">
+                          <span className="text-sm text-muted-foreground capitalize">
+                            {lead.source || "website"}
+                          </span>
+                        </td>
+                        <td className="p-3">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <span className="text-sm">
+                              {lead.subscriptionDate ? formatDate(lead.subscriptionDate) : "N/A"}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Test Newsletter Subscription */}
+            <div className="mt-6 p-4 bg-muted rounded-lg">
+              <h4 className="font-medium mb-2">Test Newsletter Subscription</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Test the newsletter subscription functionality with a sample email
+              </p>
+              <TestNewsletterForm />
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// Test Newsletter Form Component
+function TestNewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
+  const queryClient = useQueryClient();
+
+  const testSubscription = useMutation({
+    mutationFn: async (email: string) => {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to subscribe");
+      }
+      
+      return await response.json();
+    },
+    onSuccess: (data) => {
+      setMessage("Test subscription successful!");
+      setMessageType("success");
+      setEmail("");
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/newsletter/leads"] });
+      setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 3000);
+    },
+    onError: (error: any) => {
+      setMessage(error.message || "Failed to subscribe");
+      setMessageType("error");
+      setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 3000);
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      testSubscription.mutate(email);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <Input
+        type="email"
+        placeholder="test@example.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="flex-1"
+        required
+      />
+      <Button
+        type="submit"
+        disabled={testSubscription.isPending}
+        className="whitespace-nowrap"
+      >
+        {testSubscription.isPending ? "Testing..." : "Test Subscribe"}
+      </Button>
+      {message && (
+        <span
+          className={`text-sm ${
+            messageType === "success" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {message}
+        </span>
+      )}
+    </form>
   );
 }
 

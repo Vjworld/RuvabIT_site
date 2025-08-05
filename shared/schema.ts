@@ -113,6 +113,29 @@ export const searchSchema = z.object({
   offset: z.number().min(0).optional().default(0),
 });
 
+// Newsletter leads table
+export const newsletterLeads = pgTable("newsletter_leads", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  subscriptionDate: timestamp("subscription_date").defaultNow(),
+  isActive: boolean("is_active").default(true),
+  source: varchar("source", { length: 100 }).default("website"), // website, referral, etc.
+  userAgent: varchar("user_agent", { length: 500 }),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type NewsletterLead = typeof newsletterLeads.$inferSelect;
+export type InsertNewsletterLead = typeof newsletterLeads.$inferInsert;
+
+export const insertNewsletterLeadSchema = createInsertSchema(newsletterLeads).omit({
+  id: true,
+  subscriptionDate: true,
+  createdAt: true,
+});
+
+export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
+
 // Type exports
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
