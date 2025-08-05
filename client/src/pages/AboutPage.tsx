@@ -244,9 +244,14 @@ const AboutPage = () => {
 
                     {/* Call to action button */}
                     <div className="pt-4">
-                      <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-base hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                      <a 
+                        href="https://www.linkedin.com/in/vaibhav-selukar" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-base hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                      >
                         Connect & Collaborate
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
