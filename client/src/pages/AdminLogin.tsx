@@ -35,7 +35,7 @@ export default function AdminLogin() {
     },
     onSuccess: (data) => {
       if (data.success && data.user?.isAdmin) {
-        setLocation("/admin/dashboard");
+        setLocation("/vsadmin/dashboard");
       } else {
         setError("Admin access required");
       }

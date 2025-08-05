@@ -44,7 +44,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!userLoading && (!currentUser || !currentUser.isAdmin)) {
-      setLocation("/admin/login");
+      setLocation("/vsadmin/login");
     }
   }, [currentUser, userLoading, setLocation]);
 
@@ -59,7 +59,7 @@ export default function AdminDashboard() {
     },
     onSuccess: () => {
       queryClient.clear();
-      setLocation("/admin/login");
+      setLocation("/vsadmin/login");
     },
   });
 

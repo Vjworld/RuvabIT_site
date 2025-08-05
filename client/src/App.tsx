@@ -71,8 +71,8 @@ function Router() {
       <Route path="/search" component={SearchPage} />
       
       {/* Admin Pages */}
-      <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/vsadmin/login" component={AdminLogin} />
+      <Route path="/vsadmin/dashboard" component={AdminDashboard} />
       
       {/* Additional Content Pages */}
       <Route path="/case-studies" component={CaseStudies} />
