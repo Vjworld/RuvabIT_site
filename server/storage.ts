@@ -181,6 +181,22 @@ export class DatabaseStorage implements IStorage {
     return content;
   }
 
+  // User management operations
+  async updateUserPassword(userId: number, hashedPassword: string): Promise<void> {
+    try {
+      await db
+        .update(users)
+        .set({ 
+          password: hashedPassword, 
+          updatedAt: new Date() 
+        })
+        .where(eq(users.id, userId));
+    } catch (error) {
+      console.error("Error updating user password:", error);
+      throw error;
+    }
+  }
+
   // Search operations
   async searchContent(query: SearchQuery): Promise<SearchIndex[]> {
     const searchTerm = `%${query.query}%`;
