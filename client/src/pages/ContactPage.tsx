@@ -21,17 +21,48 @@ const ContactPage = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Handle form submission (implement your API call here)
-    console.log("Form submitted:", formData);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Show success message
-    toast({
-      title: "Form Submitted",
-      description: "Thank you for your message. We'll get back to you within 24 hours.",
-    });
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent Successfully",
+          description: result.message,
+        });
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleChange = (
