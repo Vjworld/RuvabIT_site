@@ -1,19 +1,181 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertBlogPostSchema } from "@shared/schema";
+import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema } from "@shared/schema";
+import bcrypt from "bcrypt";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import sgMail from '@sendgrid/mail';
 
-export async function registerRoutes(app: Express): Promise<Server> {
+// Extend Express Request type for user session
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    isAdmin?: boolean;
+  }
+}
 
-  // Blog routes
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
+}
+
+// Session middleware
+const PgSession = connectPgSimple(session);
+
+// Authentication middleware
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.session?.userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+  next();
+};
+
+const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.session?.userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+  
+  const user = await storage.getUser(req.session.userId);
+  if (!user?.isAdmin) {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  
+  req.user = user;
+  next();
+};
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Session configuration
+  app.use(session({
+    store: new PgSession({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: false,
+      tableName: 'sessions',
+    }),
+    secret: process.env.SESSION_SECRET || 'dev-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  }));
+
+  // Authentication routes
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid username or password" });
+      }
+      
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid username or password" });
+      }
+      
+      req.session.userId = user.id;
+      req.session.isAdmin = user.isAdmin;
+      
+      res.json({
+        success: true,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isAdmin: user.isAdmin,
+        },
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  app.get("/api/auth/me", requireAuth, async (req, res) => {
+    try {
+      const user = await storage.getUser(req.session.userId!);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isAdmin: user.isAdmin,
+      });
+    } catch (error) {
+      console.error("Get user error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // User management routes (admin only)
+  app.get("/api/admin/users", requireAdmin, async (req, res) => {
+    try {
+      // Note: This would require a method to get all users
+      res.json({ message: "Users endpoint - to be implemented" });
+    } catch (error) {
+      console.error("Get users error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/admin/users", requireAdmin, async (req, res) => {
+    try {
+      const result = insertUserSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid user data", errors: result.error.errors });
+      }
+      
+      const user = await storage.createUser(result.data);
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isAdmin: user.isAdmin,
+      });
+    } catch (error) {
+      console.error("Create user error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Blog routes (public)
   app.get("/api/blog/posts", async (req, res) => {
     try {
       const posts = await storage.getBlogPosts();
-      const publishedPosts = posts.filter(post => post.isPublished);
-      res.json(publishedPosts);
+      res.json(posts);
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      console.error("Get blog posts error:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   });
 
@@ -21,11 +183,166 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const post = await storage.getBlogPostBySlug(req.params.slug);
       if (!post) {
-        return res.status(404).json({ error: "Post not found" });
+        return res.status(404).json({ message: "Post not found" });
       }
       res.json(post);
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      console.error("Get blog post error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Blog management routes (admin only)
+  app.get("/api/admin/blog/posts", requireAdmin, async (req, res) => {
+    try {
+      // Get all posts including unpublished ones
+      const posts = await storage.getBlogPosts();
+      res.json(posts);
+    } catch (error) {
+      console.error("Get admin blog posts error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/admin/blog/posts", requireAdmin, async (req, res) => {
+    try {
+      const result = insertBlogPostSchema.safeParse({
+        ...req.body,
+        authorId: req.session.userId,
+      });
+      
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid blog post data", errors: result.error.errors });
+      }
+      
+      const post = await storage.createBlogPost(result.data);
+      res.json(post);
+    } catch (error) {
+      console.error("Create blog post error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.put("/api/admin/blog/posts/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid post ID" });
+      }
+      
+      const post = await storage.updateBlogPost(id, req.body);
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      
+      res.json(post);
+    } catch (error) {
+      console.error("Update blog post error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.delete("/api/admin/blog/posts/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid post ID" });
+      }
+      
+      const success = await storage.deleteBlogPost(id);
+      if (!success) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete blog post error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // CMS/Page content routes (admin only)
+  app.get("/api/admin/pages", requireAdmin, async (req, res) => {
+    try {
+      const pages = await storage.getAllPageContents();
+      res.json(pages);
+    } catch (error) {
+      console.error("Get pages error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get("/api/pages/:pageKey", async (req, res) => {
+    try {
+      const page = await storage.getPageContent(req.params.pageKey);
+      if (!page) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      res.json(page);
+    } catch (error) {
+      console.error("Get page error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/admin/pages", requireAdmin, async (req, res) => {
+    try {
+      const result = insertPageContentSchema.safeParse({
+        ...req.body,
+        updatedBy: req.session.userId,
+      });
+      
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid page data", errors: result.error.errors });
+      }
+      
+      const page = await storage.createPageContent(result.data);
+      res.json(page);
+    } catch (error) {
+      console.error("Create page error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.put("/api/admin/pages/:pageKey", requireAdmin, async (req, res) => {
+    try {
+      const page = await storage.updatePageContent(req.params.pageKey, {
+        ...req.body,
+        updatedBy: req.session.userId,
+      });
+      
+      if (!page) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+      
+      res.json(page);
+    } catch (error) {
+      console.error("Update page error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Search routes
+  app.get("/api/search", async (req, res) => {
+    try {
+      // Parse query parameters manually to handle number conversion
+      const searchParams = {
+        query: req.query.query as string,
+        type: (req.query.type as string) || "all",
+        limit: req.query.limit ? parseInt(req.query.limit as string, 10) : 10,
+        offset: req.query.offset ? parseInt(req.query.offset as string, 10) : 0,
+      };
+      
+      const result = searchSchema.safeParse(searchParams);
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid search parameters", errors: result.error.errors });
+      }
+      
+      const results = await storage.searchContent(result.data);
+      res.json(results);
+    } catch (error) {
+      console.error("Search error:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   });
 
@@ -73,82 +390,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         <p><em>Submitted at: ${new Date().toISOString()}</em></p>
       `;
 
-      const textContent = `
-        New Contact Form Submission
-        
-        Name: ${name}
-        Email: ${email}
-        Company: ${company || 'Not specified'}
-        Subject: ${subject || 'Contact Form Submission'}
-        
-        Message:
-        ${message}
-        
-        Submitted at: ${new Date().toISOString()}
-      `;
+      // Send email
+      const msg = {
+        to: process.env.EMAIL_TO || 'admin@ruvab.it.com',
+        from: process.env.EMAIL_FROM || 'noreply@ruvab.it.com',
+        subject: `Contact Form: ${subject || 'New Inquiry'}`,
+        html: emailContent,
+        replyTo: email,
+      };
 
-      // Send email via SendGrid
-      try {
-        await sgMail.send({
-          to: process.env.EMAIL_TO || 'info@ruvab.it.com',
-          from: process.env.EMAIL_FROM || 'noreply@ruvab.it.com',
-          subject: `Contact Form: ${subject || 'New Message from ' + name}`,
-          text: textContent,
-          html: emailContent,
-        });
+      await sgMail.send(msg);
 
-        console.log("Contact form email sent successfully to:", process.env.EMAIL_TO);
-        res.json({ 
-          success: true, 
-          message: "Thank you for your message. We'll get back to you within 24 hours." 
-        });
-
-      } catch (sendGridError: any) {
-        console.error("SendGrid error details:", {
-          code: sendGridError.code,
-          message: sendGridError.message,
-          response: sendGridError.response?.body
-        });
-
-        // Log form data since email failed
-        console.log("Contact form submission (email failed):", { name, email, company, subject, message });
-
-        // Return success to user even if email fails - we've logged the data
-        res.json({ 
-          success: true, 
-          message: "Thank you for your message. We'll get back to you within 24 hours." 
-        });
-      }
+      res.json({ 
+        success: true, 
+        message: "Thank you for your message. We'll get back to you within 24 hours." 
+      });
 
     } catch (error) {
-      console.error("Contact form error:", error);
-      res.status(500).json({ error: "Failed to send message. Please try again later." });
+      console.error('SendGrid error:', error);
+      
+      // Log the contact data even if email fails
+      console.log("Contact form submission (email failed):", req.body);
+      
+      res.json({ 
+        success: true, 
+        message: "Thank you for your message. We'll get back to you within 24 hours." 
+      });
     }
-  });
-
-  // Environment variables security check endpoint (development only)
-  app.get("/api/env-check", (req, res) => {
-    if (process.env.NODE_ENV === 'production') {
-      return res.status(404).json({ error: "Not found" });
-    }
-
-    const envStatus = {
-      DATABASE_URL: process.env.DATABASE_URL ? "✅ Set (secured)" : "❌ Missing",
-      SENDGRID_API_KEY: process.env.SENDGRID_API_KEY ? `✅ Set (${process.env.SENDGRID_API_KEY.substring(0, 6)}...)` : "❌ Missing",
-      EMAIL_FROM: process.env.EMAIL_FROM ? `✅ Set (${process.env.EMAIL_FROM})` : "❌ Missing", 
-      EMAIL_TO: process.env.EMAIL_TO ? `✅ Set (${process.env.EMAIL_TO})` : "❌ Missing",
-      VITE_GA_MEASUREMENT_ID: process.env.VITE_GA_MEASUREMENT_ID ? `✅ Set (${process.env.VITE_GA_MEASUREMENT_ID})` : "❌ Missing",
-      VITE_ADSENSE_CLIENT_ID: process.env.VITE_ADSENSE_CLIENT_ID ? `✅ Set (${process.env.VITE_ADSENSE_CLIENT_ID})` : "❌ Missing"
-    };
-
-    res.json({
-      message: "Environment Variables Status (Development Only)",
-      security_note: "DATABASE_URL is properly secured and not exposed to frontend. VITE_ prefixed variables are intentionally exposed to frontend for Google Analytics and AdSense.",
-      variables: envStatus
-    });
   });
 
   const httpServer = createServer(app);
-
   return httpServer;
 }

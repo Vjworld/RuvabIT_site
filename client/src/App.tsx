@@ -25,6 +25,9 @@ import Consulting from "@/pages/Consulting";
 import CookiePolicy from "@/pages/CookiePolicy";
 import BlogPage from "@/pages/BlogPage";
 import BlogPostDetail from "@/pages/BlogPostDetail";
+import SearchPage from "@/pages/SearchPage";
+import AdminLogin from "@/pages/AdminLogin";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 import CaseStudies from "@/pages/CaseStudies";
 import HelpCenter from "@/pages/HelpCenter";
@@ -65,6 +68,11 @@ function Router() {
       {/* Content Pages */}
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostDetail} />
+      <Route path="/search" component={SearchPage} />
+      
+      {/* Admin Pages */}
+      <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
       
       {/* Additional Content Pages */}
       <Route path="/case-studies" component={CaseStudies} />
