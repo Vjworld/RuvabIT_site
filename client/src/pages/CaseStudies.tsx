@@ -6,8 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Users, Clock, Target, CheckCircle, ArrowRight } from "lucide-react";
+import { trackEvent } from '@/lib/analytics';
+import { useLocation } from 'wouter';
 
 export default function CaseStudies() {
+  const [, setLocation] = useLocation();
+
+  const handleStartProject = () => {
+    trackEvent('start_project', 'engagement', 'case_studies_cta');
+    setLocation('/contact');
+  };
+
+  const handleDiscussNeeds = () => {
+    trackEvent('discuss_needs', 'engagement', 'case_studies_cta');
+    setLocation('/contact');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -325,10 +339,18 @@ export default function CaseStudies() {
             Join our growing list of satisfied clients who have transformed their businesses with our technology solutions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700">
+            <Button 
+              size="lg" 
+              className="bg-green-600 hover:bg-green-700"
+              onClick={handleStartProject}
+            >
               Start Your Project
             </Button>
-            <Button size="lg" variant="outline">
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={handleDiscussNeeds}
+            >
               Discuss Your Needs
             </Button>
           </div>
