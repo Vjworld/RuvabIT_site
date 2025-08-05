@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertBlogPostSchema } from "@shared/schema";
-import nodemailer from "nodemailer";
+import sgMail from '@sendgrid/mail';
 
 export async function registerRoutes(app: Express): Promise<Server> {
 
@@ -45,29 +45,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Please provide a valid email address" });
       }
 
-      // Check if email service is configured
-      if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      // Check if SendGrid is configured
+      if (!process.env.SENDGRID_API_KEY) {
         console.log("Contact form submission:", { name, email, company, subject, message });
-        console.warn("Email service not configured. Contact form data logged only.");
+        console.warn("SendGrid API key not configured. Contact form data logged only.");
         return res.json({ 
           success: true, 
           message: "Thank you for your message. We'll get back to you within 24 hours." 
         });
       }
 
-      // Configure email transporter
-      const transporter = nodemailer.createTransporter({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || "587"),
-        secure: process.env.SMTP_PORT === "465",
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
-        },
-      });
+      // Configure SendGrid
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
       // Email content
       const emailContent = `
+        <h2>New Contact Form Submission</h2>
+        
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Company:</strong> ${company || 'Not specified'}</p>
+        <p><strong>Subject:</strong> ${subject || 'Contact Form Submission'}</p>
+        
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        
+        <p><em>Submitted at: ${new Date().toISOString()}</em></p>
+      `;
+
+      const textContent = `
         New Contact Form Submission
         
         Name: ${name}
@@ -81,13 +87,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         Submitted at: ${new Date().toISOString()}
       `;
 
-      // Send email
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM || process.env.SMTP_USER,
-        to: process.env.EMAIL_TO || process.env.SMTP_USER,
-        subject: `Contact Form: ${subject || 'New Message'}`,
-        text: emailContent,
-        html: emailContent.replace(/\n/g, '<br>'),
+      // Send email via SendGrid
+      await sgMail.send({
+        to: process.env.EMAIL_TO || 'info@ruvab.it.com',
+        from: process.env.EMAIL_FROM || 'noreply@ruvab.it.com',
+        subject: `Contact Form: ${subject || 'New Message from ' + name}`,
+        text: textContent,
+        html: emailContent,
       });
 
       res.json({ 
