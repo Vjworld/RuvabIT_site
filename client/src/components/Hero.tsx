@@ -6,10 +6,7 @@ import DemoTour from './DemoTour';
 export default function Hero() {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
 
-  const handleStartTrial = () => {
-    trackEvent('start_trial', 'engagement', 'hero_button');
-    window.location.href = '/trend-solver';
-  };
+
 
   const handleWatchDemo = () => {
     trackEvent('watch_demo', 'engagement', 'hero_button');
@@ -31,17 +28,10 @@ export default function Hero() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                 <Button
-                  onClick={() => window.open('https://trendsolver.ruvab.it.com', '_blank')}
+                  onClick={handleWatchDemo}
                   className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
                 >
-                  Launch TrendSolver
-                </Button>
-                <Button
-                  onClick={() => window.open('https://langscribe.ruvab.it.com', '_blank')}
-                  variant="outline"
-                  className="border-primary text-primary px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto"
-                >
-                  Launch LangScribe
+                  Take Demo Tour
                 </Button>
               </div>
             </div>
