@@ -323,7 +323,7 @@ const CancellationRefundPolicy = () => {
               </h3>
               <ol className="list-decimal pl-6 text-gray-600 space-y-2 mb-6">
                 <li>
-                  <strong>Contact Support:</strong> Email refunds@ruvabit.com
+                  <strong>Contact Support:</strong> Use our contact form 
                   with your request
                 </li>
                 <li>
@@ -500,8 +500,7 @@ const CancellationRefundPolicy = () => {
               </p>
               <ol className="list-decimal pl-6 text-gray-600 space-y-2 mb-6">
                 <li>
-                  Contact our Customer Success Manager at
-                  escalations@ruvabit.com
+                  Contact our Customer Success Manager through our contact form
                 </li>
                 <li>Provide additional documentation or clarification</li>
                 <li>Request a review by our senior management team</li>
@@ -536,29 +535,10 @@ const CancellationRefundPolicy = () => {
                 For cancellations, refunds, or questions about this policy:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Refunds Email:</strong> refunds@ruvabit.com
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Support Phone:</strong> +1 (555) 123-4567
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Escalations:</strong> escalations@ruvabit.com
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Business Hours:</strong> 9 AM - 6 PM PST
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Response Time:</strong> Within 24 hours
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Processing Time:</strong> 5-10 business days
-                    </p>
-                  </div>
+                <div className="text-center">
+                  <p className="text-gray-600">
+                    For cancellations, refunds, or questions about this policy, please use our contact form.
+                  </p>
                 </div>
               </div>
             </div>

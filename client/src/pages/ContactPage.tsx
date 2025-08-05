@@ -236,83 +236,9 @@ const ContactPage = () => {
                   Contact Information
                 </h2>
                 <p className="text-lg text-gray-600 mb-8">
-                  Get in touch with our team through any of these channels.
+                  Get in touch with our team through the contact form.
                   We're here to help you achieve your technology goals.
                 </p>
-              </div>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MapPin className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      Headquarters
-                    </h3>
-                    <p className="text-gray-600">
-                      123 Technology Drive
-                      <br />
-                      San Francisco, CA 94105
-                      <br />
-                      United States
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Phone className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      Phone Support
-                    </h3>
-                    <p className="text-gray-600">
-                      Sales: +1 (555) 123-4567
-                      <br />
-                      Support: +1 (555) 123-4568
-                      <br />
-                      Toll-free: 1-800-RUVAB-IT
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      Email
-                    </h3>
-                    <p className="text-gray-600">
-                      General: info@ruvabit.com
-                      <br />
-                      Sales: sales@ruvabit.com
-                      <br />
-                      Support: support@ruvabit.com
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Clock className="h-6 w-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                      Business Hours
-                    </h3>
-                    <p className="text-gray-600">
-                      Monday - Friday: 9:00 AM - 6:00 PM PST
-                      <br />
-                      Saturday: 10:00 AM - 4:00 PM PST
-                      <br />
-                      Sunday: Closed
-                    </p>
-                  </div>
-                </div>
               </div>
 
               {/* Live Chat */}
@@ -324,8 +250,7 @@ const ContactPage = () => {
                   </h3>
                 </div>
                 <p className="text-gray-600 mb-4">
-                  Need immediate assistance? Our live chat support is available
-                  during business hours.
+                  Need immediate assistance? Please use the contact form and we'll respond quickly.
                 </p>
                 <button
                   onClick={handleLiveChatClick}
@@ -339,66 +264,7 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Office Locations */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Global Offices
-            </h2>
-            <p className="text-xl text-gray-600">
-              Find us around the world with local support and expertise
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                San Francisco
-              </h3>
-              <p className="text-gray-600 mb-3">
-                123 Technology Drive
-                <br />
-                San Francisco, CA 94105
-              </p>
-              <p className="text-sm text-blue-600">Headquarters</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                New York
-              </h3>
-              <p className="text-gray-600 mb-3">
-                456 Innovation Ave
-                <br />
-                New York, NY 10001
-              </p>
-              <p className="text-sm text-green-600">East Coast Office</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                London
-              </h3>
-              <p className="text-gray-600 mb-3">
-                789 Tech Street
-                <br />
-                London, UK EC1A 1AA
-              </p>
-              <p className="text-sm text-purple-600">European Office</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* FAQ */}
       <section className="py-20">

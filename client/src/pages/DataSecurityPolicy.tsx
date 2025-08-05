@@ -91,9 +91,7 @@ export default function DataSecurityPolicy() {
               For any questions about our data security practices or to report a security concern:
             </p>
             <p className="mt-4">
-              Email: security@ruvab.it.com<br />
-              Phone: +1 (555) 123-4567<br />
-              Address: Ruvab IT, Security Department
+              Please use our contact form to report security concerns.
             </p>
           </section>
         </div>

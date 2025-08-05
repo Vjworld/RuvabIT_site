@@ -72,13 +72,13 @@ export default function HelpCenter() {
             <Card>
               <CardHeader>
                 <Phone className="w-8 h-8 text-purple-600 mb-2" />
-                <CardTitle>Phone Support</CardTitle>
+                <CardTitle>Contact Support</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Speak directly with our technical support team.
+                  Get help through our contact form for technical support.
                 </p>
-                <Button variant="outline" className="w-full">Call Support</Button>
+                <Button variant="outline" className="w-full">Contact Us</Button>
               </CardContent>
             </Card>
           </div>

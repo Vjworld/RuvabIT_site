@@ -530,27 +530,10 @@ const Disclaimer = () => {
                 clarification on any terms:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Legal Department:</strong> legal@ruvabit.com
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>General Inquiries:</strong> info@ruvabit.com
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Phone:</strong> +1 (555) 123-4567
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Address:</strong> 123 Technology Drive
-                    </p>
-                    <p className="text-gray-600">San Francisco, CA 94105</p>
-                    <p className="text-gray-600">
-                      <strong>Business Hours:</strong> 9 AM - 6 PM PST
-                    </p>
-                  </div>
+                <div className="text-center">
+                  <p className="text-gray-600">
+                    For questions about this disclaimer, please use our contact form.
+                  </p>
                 </div>
               </div>
             </div>

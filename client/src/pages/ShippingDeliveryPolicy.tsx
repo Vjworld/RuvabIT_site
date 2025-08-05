@@ -355,7 +355,7 @@ const ShippingDeliveryPolicy = () => {
                   Check your email spam/junk folder for delivery notifications
                 </li>
                 <li>Verify your account information and payment status</li>
-                <li>Contact our support team at support@ruvabit.com</li>
+                <li>Contact our support team through our contact form</li>
                 <li>Provide your order number and account details</li>
                 <li>
                   Our team will resolve the issue within 2 hours during business
@@ -368,9 +368,8 @@ const ShippingDeliveryPolicy = () => {
                   Emergency Support
                 </h4>
                 <p className="text-orange-700 text-sm">
-                  For critical business services, emergency support is available
-                  24/7 for Enterprise customers. Contact our emergency hotline
-                  at +1 (555) 123-URGENT for immediate assistance.
+                  For critical business services, priority support is available
+                  for Enterprise customers. Use our contact form for immediate assistance.
                 </p>
               </div>
             </div>
@@ -471,29 +470,10 @@ const ShippingDeliveryPolicy = () => {
                 us:
               </p>
               <div className="bg-gray-50 p-6 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Email:</strong> delivery@ruvabit.com
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Phone:</strong> +1 (555) 123-4567
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Emergency:</strong> +1 (555) 123-URGENT
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-600">
-                      <strong>Business Hours:</strong> 9 AM - 6 PM PST
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Emergency Support:</strong> 24/7 (Enterprise)
-                    </p>
-                    <p className="text-gray-600">
-                      <strong>Response Time:</strong> Within 2 hours
-                    </p>
-                  </div>
+                <div className="text-center">
+                  <p className="text-gray-600">
+                    For questions about service delivery or access issues, please use our contact form.
+                  </p>
                 </div>
               </div>
             </div>
