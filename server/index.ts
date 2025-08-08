@@ -8,29 +8,61 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Reverse Proxy for QR Gen Tool
-app.use('/qr-gen-tool', createProxyMiddleware({
-  target: 'https://qr-gentool-vjvaibhu.replit.app',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/qr-gen-tool': '', // removes the /qr-gen-tool path prefix when forwarding the request
-  },
-  onProxyReq: (proxyReq: any, req: any, res: any) => {
-    // Log proxy requests for debugging
-    console.log(`Proxying ${req.method} ${req.url} to https://qr-gentool-vjvaibhu.replit.app${req.url.replace('/qr-gen-tool', '')}`);
-  },
-  onError: (err: any, req: any, res: any) => {
-    console.error('Proxy error:', err);
-    res.status(500).send('Proxy error: ' + err.message);
-  },
-  // Handle HTTPS properly
-  secure: true,
-  // Forward headers properly
-  headers: {
-    'X-Forwarded-Host': (req: any) => req.get('host'),
-    'X-Forwarded-Proto': 'https'
+// QR Gen Tool custom proxy handler
+app.get('/qr-gen-tool*', async (req, res) => {
+  const targetPath = req.path.replace('/qr-gen-tool', '') || '/';
+  const targetUrl = `https://qr-gentool-vjvaibhu.replit.app${targetPath}`;
+  
+  console.log(`Proxying ${req.method} ${req.path} to ${targetUrl}`);
+  
+  try {
+    const fetch = (await import('node-fetch')).default;
+    const response = await fetch(targetUrl, {
+      method: req.method,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': req.headers.accept || 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': req.headers['accept-language'] || 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
+      }
+    });
+    
+    if (!response.ok) {
+      console.error(`Proxy error: ${response.status} ${response.statusText}`);
+      return res.status(response.status).send(`Proxy error: ${response.statusText}`);
+    }
+    
+    const contentType = response.headers.get('content-type') || '';
+    let content = await response.text();
+    
+    // For HTML responses, fix relative paths
+    if (contentType.includes('text/html')) {
+      content = content
+        .replace(/href="\/([^"]*?)"/g, 'href="/qr-gen-tool/$1"')
+        .replace(/src="\/([^"]*?)"/g, 'src="/qr-gen-tool/$1"')
+        .replace(/<head>/i, '<head><base href="/qr-gen-tool/">')
+        // Fix specific manifest and asset paths
+        .replace('href="/qr-gen-tool/manifest.json"', 'href="/qr-gen-tool/manifest.json"')
+        .replace(/href="\/qr-gen-tool\/qr-gen-tool\//g, 'href="/qr-gen-tool/');
+    }
+    
+    // Set response headers
+    res.set({
+      'Content-Type': contentType,
+      'Cache-Control': response.headers.get('cache-control') || 'no-cache',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    });
+    
+    res.send(content);
+  } catch (error) {
+    console.error('Proxy request failed:', error);
+    res.status(500).send('Proxy request failed: ' + (error as Error).message);
   }
-} as any));
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -68,7 +100,11 @@ app.use((req, res, next) => {
   await storage.initializeDefaultData();
   console.log("Default data initialized successfully");
   
+  // Register API routes first
   const server = await registerRoutes(app);
+
+  // The QR Gen Tool proxy is already registered above, before Vite
+  // This ensures it runs before Vite's catch-all route
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -78,9 +114,8 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
+  // Setup Vite AFTER all other routes so the catch-all route
+  // doesn't interfere with our QR proxy or API routes
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
