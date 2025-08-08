@@ -512,11 +512,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // QR Gen Tool Proxy - Register before any catch-all routes
-  app.use('/qr-gen-tool*', async (req, res) => {
+  app.get('/qr-gen-tool', (req, res) => {
+    res.redirect('/qr-gen-tool/');
+  });
+  
+  app.get('/qr-gen-tool/*', async (req, res) => {
     const targetPath = req.path.replace('/qr-gen-tool', '') || '/';
     const targetUrl = `https://qr-gentool-vjvaibhu.replit.app${targetPath}`;
     
-    console.log(`Proxying ${req.method} ${req.path} to ${targetUrl}`);
+    console.log(`[QR Proxy] ${req.method} ${req.path} -> ${targetUrl}`);
     
     try {
       const fetch = (await import('node-fetch')).default;
@@ -526,24 +530,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
           'Accept': req.headers.accept || 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
           'Accept-Language': req.headers['accept-language'] || 'en-US,en;q=0.9',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Connection': 'keep-alive',
-          'Upgrade-Insecure-Requests': '1'
         }
       });
 
+      console.log(`[QR Proxy] Response: ${response.status} ${response.statusText} (${response.headers.get('content-type')})`);
+
       if (!response.ok) {
+        console.error(`[QR Proxy] Error: ${response.status} ${response.statusText}`);
         return res.status(response.status).send(`Proxy error: ${response.statusText}`);
       }
 
       const contentType = response.headers.get('content-type') || '';
+      const buffer = await response.buffer();
+      
+      console.log(`[QR Proxy] Content length: ${buffer.length} bytes`);
       
       // Set proper headers for the response
-      res.set('Content-Type', contentType);
+      res.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Cache-Control': response.headers.get('cache-control') || 'public, max-age=3600'
+      });
       
       if (contentType.includes('text/html')) {
         // For HTML content, rewrite relative paths
-        let content = await response.text();
+        let content = buffer.toString('utf-8');
         
         // Inject base href for proper asset loading
         content = content.replace('<head>', '<head><base href="/qr-gen-tool/">');
@@ -552,14 +564,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content = content.replace(/href="\/(?!qr-gen-tool)/g, 'href="/qr-gen-tool/');
         content = content.replace(/src="\/(?!qr-gen-tool)/g, 'src="/qr-gen-tool/');
         
+        res.set('Content-Type', 'text/html; charset=utf-8');
         res.send(content);
       } else {
-        // For non-HTML content (CSS, JS, images), stream directly
-        const buffer = await response.buffer();
+        // For non-HTML content (CSS, JS, images), pass through with proper headers
+        if (req.path.endsWith('.js')) {
+          res.set('Content-Type', 'application/javascript; charset=utf-8');
+        } else if (req.path.endsWith('.css')) {
+          res.set('Content-Type', 'text/css; charset=utf-8');
+        } else if (req.path.endsWith('.json')) {
+          res.set('Content-Type', 'application/json; charset=utf-8');
+        } else {
+          res.set('Content-Type', contentType);
+        }
+        
         res.send(buffer);
       }
     } catch (error) {
-      console.error('QR Proxy error:', error);
+      console.error('[QR Proxy] Error:', error);
       res.status(500).send('Proxy error: Internal server error');
     }
   });
