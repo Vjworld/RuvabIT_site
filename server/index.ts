@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
@@ -6,6 +7,15 @@ import { storage } from "./storage";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Reverse Proxy for QR Gen Tool
+app.use('/qr-gen-tool', createProxyMiddleware({
+  target: 'https://qr-gentool-vjvaibhu.replit.app',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/qr-gen-tool': '', // removes the /qr-gen-tool path prefix when forwarding the request
+  }
+} as any));
 
 app.use((req, res, next) => {
   const start = Date.now();
