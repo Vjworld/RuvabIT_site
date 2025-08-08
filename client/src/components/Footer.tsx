@@ -35,8 +35,8 @@ function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/trend-solver"><span className="hover:text-white transition-colors cursor-pointer">Trend Solver</span></Link></li>
               <li><Link href="/langscribe"><span className="hover:text-white transition-colors cursor-pointer">LangScribe</span></Link></li>
+              <li><Link href="/qr-gen-tool"><span className="hover:text-white transition-colors cursor-pointer">QR Gen Tool</span></Link></li>
               <li><Link href="/ai-analytics"><span className="hover:text-white transition-colors cursor-pointer">AI Analytics</span></Link></li>
-              <li><Link href="/process-automation"><span className="hover:text-white transition-colors cursor-pointer">Process Automation</span></Link></li>
             </ul>
           </div>
           

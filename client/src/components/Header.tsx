@@ -21,6 +21,7 @@ function Header() {
       submenu: [
         { name: 'Trend Solver', href: '/trend-solver' },
         { name: 'LangScribe', href: '/langscribe' },
+        { name: 'QR Gen Tool', href: '/qr-gen-tool/' },
       ]
     },
     { 

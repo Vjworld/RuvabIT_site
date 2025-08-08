@@ -8,6 +8,8 @@ export default function Products() {
       window.open('https://trendsolver.ruvab.it.com', '_blank');
     } else if (product === 'langscribe') {
       window.open('https://langscribe.ruvab.it.com', '_blank');
+    } else if (product === 'qr_gen_tool') {
+      window.location.href = '/qr-gen-tool/';
     }
   };
 
@@ -21,7 +23,7 @@ export default function Products() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
           {/* Trend Solver Product */}
           <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="mb-4 sm:mb-6">
@@ -89,6 +91,41 @@ export default function Products() {
               className="bg-purple-600 text-white hover:bg-purple-700 transition-colors w-full"
             >
               Launch LangScribe
+            </Button>
+          </div>
+
+          {/* QR Gen Tool Product */}
+          <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <div className="mb-4 sm:mb-6">
+              <img
+                src="https://images.unsplash.com/photo-1606742142793-40aaa0b36bb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"
+                alt="QR code generation interface with customization options"
+                className="rounded-xl w-full h-40 sm:h-48 object-cover"
+              />
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">QR Gen Tool</h3>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+              Professional QR code generator with advanced customization options, bulk generation, and analytics tracking for marketing campaigns and business applications.
+            </p>
+            <ul className="space-y-2 mb-6">
+              <li className="flex items-center text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Custom QR code design & colors
+              </li>
+              <li className="flex items-center text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Bulk generation & download
+              </li>
+              <li className="flex items-center text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Analytics & scan tracking
+              </li>
+            </ul>
+            <Button
+              onClick={() => handleLearnMore('qr_gen_tool')}
+              className="bg-green-600 text-white hover:bg-green-700 transition-colors w-full"
+            >
+              Launch QR Gen Tool
             </Button>
           </div>
         </div>
