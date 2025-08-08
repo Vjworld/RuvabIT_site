@@ -91,6 +91,7 @@ function Router() {
       <Route path="/trend-solver" component={TrendSolver} />
       <Route path="/langscribe" component={LangScribe} />
       <Route path="/qr-gen-tool" component={QRGenTool} />
+      <Route path="/qr-gen-tool/" component={QRGenTool} />
       
       {/* Policy Pages */}
       <Route path="/cookie-policy" component={CookiePolicy} />
