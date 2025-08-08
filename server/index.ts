@@ -14,6 +14,21 @@ app.use('/qr-gen-tool', createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: {
     '^/qr-gen-tool': '', // removes the /qr-gen-tool path prefix when forwarding the request
+  },
+  onProxyReq: (proxyReq: any, req: any, res: any) => {
+    // Log proxy requests for debugging
+    console.log(`Proxying ${req.method} ${req.url} to https://qr-gentool-vjvaibhu.replit.app${req.url.replace('/qr-gen-tool', '')}`);
+  },
+  onError: (err: any, req: any, res: any) => {
+    console.error('Proxy error:', err);
+    res.status(500).send('Proxy error: ' + err.message);
+  },
+  // Handle HTTPS properly
+  secure: true,
+  // Forward headers properly
+  headers: {
+    'X-Forwarded-Host': (req: any) => req.get('host'),
+    'X-Forwarded-Proto': 'https'
   }
 } as any));
 
