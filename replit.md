@@ -196,6 +196,7 @@ componentSettings: {
   - **HTML Content Rewriting**: Asset path rewriting without problematic base href injection
   - **Route Priority**: QR proxy routes registered FIRST before all other middleware
   - **Development Verified**: Confirmed working with proper HTML content (1510 bytes) and all assets
+  - **Client Route Removal**: Removed conflicting React routes to allow server proxy full control
   - **Production Ready**: Ready for deployment with comprehensive error handling and logging
   - **Debug Logging**: Complete request/response logging for troubleshooting
 
