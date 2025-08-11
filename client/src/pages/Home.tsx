@@ -13,19 +13,15 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Header />
       <Hero />
-      
-      <AdSenseAd adSlot="1234567890" />
-      
       <Products />
       <Services />
       
+      {/* Ad placement after substantial content */}
       <AdSenseAd adSlot="1234567891" adLayout="in-article" />
       
       <About />
       <Blog />
       <Contact />
-      
-      <AdSenseAd adSlot="1234567892" />
       
       <Footer />
     </div>

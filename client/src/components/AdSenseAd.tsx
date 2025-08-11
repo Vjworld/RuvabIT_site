@@ -23,10 +23,20 @@ function AdSenseAd({
     const loadAd = () => {
       if (hasAdLoaded.current) return;
 
-      // Check if user has consented to cookies
+      // Check if user has consented to advertising cookies
       const cookieConsent = localStorage.getItem('cookieConsent');
-      if (cookieConsent !== 'accepted') {
-        return;
+      if (!cookieConsent) return;
+      
+      try {
+        const consentData = JSON.parse(cookieConsent);
+        if (!consentData.advertising) {
+          return;
+        }
+      } catch {
+        // Fallback for old consent format
+        if (cookieConsent !== 'accepted') {
+          return;
+        }
       }
 
       // Check if AdSense is available
@@ -45,8 +55,18 @@ function AdSenseAd({
 
     // Listen for cookie consent changes
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'cookieConsent' && e.newValue === 'accepted') {
-        loadAd();
+      if (e.key === 'cookieConsent') {
+        try {
+          const consentData = JSON.parse(e.newValue || '{}');
+          if (consentData.advertising === true) {
+            loadAd();
+          }
+        } catch {
+          // Fallback for old consent format
+          if (e.newValue === 'accepted') {
+            loadAd();
+          }
+        }
       }
     };
 
@@ -77,10 +97,20 @@ function AdSenseAd({
   }
 
   return (
-    <div ref={adRef} className="flex justify-center py-8">
-      <div className="text-center">
-        <p className="text-xs text-gray-500 mb-2">Advertisement</p>
-        <ins {...adProps} />
+    <div ref={adRef} className="w-full my-8 py-6">
+      {/* Clear ad labeling and separation */}
+      <div className="border border-gray-200 bg-gray-50 rounded-lg p-4 mx-auto max-w-4xl">
+        <div className="text-center">
+          <p className="text-xs text-gray-600 font-medium mb-3 uppercase tracking-wide">
+            SPONSORED CONTENT
+          </p>
+          <div className="bg-white rounded border p-2">
+            <ins {...adProps} />
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            Ads help us provide free content and services
+          </p>
+        </div>
       </div>
     </div>
   );
