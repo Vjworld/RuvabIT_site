@@ -1,0 +1,58 @@
+| Policy Not Adhered To                                 | Description of Violation                                                                                           | Workaround to Fix                                                                                  |
+|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| Lack of Privacy Policy                                | Google AdSense requires a Privacy Policy page that clearly states the use of cookies and personal data collection for ads[1][2]. | Add a dedicated Privacy Policy page describing the use of cookies, user data, and ad personalization. |
+| Low-Value or Thin Content                             | AdSense prohibits sites with little or irrelevant content (“low-value content”). Automated, scraped, or duplicate material may lead to violations[3][4]. | Remove thin, duplicate, or low-value pages. Add original, high-quality, and informative content that delivers value.   |
+| Copyrighted or Replicated Content                     | Monetizing with AdSense on copied, scraped, or copyrighted material without rights is prohibited[5][4].            | Remove any copied content. Ensure all material is original or properly licensed with clear attribution.                  |
+| Invalid Ad Placement / Deceptive Layouts              | Ads must not be placed close to navigation/button elements, nor should they mimic site features (menus, downloads)[6][7].           | Clearly distinguish ads from content. Keep adequate space between ads and site elements. Use permitted ad labels only.  |
+| No EU User Consent (GDPR Compliance)                  | Sites serving users in the EU must ask for consent for cookies/ad personalization via a Certified CMP[1][2].         | Implement a Google-certified Consent Management Platform to collect user consent as per GDPR.                             |
+| Excessive Ads “Above the Fold” and Poor User Experience | Ads must not outweigh genuine content, nor overly distract, confuse, or frustrate users[5][6].                      | Moderate ad placements: ensure ads complement content, not dominate pages. Follow Google’s guidelines for ad density and placement. |
+
+**How to Proceed:**
+- Address each issue by updating site structure, content, and policy pages.
+- After fixing, request a review in the AdSense Policy Center.
+- Maintain regular site audits for future compliance.
+
+These recommendations directly address common violations likely to be found based on Google AdSense policies for a content creation site like ruvab.it.com.[5][7][4]
+
+[1] https://www.adpushup.com/blog/adsense-ads-violation/
+[2] https://blog.clickio.com/how-to-resolve-the-notification-in-adsense-one-or-more-of-your-sites-has-been-in-violation-of-adsense-policies/
+[3] https://support.google.com/adsense/thread/233441091/google-says-we-found-some-policy-violations?hl=en
+[4] https://www.monetizemore.com/blog/google-content-policy-violations-website-can-avoid/
+[5] https://support.google.com/adsense/answer/2660562?hl=en
+[6] https://www.adpushup.com/blog/adsense-policy-guide/
+[7] https://jksdigital.in/adsense-policy-violation-errors-explained/
+[8] https://support.google.com/adsense/answer/10502938?hl=en&visit_id=638905136068821805-3557685687&rd=1
+[9] https://support.google.com/adsense/answer/48182?hl=en
+[10] https://support.google.com/adsense/answer/23921?hl=en
+[11] https://services.google.com/fh/files/blogs/common_adsense_policy_questions.pdf
+[12] https://wpadvancedads.com/google-adsense-policies-guidelines/
+[13] https://support.google.com/adsense/answer/7003627?hl=en
+[14] https://transparency.google/intl/en/our-policies/product-terms/google-adsense
+[15] https://adsense.google.com/adsense/terms
+[16] https://www.monetizemore.com/blog/adsensewednesdays-10-most-common-adsense-violations-memes-edition/
+[17] https://www.youtube.com/watch?v=7m0emoA-2bU
+[18] https://developers.google.com/adsense/platforms/direct/policy
+[19] https://www.youtube.com/watch?v=beGh3WSCq4s
+[20] https://exmarketplace.com/v2/en/adsense-policies-conditions
+[21] https://developers.google.com/adsense/platforms/transparent/policy
+[22] https://www.internetsearchinc.com/a-guide-to-google-adsense-rules/
+[23] https://www.pubgalaxy.com/blog/google-adsense/top-7-google-adsense-violations/
+[24] https://support.google.com/adsense/answer/13784654?hl=en
+[25] https://optad360.com/blog/how-does-google-communicate-adsense-policy-violations-to-publishers/
+[26] https://www.youtube.com/watch?v=oJBq5fzqxh4
+[27] http://ruvab.it.com
+[28] https://www.sciencedirect.com/science/article/pii/S0021925819843910
+[29] https://www.nature.com/articles/s41586-022-05121-1
+[30] https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2023.1139106/full
+[31] https://www.sciencedirect.com/science/article/pii/S002192582053370X
+[32] https://www.youtube.com/watch?v=0QVXaJatCZ0
+[33] https://www.biorxiv.org/content/10.1101/2020.11.23.394155v1.full.pdf
+[34] https://www.tiktok.com/discover/this-is-tesla-grok
+[35] https://pmc.ncbi.nlm.nih.gov/articles/PMC2870958/
+[36] https://jb.asm.org/content/jb/196/8/1608.full.pdf
+[37] https://www.tiktok.com/discover/nothin-on-you-national-gf-day
+[38] https://www.linkedin.com/posts/ruva-chinyemba_a-decade-at-barry-callebaut-comes-to-an-end-activity-7228669120068681728-T38O
+[39] https://www.frontiersin.org/journals/molecular-biosciences/articles/10.3389/fmolb.2022.784451/xml
+[40] https://www.instagram.com/p/DNMaOw1TcDo/
+[41] http://genesdev.cshlp.org/content/6/11/2214
+[42] https://journals.asm.org/doi/pdf/10.1128/jb.00674-12
