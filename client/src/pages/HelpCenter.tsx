@@ -128,9 +128,9 @@ export default function HelpCenter() {
             Our support team is here to help you succeed.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
+            <Button size="lg" onClick={() => window.location.href = 'mailto:support@ruvabit.com'}>
               <Mail className="w-4 h-4 mr-2" />
-              Contact Support
+              Email Support
             </Button>
             <Button size="lg" variant="outline">
               <Clock className="w-4 h-4 mr-2" />

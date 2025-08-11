@@ -91,10 +91,13 @@ export default function Terms() {
                 </p>
                 <div className="flex items-center text-gray-700">
                   <Mail className="w-5 h-5 mr-2" />
-                  <a href="mailto:legal@ruvabit.com" className="text-primary hover:text-blue-700 underline">
-                    legal@ruvabit.com
+                  <a href="mailto:support@ruvabit.com" className="text-primary hover:text-blue-700 underline">
+                    support@ruvabit.com
                   </a>
                 </div>
+                <p className="text-sm text-gray-600 mt-2">
+                  For all inquiries including legal, support, feedback, suggestions, and issue reporting.
+                </p>
               </section>
             </div>
           </CardContent>

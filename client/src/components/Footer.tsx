@@ -65,8 +65,8 @@ function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/help"><span className="hover:text-white transition-colors cursor-pointer">Help Center</span></Link></li>
               <li><Link href="/documentation"><span className="hover:text-white transition-colors cursor-pointer">Documentation</span></Link></li>
-              {/* <li><Link href="/api-documentation"><span className="hover:text-white transition-colors cursor-pointer">API Docs</span></Link></li> */}
               <li><Link href="/case-studies"><span className="hover:text-white transition-colors cursor-pointer">Case Studies</span></Link></li>
+              <li><a href="mailto:support@ruvabit.com" className="hover:text-white transition-colors">Email Support</a></li>
             </ul>
           </div>
         </div>

@@ -91,7 +91,7 @@ export default function DataSecurityPolicy() {
               For any questions about our data security practices or to report a security concern:
             </p>
             <p className="mt-4">
-              Please use our contact form to report security concerns.
+              Email us at <a href="mailto:support@ruvabit.com" className="text-blue-600 hover:underline font-medium">support@ruvabit.com</a> to report security concerns, provide feedback, or get support.
             </p>
           </section>
         </div>

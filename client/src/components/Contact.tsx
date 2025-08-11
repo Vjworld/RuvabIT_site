@@ -80,6 +80,12 @@ export default function Contact() {
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
             Ready to transform your business with cutting-edge technology? Let's discuss how we can help you achieve your goals.
           </p>
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 mb-2">Email us directly for feedback, suggestions, or support:</p>
+            <a href="mailto:support@ruvabit.com" className="text-primary hover:text-blue-700 font-medium text-lg">
+              support@ruvabit.com
+            </a>
+          </div>
         </div>
         
         <div className="max-w-2xl mx-auto">

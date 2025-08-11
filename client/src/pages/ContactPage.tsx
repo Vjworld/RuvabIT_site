@@ -235,10 +235,27 @@ const ContactPage = () => {
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">
                   Contact Information
                 </h2>
-                <p className="text-lg text-gray-600 mb-8">
-                  Get in touch with our team through the contact form.
+                <p className="text-lg text-gray-600 mb-6">
+                  Get in touch with our team through the contact form or email us directly.
                   We're here to help you achieve your technology goals.
                 </p>
+                
+                {/* Direct Email Contact */}
+                <div className="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-8">
+                  <div className="flex items-center mb-3">
+                    <Mail className="h-6 w-6 text-blue-600 mr-3" />
+                    <h3 className="text-lg font-semibold text-gray-900">Email Support</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    For feedback, suggestions, technical support, or any inquiries:
+                  </p>
+                  <a 
+                    href="mailto:support@ruvabit.com" 
+                    className="text-blue-600 hover:text-blue-700 font-medium text-lg"
+                  >
+                    support@ruvabit.com
+                  </a>
+                </div>
               </div>
 
               {/* Live Chat */}

@@ -135,9 +135,9 @@ export default function Privacy() {
                   For questions about this Privacy Policy, your data rights, or advertising preferences, contact us at:
                 </p>
                 <ul className="list-disc list-inside text-gray-700 mb-4 space-y-2">
-                  <li><strong>Email:</strong> privacy@ruvab.it.com</li>
-                  <li><strong>Data Protection Officer:</strong> dpo@ruvab.it.com</li>
-                  <li><strong>Address:</strong> Ruvab IT Solutions, Privacy Department</li>
+                  <li><strong>Email:</strong> support@ruvabit.com</li>
+                  <li><strong>Address:</strong> Ruvab IT Solutions</li>
+                  <li><strong>Contact:</strong> For all privacy, feedback, suggestions, and support inquiries</li>
                 </ul>
               </section>
 
