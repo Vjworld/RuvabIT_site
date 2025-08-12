@@ -189,16 +189,15 @@ componentSettings: {
 
 ## Recent Changes
 
-### February 13, 2025 - QR Gen Tool Subdomain Migration COMPLETED ✅
-- **QR Gen Tool Subdomain**: Migrated from proxy route to dedicated subdomain architecture
-  - **New URL**: `https://qr-gen.ruvab.it.com` (subdomain-based access)
-  - **Removed**: All proxy server routes `/qr-gen-tool/*` no longer needed
-  - **Updated**: All navigation links, buttons, and CTA elements to use subdomain URL
+### February 13, 2025 - QR Gen Tool Direct Access COMPLETED ✅
+- **QR Gen Tool Direct Access**: Updated all references to point to working Replit application
+  - **Direct URL**: `https://qr-gentool-vjvaibhu.replit.app` (working Replit application)
+  - **Updated**: All navigation links, buttons, and CTA elements to use direct application URL
   - **Header Navigation**: Enhanced dropdown menu with external link support
   - **Footer Links**: Updated product links to open QR Gen Tool in new tab
-  - **Product Pages**: All "Launch QR Gen Tool" buttons now open subdomain in new tab
-  - **SEO Optimization**: Updated canonical URLs to point to subdomain
-  - **Clean Architecture**: Removed complex proxy middleware for simpler subdomain approach
+  - **Product Pages**: All "Launch QR Gen Tool" buttons now open application in new tab
+  - **Page Route Added**: Added `/qr-gen-tool` route for product information page
+  - **Clean Architecture**: Removed proxy middleware, direct external linking approach
 
 ### February 8, 2025 - AdSense Policy Compliance COMPLETED ✅
 - **Privacy Policy Enhancement**: Added comprehensive AdSense and cookie disclosure sections

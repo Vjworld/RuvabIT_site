@@ -49,8 +49,8 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // QR Gen Tool is now accessible at subdomain: qr-gen.ruvab.it.com
-  console.log('[QR Setup] QR Gen Tool available at qr-gen.ruvab.it.com subdomain');
+  // QR Gen Tool is accessible via direct Replit URL
+  console.log('[QR Setup] QR Gen Tool available at https://qr-gentool-vjvaibhu.replit.app');
 
 
   // Session configuration

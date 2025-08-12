@@ -21,7 +21,7 @@ function Header() {
       submenu: [
         { name: 'Trend Solver', href: '/trend-solver' },
         { name: 'LangScribe', href: '/langscribe' },
-        { name: 'QR Gen Tool', href: 'https://qr-gen.ruvab.it.com', external: true },
+        { name: 'QR Gen Tool', href: 'https://qr-gentool-vjvaibhu.replit.app', external: true },
       ]
     },
     { 

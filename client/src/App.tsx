@@ -38,6 +38,7 @@ import ContactPage from "@/pages/ContactPage";
 import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
+import QRGenTool from "@/pages/QRGenTool";
 
 import HelpDocumentation from "@/pages/HelpDocumentation";
 
@@ -90,6 +91,7 @@ function Router() {
       {/* Product Pages */}
       <Route path="/trend-solver" component={TrendSolver} />
       <Route path="/langscribe" component={LangScribe} />
+      <Route path="/qr-gen-tool" component={QRGenTool} />
       
       {/* Policy Pages */}
       <Route path="/cookie-policy" component={CookiePolicy} />
