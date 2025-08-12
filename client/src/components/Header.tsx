@@ -21,7 +21,7 @@ function Header() {
       submenu: [
         { name: 'Trend Solver', href: '/trend-solver' },
         { name: 'LangScribe', href: '/langscribe' },
-        { name: 'QR Gen Tool', href: '/qr-gen-tool/' },
+        { name: 'QR Gen Tool', href: 'https://qr-gen.ruvab.it.com', external: true },
       ]
     },
     { 
@@ -69,14 +69,40 @@ function Header() {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navigation.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <span
-                    onClick={() => handleNavClick(item.href)}
-                    className="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors cursor-pointer"
-                  >
-                    {item.name}
-                  </span>
-                </Link>
+                item.submenu ? (
+                  <DropdownMenu key={item.name}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                        {item.name}
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {item.submenu.map((subItem) => (
+                        <DropdownMenuItem key={subItem.name} asChild>
+                          {subItem.external ? (
+                            <a href={subItem.href} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
+                              {subItem.name}
+                            </a>
+                          ) : (
+                            <Link href={subItem.href}>
+                              <span className="cursor-pointer">{subItem.name}</span>
+                            </Link>
+                          )}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link key={item.name} href={item.href}>
+                    <span
+                      onClick={() => handleNavClick(item.href)}
+                      className="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium transition-colors cursor-pointer"
+                    >
+                      {item.name}
+                    </span>
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -109,14 +135,42 @@ function Header() {
         <div className="md:hidden">
           <div className="px-3 pt-2 pb-4 space-y-1 bg-white border-t shadow-lg">
             {navigation.map((item) => (
-              <Link key={item.name} href={item.href}>
-                <span
-                  onClick={() => handleNavClick(item.href)}
-                  className="block px-3 py-3 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
-                >
-                  {item.name}
-                </span>
-              </Link>
+              item.submenu ? (
+                <div key={item.name} className="space-y-1">
+                  <div className="px-3 py-2 text-sm font-medium text-gray-900">{item.name}</div>
+                  {item.submenu.map((subItem) => (
+                    subItem.external ? (
+                      <a 
+                        key={subItem.name}
+                        href={subItem.href} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block px-6 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
+                      >
+                        {subItem.name}
+                      </a>
+                    ) : (
+                      <Link key={subItem.name} href={subItem.href}>
+                        <span
+                          onClick={() => handleNavClick(subItem.href)}
+                          className="block px-6 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
+                        >
+                          {subItem.name}
+                        </span>
+                      </Link>
+                    )
+                  ))}
+                </div>
+              ) : (
+                <Link key={item.name} href={item.href}>
+                  <span
+                    onClick={() => handleNavClick(item.href)}
+                    className="block px-3 py-3 text-sm font-medium text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              )
             ))}
             <div className="pt-2 mt-2 border-t border-gray-200">
               <Button 

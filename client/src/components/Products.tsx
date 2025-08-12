@@ -9,7 +9,7 @@ export default function Products() {
     } else if (product === 'langscribe') {
       window.open('https://langscribe.ruvab.it.com', '_blank');
     } else if (product === 'qr_gen_tool') {
-      window.location.href = '/qr-gen-tool/';
+      window.open('https://qr-gen.ruvab.it.com', '_blank');
     }
   };
 

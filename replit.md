@@ -189,18 +189,16 @@ componentSettings: {
 
 ## Recent Changes
 
-### February 8, 2025 - QR Gen Tool Proxy COMPLETED ✅
-- **QR Gen Tool Proxy**: Fully functional reverse proxy implementation WORKING
-  - **Route**: `/qr-gen-tool/` → `https://qr-gentool-vjvaibhu.replit.app`
-  - **Technical Implementation**: Complete custom proxy handler with proper routing patterns
-  - **Critical Fix**: Resolved infinite redirect loop by fixing Vite middleware conflicts
-  - **MIME Type Handling**: Perfect JavaScript/CSS content type handling (614KB+ assets loading)
-  - **HTML Content Rewriting**: Asset path rewriting without problematic base href injection
-  - **Route Priority**: QR proxy routes registered FIRST before all other middleware
-  - **Development Verified**: Confirmed working with proper HTML content (1510 bytes) and all assets
-  - **Client Route Removal**: Removed conflicting React routes to allow server proxy full control
-  - **Production Ready**: Ready for deployment with comprehensive error handling and logging
-  - **Debug Logging**: Complete request/response logging for troubleshooting
+### February 13, 2025 - QR Gen Tool Subdomain Migration COMPLETED ✅
+- **QR Gen Tool Subdomain**: Migrated from proxy route to dedicated subdomain architecture
+  - **New URL**: `https://qr-gen.ruvab.it.com` (subdomain-based access)
+  - **Removed**: All proxy server routes `/qr-gen-tool/*` no longer needed
+  - **Updated**: All navigation links, buttons, and CTA elements to use subdomain URL
+  - **Header Navigation**: Enhanced dropdown menu with external link support
+  - **Footer Links**: Updated product links to open QR Gen Tool in new tab
+  - **Product Pages**: All "Launch QR Gen Tool" buttons now open subdomain in new tab
+  - **SEO Optimization**: Updated canonical URLs to point to subdomain
+  - **Clean Architecture**: Removed complex proxy middleware for simpler subdomain approach
 
 ### February 8, 2025 - AdSense Policy Compliance COMPLETED ✅
 - **Privacy Policy Enhancement**: Added comprehensive AdSense and cookie disclosure sections
