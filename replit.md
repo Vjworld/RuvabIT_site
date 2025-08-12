@@ -189,15 +189,15 @@ componentSettings: {
 
 ## Recent Changes
 
-### February 13, 2025 - QR Gen Tool Direct Access COMPLETED ✅
-- **QR Gen Tool Direct Access**: Updated all references to point to working Replit application
-  - **Direct URL**: `https://qr-gentool-vjvaibhu.replit.app` (working Replit application)
-  - **Updated**: All navigation links, buttons, and CTA elements to use direct application URL
-  - **Header Navigation**: Enhanced dropdown menu with external link support
-  - **Footer Links**: Updated product links to open QR Gen Tool in new tab
-  - **Product Pages**: All "Launch QR Gen Tool" buttons now open application in new tab
-  - **Page Route Added**: Added `/qr-gen-tool` route for product information page
-  - **Clean Architecture**: Removed proxy middleware, direct external linking approach
+### February 13, 2025 - QR Gen Tool Custom Domain COMPLETED ✅
+- **QR Gen Tool Custom Domain**: Updated all references to use custom domain URL
+  - **Custom Domain**: `https://qrgen.ruvab.it.com` (production custom domain)
+  - **Updated**: All navigation links, buttons, and CTA elements to use custom domain URL
+  - **Header Navigation**: Enhanced dropdown menu with external link support for custom domain
+  - **Footer Links**: Updated product links to open QR Gen Tool custom domain in new tab
+  - **Product Pages**: All "Launch QR Gen Tool" buttons now open custom domain in new tab
+  - **SEO Optimization**: Updated canonical URLs to point to custom domain
+  - **Clean Architecture**: Direct external linking to custom domain approach
 
 ### February 8, 2025 - AdSense Policy Compliance COMPLETED ✅
 - **Privacy Policy Enhancement**: Added comprehensive AdSense and cookie disclosure sections
