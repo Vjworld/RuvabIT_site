@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import GoToTopButton from "@/components/GoToTopButton";
 import { BlogPost } from "@shared/schema";
 
 const BlogPage = () => {
@@ -265,6 +266,7 @@ const BlogPage = () => {
         </div>
       </section>
       <Footer />
+      <GoToTopButton />
     </div>
   );
 };

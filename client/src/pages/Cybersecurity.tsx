@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Lock, Eye, AlertTriangle, Users, FileCheck } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Cybersecurity() {
   return (
@@ -358,6 +359,7 @@ export default function Cybersecurity() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

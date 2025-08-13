@@ -8,7 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { AdSenseAd } from '@/components/AdSenseAd';
+import AdSenseAd from '@/components/AdSenseAd';
+import GoToTopButton from '@/components/GoToTopButton';
 import { BlogPost } from '@shared/schema';
 
 export default function BlogPostDetail() {
@@ -276,12 +277,7 @@ export default function BlogPostDetail() {
             
             {/* Ad placement */}
             <div className="my-8">
-              <AdSenseAd
-                slot="1234567890"
-                style={{ display: 'block', textAlign: 'center' }}
-                format="auto"
-                responsive
-              />
+              <AdSenseAd />
             </div>
             
             <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -325,6 +321,7 @@ export default function BlogPostDetail() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

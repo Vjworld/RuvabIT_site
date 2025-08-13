@@ -3,6 +3,7 @@ import { Users, Target, Award, Zap, CheckCircle } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import GoToTopButton from "@/components/GoToTopButton";
 import vsProfileImage from "@/assets/vs_profile.jpg";
 
 const AboutPage = () => {
@@ -377,6 +378,7 @@ const AboutPage = () => {
         </div>
       </section>
       <Footer />
+      <GoToTopButton />
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import DemoTour from "@/components/DemoTour";
 import ProductDemoWidget from "@/components/ProductDemoWidget";
+import GoToTopButton from "@/components/GoToTopButton";
 
 const TrendSolver = () => {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
@@ -361,6 +362,7 @@ const TrendSolver = () => {
         </div>
       </section>
       <Footer />
+      <GoToTopButton />
       
       <DemoTour isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>

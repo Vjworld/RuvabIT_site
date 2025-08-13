@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Book, Code, Play, Settings, Download, ExternalLink } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Documentation() {
   return (
@@ -396,6 +397,7 @@ export default function Documentation() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

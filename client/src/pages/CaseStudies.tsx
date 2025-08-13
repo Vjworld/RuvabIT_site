@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Users, Clock, Target, CheckCircle, ArrowRight } from "lucide-react";
 import { trackEvent } from '@/lib/analytics';
 import { useLocation } from 'wouter';
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function CaseStudies() {
   const [, setLocation] = useLocation();
@@ -358,6 +359,7 @@ export default function CaseStudies() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import Blog from '@/components/Blog';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import AdSenseAd from '@/components/AdSenseAd';
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Contact />
       
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

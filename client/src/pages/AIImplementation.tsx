@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Rocket, Code, Settings, Target, Shield } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function AIImplementation() {
   return (
@@ -381,6 +382,7 @@ export default function AIImplementation() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, TrendingUp, Database, Brain, Target, Zap } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function AIAnalytics() {
   return (
@@ -237,6 +238,7 @@ export default function AIAnalytics() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

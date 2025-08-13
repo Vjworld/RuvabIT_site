@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, TrendingUp, PieChart, LineChart, Database, Eye } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function BusinessIntelligence() {
   return (
@@ -373,6 +374,7 @@ export default function BusinessIntelligence() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

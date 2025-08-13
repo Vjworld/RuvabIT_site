@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, Target, Lightbulb, TrendingUp, Settings, CheckCircle } from "lucide-react";
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Consulting() {
   return (
@@ -423,6 +424,7 @@ export default function Consulting() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }
