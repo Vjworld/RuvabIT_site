@@ -23,6 +23,7 @@ import {
   ArrowUpRight,
   ArrowDownRight
 } from 'lucide-react';
+import GoToTopButton from '@/components/GoToTopButton';
 
 interface AnalyticsData {
   pageViews: number;
@@ -403,6 +404,7 @@ export default function AdvancedAnalytics() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

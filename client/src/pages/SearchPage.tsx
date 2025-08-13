@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, ArrowRight, Clock, Tag } from "lucide-react";
 import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
+import GoToTopButton from "@/components/GoToTopButton";
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -188,6 +189,7 @@ export default function SearchPage() {
           </div>
         )}
       </section>
+      <GoToTopButton />
     </div>
   );
 }

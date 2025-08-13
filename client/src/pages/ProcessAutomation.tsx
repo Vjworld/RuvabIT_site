@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Cog, Zap, Clock, Shield, Users, CheckCircle } from "lucide-react";
+import GoToTopButton from "@/components/GoToTopButton";
 
 export default function ProcessAutomation() {
   return (
@@ -331,6 +332,7 @@ export default function ProcessAutomation() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

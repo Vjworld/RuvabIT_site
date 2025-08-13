@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Cloud, Server, Shield, Zap, Database, Globe } from "lucide-react";
+import GoToTopButton from "@/components/GoToTopButton";
 
 export default function CloudSolutions() {
   return (
@@ -356,6 +357,7 @@ export default function CloudSolutions() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

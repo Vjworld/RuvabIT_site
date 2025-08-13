@@ -5,6 +5,7 @@ import { ArrowLeft, Mail } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Privacy() {
   return (
@@ -198,6 +199,7 @@ export default function Privacy() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

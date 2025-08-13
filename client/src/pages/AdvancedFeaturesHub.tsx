@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Globe
 } from 'lucide-react';
+import GoToTopButton from '@/components/GoToTopButton';
 
 const AdvancedFeaturesHub = () => {
   const features = [
@@ -384,6 +385,7 @@ const AdvancedFeaturesHub = () => {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 };

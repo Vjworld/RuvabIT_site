@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import GoToTopButton from "@/components/GoToTopButton";
 
 const ContactPage = () => {
   const { toast } = useToast();
@@ -371,6 +372,7 @@ const ContactPage = () => {
       </section>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 };

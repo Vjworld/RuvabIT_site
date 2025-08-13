@@ -25,6 +25,7 @@ import {
   Clock,
   Search
 } from 'lucide-react';
+import GoToTopButton from '@/components/GoToTopButton';
 
 interface APIEndpoint {
   method: string;
@@ -547,6 +548,7 @@ export default function APIDocumentationPortal() {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Mail } from 'lucide-react';
+import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Terms() {
   return (
@@ -103,6 +104,7 @@ export default function Terms() {
           </CardContent>
         </Card>
       </div>
+      <GoToTopButton />
     </div>
   );
 }
