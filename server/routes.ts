@@ -1,6 +1,5 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import { storage } from "./storage";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
@@ -65,35 +64,6 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // QR Gen Tool reverse proxy setup
-  const qrGenToolProxy = createProxyMiddleware({
-    target: 'https://qr-gentool-vjvaibhu.replit.app',
-    changeOrigin: true,
-    pathRewrite: {
-      '^/qrgentool': '', // Remove /qrgentool from the path when forwarding
-    },
-    ws: true, // Enable websocket proxying for hot reload
-    followRedirects: true,
-    secure: true,
-    onProxyReq: (proxyReq: any, req: any, res: any) => {
-      console.log(`[Proxy] ${req.method} ${req.originalUrl} -> ${proxyReq.host}${proxyReq.path}`);
-      proxyReq.setHeader('Host', 'qr-gentool-vjvaibhu.replit.app');
-      proxyReq.setHeader('X-Forwarded-Host', req.get('host') || '');
-      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
-      proxyReq.setHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
-    },
-    onProxyRes: (proxyRes: any, req: any, res: any) => {
-      console.log(`[Proxy Response] ${req.originalUrl} -> Status: ${proxyRes.statusCode}`);
-    },
-    onError: (err: any, req: any, res: any) => {
-      console.error('[Proxy Error]', err.message);
-      res.status(500).send('QR Gen Tool temporarily unavailable');
-    }
-  });
-
-  // Apply the proxy middleware to the /qrgentool path and all sub-paths
-  app.use('/qrgentool', qrGenToolProxy);
-  console.log('[QR Setup] QR Gen Tool proxy configured for /qrgentool -> https://qr-gentool-vjvaibhu.replit.app');
 
   // Session configuration
   app.use(session({

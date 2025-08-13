@@ -50,7 +50,7 @@ const QRGenTool = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
-                  onClick={() => window.location.href = '/qrgentool/'}
+                  onClick={() => window.open('https://qr-gentool-vjvaibhu.replit.app', '_blank')}
                   className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
                 >
                   Launch QR Gen Tool
@@ -261,7 +261,7 @@ const QRGenTool = () => {
             Join thousands of businesses using QR Gen Tool for their marketing and operational needs.
           </p>
           <button
-            onClick={() => window.location.href = '/qrgentool/'}
+            onClick={() => window.open('https://qr-gentool-vjvaibhu.replit.app', '_blank')}
             className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
           >
             Launch QR Gen Tool
