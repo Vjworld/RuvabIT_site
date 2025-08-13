@@ -35,7 +35,7 @@ function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/trend-solver"><span className="hover:text-white transition-colors cursor-pointer">Trend Solver</span></Link></li>
               <li><Link href="/langscribe"><span className="hover:text-white transition-colors cursor-pointer">LangScribe</span></Link></li>
-              <li><a href="https://qrgen.ruvab.it.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">QR Gen Tool</a></li>
+              <li><a href="https://qr-gen.ruvab.it.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">QR Gen Tool</a></li>
               <li><Link href="/ai-analytics"><span className="hover:text-white transition-colors cursor-pointer">AI Analytics</span></Link></li>
             </ul>
           </div>
