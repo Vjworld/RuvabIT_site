@@ -1,5 +1,4 @@
 import { Link } from 'wouter';
-import { GoToTop } from './GoToTop';
 
 function Footer() {
   return (
