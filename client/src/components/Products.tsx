@@ -98,8 +98,8 @@ export default function Products() {
           <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="mb-4 sm:mb-6">
               <img
-                src="https://images.unsplash.com/photo-1606742142793-40aaa0b36bb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"
-                alt="QR code generation interface with customization options"
+                src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"
+                alt="Professional QR code with smartphone scanning"
                 className="rounded-xl w-full h-40 sm:h-48 object-cover"
               />
             </div>
@@ -122,7 +122,7 @@ export default function Products() {
               </li>
             </ul>
             <Button
-              onClick={() => window.location.href = '/qr-gen-tool/'}
+              onClick={() => handleLearnMore('qr_gen_tool')}
               className="bg-green-600 text-white hover:bg-green-700 transition-colors w-full"
             >
               Launch QR Gen Tool

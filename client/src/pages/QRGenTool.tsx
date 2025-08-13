@@ -72,8 +72,8 @@ const QRGenTool = () => {
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1606742142793-40aaa0b36bb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-                alt="QR code generation interface"
+                src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
+                alt="Professional QR code with smartphone scanning"
                 className="rounded-lg shadow-2xl w-full"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-blue-600/20 rounded-lg"></div>
