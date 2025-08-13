@@ -37,6 +37,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSuccess, onError }) => {
     { value: 'cloud-solutions', label: 'Cloud Solutions', price: 35000 },
     { value: 'cybersecurity', label: 'Cybersecurity Audit', price: 25000 },
     { value: 'consulting', label: 'Technology Consulting', price: 15000 },
+    { value: 'test-payment', label: 'Test Payment (₹10)', price: 10 },
   ];
 
   const handleInputChange = (field: string, value: string) => {
@@ -163,6 +164,18 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSuccess, onError }) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Test Mode Warning */}
+          {window.location.hostname.includes('replit') && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-yellow-800">
+                <Shield className="h-4 w-4" />
+                <span className="font-medium">Test Mode Active</span>
+              </div>
+              <p className="text-sm text-yellow-700 mt-1">
+                This is running in test mode. Use test card numbers for payments.
+              </p>
+            </div>
+          )}
           {/* Customer Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Customer Information</h3>

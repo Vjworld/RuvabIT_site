@@ -30,8 +30,8 @@ const PgSession = connectPgSimple(session);
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'your_razorpay_key_id',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_razorpay_key_secret',
+  key_id: process.env.RAZORPAY_KEY_ID || '',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
 });
 
 // Authentication middleware
@@ -453,6 +453,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Payment routes
   app.post("/api/payment/create-order", async (req, res) => {
     try {
+      // Check if Razorpay is properly configured
+      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+        return res.status(500).json({ error: "Payment gateway not configured. Please contact support." });
+      }
+
       const { amount, serviceType, customerName, customerEmail, customerPhone, description } = req.body;
 
       if (!amount || !serviceType || !customerEmail) {
@@ -507,7 +512,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verify signature
-      const secret = process.env.RAZORPAY_KEY_SECRET || 'your_razorpay_key_secret';
+      const secret = process.env.RAZORPAY_KEY_SECRET;
+      if (!secret) {
+        return res.status(500).json({ error: "Payment verification not configured" });
+      }
       const body = razorpay_order_id + "|" + razorpay_payment_id;
       const expectedSignature = crypto
         .createHmac('sha256', secret)
