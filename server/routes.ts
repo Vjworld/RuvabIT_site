@@ -176,7 +176,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } 
     
     if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('budget')) {
-      return "I'd be happy to discuss our pricing! 💰 Our services are competitively priced:\n\n• AI Implementation: ₹50,000 - ₹2,00,000\n• Custom Software: ₹75,000 - ₹3,00,000\n• Data Analytics: ₹40,000 - ₹1,50,000\n• Cloud Solutions: ₹35,000 - ₹1,00,000\n\nPrices vary based on complexity and scope. We offer free consultations to provide accurate quotes. Would you like to schedule one?";
+      return "Thank you for your interest in our pricing! Our costs vary based on project scope, requirements, and customization needs. For accurate pricing and detailed quotes, I'd be happy to connect you with our sales and support team.\n\nPlease reach out to: support@ruvabit.com\n\nOur sales team will:\n• Understand your specific requirements\n• Provide detailed cost breakdown\n• Offer customized solutions within your budget\n• Schedule a free consultation\n\nWould you like me to help you with anything else about our services?";
     }
     
     if (lowerMessage.includes('software') || lowerMessage.includes('development') || lowerMessage.includes('app') || lowerMessage.includes('web')) {

@@ -276,125 +276,46 @@ const TrendSolver = () => {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Get Started */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Flexible Pricing Plans
+              Get Started with TrendSolver
             </h2>
             <p className="text-xl text-gray-600">
-              Choose the plan that fits your content creation needs
+              Ready to unlock the power of AI-driven analytics for your business?
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-lg border">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white p-8 rounded-lg shadow-lg border text-center">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Essential
+                Try TrendSolver Live
               </h3>
-              <div className="text-4xl font-bold text-gray-900 mb-6">
-                $29<span className="text-lg text-gray-600">/month</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  10,000 words/month
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />5
-                  languages
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Basic templates
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Email support
-                </li>
-              </ul>
+              <p className="text-gray-600 mb-6">
+                Experience our AI-powered analytics platform with real-time data processing and insights.
+              </p>
               <button
-                onClick={() =>
-                  window.open("https://langscribe.ruvab.it.com", "_blank")
-                }
+                onClick={() => window.open("https://trendsolver.ruvab.it.com", "_blank")}
+                className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+              >
+                Launch TrendSolver
+              </button>
+            </div>
+
+            <div className="bg-white p-8 rounded-lg shadow-lg border text-center">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Custom Solutions
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Need a tailored analytics solution? Our team will work with you to create the perfect system.
+              </p>
+              <button 
+                onClick={() => window.location.href = 'mailto:support@ruvabit.com'}
                 className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
               >
-                Start Free Trial
-              </button>
-            </div>
-
-            <div className="bg-white p-8 rounded-lg shadow-xl border-2 border-green-500 relative">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <span className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Most Popular
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Professional
-              </h3>
-              <div className="text-4xl font-bold text-gray-900 mb-6">
-                $79<span className="text-lg text-gray-600">/month</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  50,000 words/month
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  All 50+ languages
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Premium templates
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Team collaboration
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Priority support
-                </li>
-              </ul>
-              <button
-                onClick={() =>
-                  window.open("https://langscribe.ruvab.it.com", "_blank")
-                }
-                className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-              >
-                Start Free Trial
-              </button>
-            </div>
-
-            <div className="bg-white p-8 rounded-lg shadow-lg border">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Enterprise
-              </h3>
-              <div className="text-4xl font-bold text-gray-900 mb-6">
-                Custom<span className="text-lg text-gray-600"> pricing</span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Unlimited words
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Custom integrations
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  Dedicated account manager
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                  SLA guarantee
-                </li>
-              </ul>
-              <button className="w-full bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
-                Contact Sales
+                Contact Sales Team
               </button>
             </div>
           </div>
