@@ -72,18 +72,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     pathRewrite: {
       '^/qrgentool': '', // Remove /qrgentool from the path when forwarding
     },
-    onProxyReq: (proxyReq: any, req: Request, res: Response) => {
-      // Add original host header for proper handling
+    ws: true, // Enable websocket proxying for hot reload
+    followRedirects: true,
+    secure: true,
+    onProxyReq: (proxyReq: any, req: any, res: any) => {
+      console.log(`[Proxy] ${req.method} ${req.originalUrl} -> ${proxyReq.host}${proxyReq.path}`);
+      proxyReq.setHeader('Host', 'qr-gentool-vjvaibhu.replit.app');
       proxyReq.setHeader('X-Forwarded-Host', req.get('host') || '');
       proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+      proxyReq.setHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
     },
-    onError: (err: any, req: Request, res: Response) => {
-      console.error('QR Gen Tool proxy error:', err);
+    onProxyRes: (proxyRes: any, req: any, res: any) => {
+      console.log(`[Proxy Response] ${req.originalUrl} -> Status: ${proxyRes.statusCode}`);
+    },
+    onError: (err: any, req: any, res: any) => {
+      console.error('[Proxy Error]', err.message);
       res.status(500).send('QR Gen Tool temporarily unavailable');
     }
   });
 
-  // Apply the proxy middleware to the /qrgentool path
+  // Apply the proxy middleware to the /qrgentool path and all sub-paths
   app.use('/qrgentool', qrGenToolProxy);
   console.log('[QR Setup] QR Gen Tool proxy configured for /qrgentool -> https://qr-gentool-vjvaibhu.replit.app');
 
