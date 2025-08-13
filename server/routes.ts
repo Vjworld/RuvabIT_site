@@ -9,6 +9,7 @@ import connectPgSimple from "connect-pg-simple";
 import sgMail from '@sendgrid/mail';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
+import { securityHeaders, rateLimiter, sanitizeInput, maskPII, validateEnvironment } from './security';
 
 // Extend Express Request type for user session
 declare module 'express-session' {
@@ -81,6 +82,12 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Validate environment variables on startup
+  validateEnvironment();
+  
+  // Apply security headers to all routes
+  app.use(securityHeaders);
+  
   // Create HTTP server
   const httpServer = createServer(app);
 

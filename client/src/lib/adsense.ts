@@ -13,10 +13,10 @@ declare global {
 }
 
 export const initAdSense = () => {
-  const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-4204204667108655';
+  const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID;
 
   if (!clientId) {
-    console.warn('Missing required AdSense client ID');
+    console.warn('AdSense client ID not configured in environment variables');
     return;
   }
 
