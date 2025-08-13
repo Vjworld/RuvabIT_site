@@ -32,6 +32,7 @@ const GoToTopButton: React.FC = () => {
         text-white shadow-2xl transition-all duration-300 hover:scale-110 group
         border-2 border-white/30 backdrop-blur-sm
         animate-bounce hover:animate-pulse
+        flex items-center justify-center
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}
       `}
       style={{
