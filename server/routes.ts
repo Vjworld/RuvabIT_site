@@ -28,11 +28,18 @@ declare global {
 // Session middleware
 const PgSession = connectPgSimple(session);
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-});
+// Initialize Razorpay (conditionally)
+let razorpay: Razorpay | null = null;
+
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+  console.log('Razorpay payment gateway initialized successfully');
+} else {
+  console.log('Razorpay credentials not found - payment functionality will be disabled');
+}
 
 // Authentication middleware
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
@@ -454,7 +461,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/create-order", async (req, res) => {
     try {
       // Check if Razorpay is properly configured
-      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      if (!razorpay) {
         return res.status(500).json({ error: "Payment gateway not configured. Please contact support." });
       }
 
@@ -526,6 +533,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid payment signature" });
       }
 
+      // Check if Razorpay is available
+      if (!razorpay) {
+        return res.status(500).json({ error: "Payment gateway not configured" });
+      }
+
       // Get payment details from Razorpay
       const payment = await razorpay.payments.fetch(razorpay_payment_id);
 
@@ -542,15 +554,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.createPayment({
           orderId: order.id,
           razorpayPaymentId: razorpay_payment_id,
-          amount: payment.amount,
+          amount: typeof payment.amount === 'string' ? parseInt(payment.amount) : payment.amount,
           currency: payment.currency,
           status: payment.status,
           method: payment.method,
           bank: payment.bank || null,
           walletType: payment.wallet || null,
           vpa: payment.vpa || null,
-          fee: payment.fee || 0,
-          tax: payment.tax || 0,
+          fee: typeof payment.fee === 'string' ? parseInt(payment.fee) : (payment.fee || 0),
+          tax: typeof payment.tax === 'string' ? parseInt(payment.tax) : (payment.tax || 0),
         });
       }
 
