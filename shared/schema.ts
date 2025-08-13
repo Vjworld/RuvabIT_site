@@ -125,6 +125,56 @@ export const newsletterLeads = pgTable("newsletter_leads", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Orders table
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  orderId: varchar("order_id", { length: 255 }).notNull().unique(),
+  amount: integer("amount").notNull(), // Amount in paise
+  currency: varchar("currency", { length: 3 }).default("INR"),
+  status: varchar("status", { length: 50 }).default("created"), // created, paid, failed, cancelled
+  customerName: varchar("customer_name", { length: 255 }),
+  customerEmail: varchar("customer_email", { length: 255 }),
+  customerPhone: varchar("customer_phone", { length: 20 }),
+  serviceType: varchar("service_type", { length: 100 }).notNull(),
+  description: text("description"),
+  razorpayOrderId: varchar("razorpay_order_id", { length: 255 }),
+  razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }),
+  razorpaySignature: varchar("razorpay_signature", { length: 255 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Payments table
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  orderId: integer("order_id").notNull().references(() => orders.id),
+  razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }).notNull(),
+  amount: integer("amount").notNull(),
+  currency: varchar("currency", { length: 3 }).default("INR"),
+  status: varchar("status", { length: 50 }).notNull(), // success, failed, pending
+  method: varchar("method", { length: 50 }), // card, netbanking, wallet, upi
+  bank: varchar("bank", { length: 100 }),
+  walletType: varchar("wallet_type", { length: 100 }),
+  vpa: varchar("vpa", { length: 255 }),
+  fee: integer("fee"), // Razorpay fee in paise
+  tax: integer("tax"), // Tax on fee in paise
+  errorCode: varchar("error_code", { length: 50 }),
+  errorDescription: text("error_description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Order relations
+export const ordersRelations = relations(orders, ({ many }) => ({
+  payments: many(payments),
+}));
+
+export const paymentsRelations = relations(payments, ({ one }) => ({
+  order: one(orders, {
+    fields: [payments.orderId],
+    references: [orders.id],
+  }),
+}));
+
 export type NewsletterLead = typeof newsletterLeads.$inferSelect;
 export type InsertNewsletterLead = typeof newsletterLeads.$inferInsert;
 
@@ -134,7 +184,22 @@ export const insertNewsletterLeadSchema = createInsertSchema(newsletterLeads).om
   createdAt: true,
 });
 
+export const insertOrderSchema = createInsertSchema(orders).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPaymentSchema = createInsertSchema(payments).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
+export type Order = typeof orders.$inferSelect;
+export type InsertOrder = z.infer<typeof insertOrderSchema>;
+export type Payment = typeof payments.$inferSelect;
+export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 
 // Type exports
 export type User = typeof users.$inferSelect;

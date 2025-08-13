@@ -38,7 +38,10 @@ import ContactPage from "@/pages/ContactPage";
 import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
-import QRGenTool from "@/pages/QRGenTool";
+import QRGenTool from "./pages/QRGenTool";
+import PaymentPage from "./pages/PaymentPage";
+import { AuthProvider } from "./contexts/AuthContext";
+
 
 import HelpDocumentation from "@/pages/HelpDocumentation";
 
@@ -49,15 +52,15 @@ import ShippingDeliveryPolicy from "@/pages/ShippingDeliveryPolicy";
 function Router() {
   // Track page views when routes change
   useAnalytics();
-  
 
-  
+
+
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
-      
+
       {/* Service Pages */}
       <Route path="/ai-analytics" component={AIAnalytics} />
       <Route path="/process-automation" component={ProcessAutomation} />
@@ -66,45 +69,47 @@ function Router() {
       <Route path="/cloud-solutions" component={CloudSolutions} />
       <Route path="/cybersecurity" component={Cybersecurity} />
       <Route path="/consulting" component={Consulting} />
-      
+
       {/* Content Pages */}
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostDetail} />
       <Route path="/search" component={SearchPage} />
-      
+
       {/* Admin Pages */}
       <Route path="/vsadmin/login" component={AdminLogin} />
       <Route path="/vsadmin/dashboard" component={AdminDashboard} />
-      
+
       {/* Additional Content Pages */}
       <Route path="/case-studies" component={CaseStudies} />
-      
+
       {/* Support Pages */}
       <Route path="/help" component={HelpCenter} />
       <Route path="/documentation" component={Documentation} />
-      
+
       {/* Company Pages */}
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/services" component={ServicesPage} />
-      
+
       {/* Product Pages */}
       <Route path="/trend-solver" component={TrendSolver} />
       <Route path="/langscribe" component={LangScribe} />
       <Route path="/qr-gen-tool" component={QRGenTool} />
-      
+      <Route path="/payment" element={<PaymentPage />} />
+
+
       {/* Policy Pages */}
       <Route path="/cookie-policy" component={CookiePolicy} />
       <Route path="/data-security" component={DataSecurityPolicy} />
       <Route path="/disclaimer" component={Disclaimer} />
       <Route path="/cancellation-refund" component={CancellationRefundPolicy} />
       <Route path="/shipping-delivery" component={ShippingDeliveryPolicy} />
-      
+
       {/* Additional Pages */}
       <Route path="/help-documentation" component={HelpDocumentation} />
-      
 
-      
+
+
       <Route component={NotFound} />
     </Switch>
   );
@@ -134,9 +139,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
-          <Router />
-          <Toaster />
-          <CookieBanner />
+          <AuthProvider>
+            <Router />
+            <Toaster />
+            <CookieBanner />
+          </AuthProvider>
         </TooltipProvider>
       </HelmetProvider>
     </QueryClientProvider>

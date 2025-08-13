@@ -1,10 +1,11 @@
 import { 
   type BlogPost, type InsertBlogPost, type User, type InsertUser,
   type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex,
-  type NewsletterLead, type InsertNewsletterLead
+  type NewsletterLead, type InsertNewsletterLead, type Order, type InsertOrder,
+  type Payment, type InsertPayment
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex, newsletterLeads } from "@shared/schema";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments } from "@shared/schema";
 import { eq, like, or, desc, and } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
@@ -38,6 +39,17 @@ export interface IStorage {
   createNewsletterLead(insertLead: InsertNewsletterLead): Promise<NewsletterLead>;
   getNewsletterLeads(): Promise<NewsletterLead[]>;
   getNewsletterLead(email: string): Promise<NewsletterLead | undefined>;
+
+  // Payment operations
+  createOrder(insertOrder: InsertOrder): Promise<Order>;
+  getOrder(orderId: string): Promise<Order | undefined>;
+  getOrderById(id: number): Promise<Order | undefined>;
+  updateOrder(orderId: string, updates: Partial<InsertOrder>): Promise<Order | undefined>;
+  getAllOrders(): Promise<Order[]>;
+  
+  createPayment(insertPayment: InsertPayment): Promise<Payment>;
+  getPaymentsByOrderId(orderId: number): Promise<Payment[]>;
+  getPaymentByRazorpayId(razorpayPaymentId: string): Promise<Payment | undefined>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -290,6 +302,111 @@ export class DatabaseStorage implements IStorage {
       content: content.substring(0, 5000), // Limit content length
       searchVector: `${title} ${content}`.toLowerCase(),
     });
+  }
+
+  // Payment operations
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    try {
+      const [order] = await db
+        .insert(orders)
+        .values(insertOrder)
+        .returning();
+      return order;
+    } catch (error) {
+      console.error("Error creating order:", error);
+      throw error;
+    }
+  }
+
+  async getOrder(orderId: string): Promise<Order | undefined> {
+    try {
+      const [order] = await db
+        .select()
+        .from(orders)
+        .where(eq(orders.orderId, orderId));
+      return order;
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      throw error;
+    }
+  }
+
+  async getOrderById(id: number): Promise<Order | undefined> {
+    try {
+      const [order] = await db
+        .select()
+        .from(orders)
+        .where(eq(orders.id, id));
+      return order;
+    } catch (error) {
+      console.error("Error fetching order by ID:", error);
+      throw error;
+    }
+  }
+
+  async updateOrder(orderId: string, updates: Partial<InsertOrder>): Promise<Order | undefined> {
+    try {
+      const [order] = await db
+        .update(orders)
+        .set({ ...updates, updatedAt: new Date() })
+        .where(eq(orders.orderId, orderId))
+        .returning();
+      return order;
+    } catch (error) {
+      console.error("Error updating order:", error);
+      throw error;
+    }
+  }
+
+  async getAllOrders(): Promise<Order[]> {
+    try {
+      return await db
+        .select()
+        .from(orders)
+        .orderBy(desc(orders.createdAt));
+    } catch (error) {
+      console.error("Error fetching all orders:", error);
+      throw error;
+    }
+  }
+
+  async createPayment(insertPayment: InsertPayment): Promise<Payment> {
+    try {
+      const [payment] = await db
+        .insert(payments)
+        .values(insertPayment)
+        .returning();
+      return payment;
+    } catch (error) {
+      console.error("Error creating payment:", error);
+      throw error;
+    }
+  }
+
+  async getPaymentsByOrderId(orderId: number): Promise<Payment[]> {
+    try {
+      return await db
+        .select()
+        .from(payments)
+        .where(eq(payments.orderId, orderId))
+        .orderBy(desc(payments.createdAt));
+    } catch (error) {
+      console.error("Error fetching payments for order:", error);
+      throw error;
+    }
+  }
+
+  async getPaymentByRazorpayId(razorpayPaymentId: string): Promise<Payment | undefined> {
+    try {
+      const [payment] = await db
+        .select()
+        .from(payments)
+        .where(eq(payments.razorpayPaymentId, razorpayPaymentId));
+      return payment;
+    } catch (error) {
+      console.error("Error fetching payment by Razorpay ID:", error);
+      throw error;
+    }
   }
 
   // Initialize default data

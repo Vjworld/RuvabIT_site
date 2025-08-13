@@ -98,9 +98,17 @@ const ServicesPage = () => {
                   </span>
                 </li>
               </ul>
-              <button className="text-blue-600 font-semibold hover:text-blue-700 transition-colors flex items-center">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </button>
+              <div className="flex gap-2">
+                <button className="text-blue-600 font-semibold hover:text-blue-700 transition-colors flex items-center">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/payment'}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
 
             {/* Custom Software Development */}
@@ -141,9 +149,17 @@ const ServicesPage = () => {
                   </span>
                 </li>
               </ul>
-              <button className="text-green-600 font-semibold hover:text-green-700 transition-colors flex items-center">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </button>
+              <div className="flex gap-2">
+                <button className="text-green-600 font-semibold hover:text-green-700 transition-colors flex items-center">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/payment'}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
 
             {/* Data Analytics & BI */}
@@ -184,9 +200,17 @@ const ServicesPage = () => {
                   </span>
                 </li>
               </ul>
-              <button className="text-purple-600 font-semibold hover:text-purple-700 transition-colors flex items-center">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </button>
+              <div className="flex gap-2">
+                <button className="text-purple-600 font-semibold hover:text-purple-700 transition-colors flex items-center">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/payment'}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
 
             {/* Cloud Solutions */}
@@ -227,9 +251,17 @@ const ServicesPage = () => {
                   <span className="text-gray-700">Cost optimization</span>
                 </li>
               </ul>
-              <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors flex items-center">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </button>
+              <div className="flex gap-2">
+                <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors flex items-center">
+                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/payment'}
+                  className="bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors"
+                >
+                  Book Now
+                </button>
+              </div>
             </div>
           </div>
         </div>

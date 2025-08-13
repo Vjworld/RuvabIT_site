@@ -1,11 +1,13 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema } from "@shared/schema";
+import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import sgMail from '@sendgrid/mail';
+import Razorpay from 'razorpay';
+import crypto from 'crypto';
 
 // Extend Express Request type for user session
 declare module 'express-session' {
@@ -25,6 +27,12 @@ declare global {
 
 // Session middleware
 const PgSession = connectPgSimple(session);
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'your_razorpay_key_id',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'your_razorpay_key_secret',
+});
 
 // Authentication middleware
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
@@ -439,6 +447,215 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Get newsletter leads error:", error);
       res.status(500).json({ message: "Failed to fetch newsletter leads" });
+    }
+  });
+
+  // Payment routes
+  app.post("/api/payment/create-order", async (req, res) => {
+    try {
+      const { amount, serviceType, customerName, customerEmail, customerPhone, description } = req.body;
+
+      if (!amount || !serviceType || !customerEmail) {
+        return res.status(400).json({ error: "Amount, service type, and customer email are required" });
+      }
+
+      // Generate unique order ID
+      const orderId = `ORDER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Create Razorpay order
+      const razorpayOrder = await razorpay.orders.create({
+        amount: amount * 100, // Convert to paise
+        currency: 'INR',
+        receipt: orderId,
+      });
+
+      // Create order in database
+      const order = await storage.createOrder({
+        orderId,
+        amount: amount * 100,
+        currency: 'INR',
+        status: 'created',
+        customerName,
+        customerEmail,
+        customerPhone,
+        serviceType,
+        description,
+        razorpayOrderId: razorpayOrder.id,
+      });
+
+      res.json({
+        success: true,
+        orderId: order.orderId,
+        razorpayOrderId: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        key: process.env.RAZORPAY_KEY_ID,
+      });
+
+    } catch (error) {
+      console.error('Create order error:', error);
+      res.status(500).json({ error: "Failed to create order" });
+    }
+  });
+
+  app.post("/api/payment/verify", async (req, res) => {
+    try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId } = req.body;
+
+      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !orderId) {
+        return res.status(400).json({ error: "Missing payment verification data" });
+      }
+
+      // Verify signature
+      const secret = process.env.RAZORPAY_KEY_SECRET || 'your_razorpay_key_secret';
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(body.toString())
+        .digest('hex');
+
+      if (expectedSignature !== razorpay_signature) {
+        return res.status(400).json({ error: "Invalid payment signature" });
+      }
+
+      // Get payment details from Razorpay
+      const payment = await razorpay.payments.fetch(razorpay_payment_id);
+
+      // Update order status
+      await storage.updateOrder(orderId, {
+        status: 'paid',
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+      });
+
+      // Create payment record
+      const order = await storage.getOrder(orderId);
+      if (order) {
+        await storage.createPayment({
+          orderId: order.id,
+          razorpayPaymentId: razorpay_payment_id,
+          amount: payment.amount,
+          currency: payment.currency,
+          status: payment.status,
+          method: payment.method,
+          bank: payment.bank || null,
+          walletType: payment.wallet || null,
+          vpa: payment.vpa || null,
+          fee: payment.fee || 0,
+          tax: payment.tax || 0,
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Payment verified successfully",
+        paymentId: razorpay_payment_id,
+      });
+
+    } catch (error) {
+      console.error('Payment verification error:', error);
+      res.status(500).json({ error: "Failed to verify payment" });
+    }
+  });
+
+  app.get("/api/payment/order/:orderId", async (req, res) => {
+    try {
+      const order = await storage.getOrder(req.params.orderId);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      const payments = await storage.getPaymentsByOrderId(order.id);
+
+      res.json({
+        success: true,
+        order: {
+          ...order,
+          payments,
+        },
+      });
+
+    } catch (error) {
+      console.error('Get order error:', error);
+      res.status(500).json({ error: "Failed to fetch order" });
+    }
+  });
+
+  // Admin routes for orders
+  app.get("/api/admin/orders", requireAdmin, async (req, res) => {
+    try {
+      const orders = await storage.getAllOrders();
+      res.json(orders);
+    } catch (error) {
+      console.error("Get orders error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get("/api/admin/orders/:orderId", requireAdmin, async (req, res) => {
+    try {
+      const order = await storage.getOrder(req.params.orderId);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+
+      const payments = await storage.getPaymentsByOrderId(order.id);
+
+      res.json({
+        ...order,
+        payments,
+      });
+    } catch (error) {
+      console.error("Get order error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Razorpay webhook endpoint
+  app.post("/api/payment/webhook", async (req, res) => {
+    try {
+      const webhookSignature = req.get('X-Razorpay-Signature');
+      const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+      if (webhookSecret && webhookSignature) {
+        const expectedSignature = crypto
+          .createHmac('sha256', webhookSecret)
+          .update(JSON.stringify(req.body))
+          .digest('hex');
+
+        if (expectedSignature !== webhookSignature) {
+          return res.status(400).json({ error: "Invalid webhook signature" });
+        }
+      }
+
+      const event = req.body.event;
+      const paymentEntity = req.body.payload.payment.entity;
+
+      if (event === 'payment.captured') {
+        // Update order status if not already updated
+        const payment = await storage.getPaymentByRazorpayId(paymentEntity.id);
+        if (payment) {
+          const order = await storage.getOrderById(payment.orderId);
+          if (order && order.status !== 'paid') {
+            await storage.updateOrder(order.orderId, { status: 'paid' });
+          }
+        }
+      } else if (event === 'payment.failed') {
+        // Handle failed payment
+        const payment = await storage.getPaymentByRazorpayId(paymentEntity.id);
+        if (payment) {
+          const order = await storage.getOrderById(payment.orderId);
+          if (order) {
+            await storage.updateOrder(order.orderId, { status: 'failed' });
+          }
+        }
+      }
+
+      res.json({ success: true });
+
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(500).json({ error: "Webhook processing failed" });
     }
   });
 
