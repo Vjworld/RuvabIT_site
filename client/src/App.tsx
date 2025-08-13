@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { useEffect } from "react";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
+import { useScrollToTop } from "./hooks/use-scroll-to-top";
 import { initAdSense } from "./lib/adsense";
 
 
@@ -52,8 +53,9 @@ import ShippingDeliveryPolicy from "@/pages/ShippingDeliveryPolicy";
 function Router() {
   // Track page views when routes change
   useAnalytics();
-
-
+  
+  // Scroll to top on route changes
+  useScrollToTop();
 
   return (
     <Switch>
@@ -95,7 +97,7 @@ function Router() {
       <Route path="/trend-solver" component={TrendSolver} />
       <Route path="/langscribe" component={LangScribe} />
       <Route path="/qr-gen-tool" component={QRGenTool} />
-      <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/payment" component={PaymentPage} />
 
 
       {/* Policy Pages */}
