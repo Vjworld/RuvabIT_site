@@ -31,9 +31,9 @@ const QRGenTool = () => {
         <title>QR Gen Tool - Professional QR Code Generator | Ruvab IT</title>
         <meta name="description" content="Professional QR code generator with advanced customization, bulk generation, analytics tracking. Create custom QR codes for marketing campaigns and business applications." />
         <meta name="keywords" content="QR code generator, custom QR codes, bulk QR generation, QR analytics, marketing QR codes, business QR codes" />
-        <link rel="canonical" href="https://qrgen.ruvab.it.com" />
+        <link rel="canonical" href="https://ruvab.it.com/qr-gen-tool/" />
       </Helmet>
-      
+
       <Header />
 
       {/* Hero Section */}
@@ -50,7 +50,7 @@ const QRGenTool = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
-                  onClick={() => window.open('https://qrgen.ruvab.it.com', '_blank')}
+                  onClick={() => window.location.href = '/qr-gen-tool/'}
                   className="bg-white text-green-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
                 >
                   Launch QR Gen Tool
@@ -91,7 +91,7 @@ const QRGenTool = () => {
               Create professional QR codes with advanced customization options, perfect for marketing campaigns, business cards, and digital engagement.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
@@ -261,7 +261,7 @@ const QRGenTool = () => {
             Join thousands of businesses using QR Gen Tool for their marketing and operational needs.
           </p>
           <button
-            onClick={() => window.open('https://qrgen.ruvab.it.com', '_blank')}
+            onClick={() => window.location.href = '/qr-gen-tool/'}
             className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-50 transition-colors"
           >
             Launch QR Gen Tool
@@ -269,7 +269,7 @@ const QRGenTool = () => {
         </div>
       </section>
       <Footer />
-      
+
       <DemoTour isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>
   );

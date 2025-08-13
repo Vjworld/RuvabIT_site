@@ -122,7 +122,7 @@ export default function Products() {
               </li>
             </ul>
             <Button
-              onClick={() => handleLearnMore('qr_gen_tool')}
+              onClick={() => window.location.href = '/qr-gen-tool/'}
               className="bg-green-600 text-white hover:bg-green-700 transition-colors w-full"
             >
               Launch QR Gen Tool

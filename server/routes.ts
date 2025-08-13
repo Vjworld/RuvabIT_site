@@ -57,8 +57,8 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // QR Gen Tool is accessible via custom domain
-  console.log('[QR Setup] QR Gen Tool available at https://qrgen.ruvab.it.com');
+  // QR Gen Tool is accessible via reverse proxy
+  console.log('[QR Setup] QR Gen Tool available at https://ruvab.it.com/qr-gen-tool/');
 
 
   // Session configuration
