@@ -153,7 +153,7 @@ const ChatWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <Card className={`w-80 transition-all duration-300 ${
-        isMinimized ? 'h-14' : 'h-96'
+        isMinimized ? 'h-14' : 'h-[400px]'
       } shadow-xl border-0 bg-white`}>
         {/* Header */}
         <CardHeader className="pb-2 bg-blue-600 text-white rounded-t-lg">
@@ -169,6 +169,16 @@ const ChatWidget: React.FC = () => {
             </div>
             
             <div className="flex items-center space-x-1">
+              <Button
+                onClick={openFullChat}
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 text-white hover:bg-blue-700"
+                title="Open Full Chat"
+              >
+                <ExternalLink className="h-3 w-3" />
+              </Button>
+              
               <Button
                 onClick={() => setIsMinimized(!isMinimized)}
                 variant="ghost"
@@ -193,7 +203,7 @@ const ChatWidget: React.FC = () => {
         {!isMinimized && (
           <>
             {/* Messages */}
-            <CardContent className="h-64 overflow-y-auto p-3 space-y-3">
+            <CardContent className="h-72 overflow-y-auto p-3 space-y-3">
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -246,25 +256,13 @@ const ChatWidget: React.FC = () => {
 
             {/* Input */}
             <div className="p-3 border-t">
-              <div className="flex items-center space-x-2 mb-2">
-                <Button
-                  onClick={openFullChat}
-                  variant="outline"
-                  size="sm"
-                  className="text-xs flex-1"
-                >
-                  <ExternalLink className="h-3 w-3 mr-1" />
-                  Open Full Chat
-                </Button>
-              </div>
-              
               <div className="flex space-x-2">
                 <Input
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
-                  className="text-sm"
+                  className="text-sm flex-1"
                   disabled={isTyping}
                 />
                 <Button
