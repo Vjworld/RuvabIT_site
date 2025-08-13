@@ -1,5 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { storage } from "./storage";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
@@ -64,9 +65,27 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // QR Gen Tool is accessible via reverse proxy
-  console.log('[QR Setup] QR Gen Tool available at https://ruvab.it.com/qr-gen-tool/');
+  // QR Gen Tool reverse proxy setup
+  const qrGenToolProxy = createProxyMiddleware({
+    target: 'https://qr-gentool-vjvaibhu.replit.app',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/qrgentool': '', // Remove /qrgentool from the path when forwarding
+    },
+    onProxyReq: (proxyReq: any, req: Request, res: Response) => {
+      // Add original host header for proper handling
+      proxyReq.setHeader('X-Forwarded-Host', req.get('host') || '');
+      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+    },
+    onError: (err: any, req: Request, res: Response) => {
+      console.error('QR Gen Tool proxy error:', err);
+      res.status(500).send('QR Gen Tool temporarily unavailable');
+    }
+  });
 
+  // Apply the proxy middleware to the /qrgentool path
+  app.use('/qrgentool', qrGenToolProxy);
+  console.log('[QR Setup] QR Gen Tool proxy configured for /qrgentool -> https://qr-gentool-vjvaibhu.replit.app');
 
   // Session configuration
   app.use(session({
