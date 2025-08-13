@@ -206,13 +206,15 @@ componentSettings: {
 - **Strategic Categories**: Aligned with Ruvab IT's service offerings and expertise
 - **Database Integration**: All posts properly categorized and published with clean URLs
 
-### February 13, 2025 - QR Gen Tool External Integration COMPLETED ✅
-- **QR Gen Tool External Integration**: Updated all references to link to external QR Gen Tool
-  - **External URL**: `https://qr-gentool-vjvaibhu.replit.app` (external Replit application)
-  - **Updated**: All "Launch QR Gen Tool" buttons to open external app in new tab
-  - **Marketing Page**: QR Gen Tool page at `/qr-gen-tool` serves as marketing landing page
-  - **Clean Architecture**: Direct external linking approach - no reverse proxy needed
-  - **User Experience**: Seamless transition to external QR code generator application
+### February 13, 2025 - QR Gen Tool Custom Domain COMPLETED ✅
+- **QR Gen Tool Custom Domain**: Updated all references to use custom domain URL
+  - **Custom Domain**: `https://qr-gen.ruvab.it.com` (production custom domain)
+  - **Updated**: All navigation links, buttons, and CTA elements to use custom domain URL
+  - **Header Navigation**: Enhanced dropdown menu with external link support for custom domain
+  - **Footer Links**: Updated product links to open QR Gen Tool custom domain in new tab
+  - **Product Pages**: All "Launch QR Gen Tool" buttons now open custom domain in new tab
+  - **SEO Optimization**: Updated canonical URLs to point to custom domain
+  - **Clean Architecture**: Direct external linking to custom domain approach
 
 ### February 8, 2025 - AdSense Policy Compliance COMPLETED ✅
 - **Privacy Policy Enhancement**: Added comprehensive AdSense and cookie disclosure sections
