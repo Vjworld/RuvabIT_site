@@ -41,6 +41,11 @@ import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
 import QRGenTool from "./pages/QRGenTool";
 import PaymentPage from "./pages/PaymentPage";
+import LiveChat from "./pages/LiveChat";
+import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import APIDocumentationPortal from "./pages/APIDocumentationPortal";
+import AdvancedFeaturesHub from "./pages/AdvancedFeaturesHub";
+import ChatWidget from "./components/ChatWidget";
 import { AuthProvider } from "./contexts/AuthContext";
 
 
@@ -98,6 +103,10 @@ function Router() {
       <Route path="/langscribe" component={LangScribe} />
       <Route path="/qr-gen-tool" component={QRGenTool} />
       <Route path="/payment" component={PaymentPage} />
+      <Route path="/live-chat" component={LiveChat} />
+      <Route path="/advanced-analytics" component={AdvancedAnalytics} />
+      <Route path="/api-documentation" component={APIDocumentationPortal} />
+      <Route path="/advanced-features" component={AdvancedFeaturesHub} />
 
 
       {/* Policy Pages */}
@@ -143,6 +152,7 @@ function App() {
         <TooltipProvider>
           <AuthProvider>
             <Router />
+            <ChatWidget />
             <Toaster />
             <CookieBanner />
           </AuthProvider>

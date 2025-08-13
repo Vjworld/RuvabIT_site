@@ -3,6 +3,7 @@ import { FileText, Globe, Zap, Users, CheckCircle, Star, Languages } from 'lucid
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import ProductDemoWidget from "@/components/ProductDemoWidget";
 
 const LangScribe = () => {
   return (
@@ -222,8 +223,27 @@ const LangScribe = () => {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Interactive Demo */}
       <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Try LangScribe Live Demo
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Experience our AI-powered language processing in action. Test content creation and analysis with real examples.
+            </p>
+          </div>
+          
+          <ProductDemoWidget 
+            productName="LangScribe" 
+            productUrl="https://langscribe.ruvab.it.com"
+          />
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">

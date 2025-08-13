@@ -1,5 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
@@ -31,15 +32,31 @@ const PgSession = connectPgSimple(session);
 // Initialize Razorpay (conditionally)
 let razorpay: Razorpay | null = null;
 
-if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-  razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-  });
-  console.log('Razorpay payment gateway initialized successfully');
-} else {
-  console.log('Razorpay credentials not found - payment functionality will be disabled');
-}
+const initializeRazorpay = () => {
+  if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    try {
+      razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET,
+      });
+      console.log('✅ Razorpay payment gateway initialized successfully');
+      console.log(`🔑 Using Key ID: ${process.env.RAZORPAY_KEY_ID.slice(0, 15)}...`);
+      return true;
+    } catch (error) {
+      console.error('❌ Error initializing Razorpay:', error);
+      return false;
+    }
+  } else {
+    console.log('⚠️  Razorpay credentials not found - payment functionality will be disabled');
+    console.log('📋 Missing variables:');
+    if (!process.env.RAZORPAY_KEY_ID) console.log('   - RAZORPAY_KEY_ID');
+    if (!process.env.RAZORPAY_KEY_SECRET) console.log('   - RAZORPAY_KEY_SECRET');
+    return false;
+  }
+};
+
+// Initialize Razorpay
+const razorpayInitialized = initializeRazorpay();
 
 // Authentication middleware
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
@@ -64,6 +81,128 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Create HTTP server
+  const httpServer = createServer(app);
+
+  // Setup WebSocket server for live chat
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+  // Store active chat sessions
+  const chatSessions = new Map<string, { ws: WebSocket; sessionId: string; userId?: number }>();
+
+  wss.on('connection', (ws: WebSocket, req) => {
+    console.log('New WebSocket connection established');
+    
+    const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+    chatSessions.set(sessionId, { ws, sessionId });
+
+    // Send connection confirmation
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({
+        type: 'connection',
+        sessionId: sessionId,
+        message: 'Connected to support chat'
+      }));
+    }
+
+    ws.on('message', async (data) => {
+      try {
+        const message = JSON.parse(data.toString());
+        
+        if (message.type === 'message') {
+          // Broadcast to support team (in production, this would route to actual agents)
+          // For now, simulate intelligent auto-responses
+          setTimeout(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              const response = generateSmartResponse(message.text);
+              ws.send(JSON.stringify({
+                type: 'message',
+                id: Math.random().toString(36).substr(2, 9),
+                text: response,
+                sender: 'support',
+                timestamp: new Date().toISOString()
+              }));
+            }
+          }, 1500 + Math.random() * 2000); // Realistic response delay
+
+          // Show typing indicator
+          setTimeout(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({
+                type: 'typing',
+                isTyping: true
+              }));
+            }
+          }, 500);
+
+          setTimeout(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({
+                type: 'typing',
+                isTyping: false
+              }));
+            }
+          }, 1400 + Math.random() * 2000);
+        }
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    });
+
+    ws.on('close', () => {
+      console.log('WebSocket connection closed');
+      chatSessions.delete(sessionId);
+    });
+
+    ws.on('error', (error) => {
+      console.error('WebSocket error:', error);
+      chatSessions.delete(sessionId);
+    });
+  });
+
+  // Smart response generator for chat
+  function generateSmartResponse(userMessage: string): string {
+    const lowerMessage = userMessage.toLowerCase();
+    
+    if (lowerMessage.includes('ai') || lowerMessage.includes('artificial intelligence') || lowerMessage.includes('machine learning')) {
+      return "Great question about AI! 🚀 We specialize in AI implementation and machine learning solutions. Our services include predictive analytics, natural language processing, computer vision, and custom AI model development. We've helped businesses increase efficiency by up to 40% through intelligent automation. Would you like to know more about any specific AI solution?";
+    } 
+    
+    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('budget')) {
+      return "I'd be happy to discuss our pricing! 💰 Our services are competitively priced:\n\n• AI Implementation: ₹50,000 - ₹2,00,000\n• Custom Software: ₹75,000 - ₹3,00,000\n• Data Analytics: ₹40,000 - ₹1,50,000\n• Cloud Solutions: ₹35,000 - ₹1,00,000\n\nPrices vary based on complexity and scope. We offer free consultations to provide accurate quotes. Would you like to schedule one?";
+    }
+    
+    if (lowerMessage.includes('software') || lowerMessage.includes('development') || lowerMessage.includes('app') || lowerMessage.includes('web')) {
+      return "Excellent! 💻 We're experts in software development with 5+ years of experience. We build:\n\n• Web Applications (React, Node.js, Python)\n• Mobile Apps (React Native, Flutter)\n• Enterprise Solutions\n• E-commerce Platforms\n• Custom APIs and Integrations\n\nWe follow agile methodology and provide ongoing support. What type of software solution are you looking for?";
+    }
+    
+    if (lowerMessage.includes('qr') || lowerMessage.includes('qr code')) {
+      return "Our QR Code Generator is awesome! 📱 Visit https://qr-gen.ruvab.it.com - it's completely free and offers:\n\n• Custom QR codes for URLs, text, contacts\n• Bulk generation capabilities\n• High-resolution downloads\n• Professional design options\n\nIt's part of our suite of digital tools. Are you interested in our other business solutions too?";
+    }
+    
+    if (lowerMessage.includes('contact') || lowerMessage.includes('meeting') || lowerMessage.includes('consultation') || lowerMessage.includes('call')) {
+      return "I'd love to arrange that! 📞 Here are your options:\n\n• Free 30-minute consultation call\n• Technical demo session\n• In-person meeting (if you're in our area)\n• Video conference at your convenience\n\nOur consultations are completely free with no obligations. What works best for your schedule? I can connect you with our senior consultant right away.";
+    }
+    
+    if (lowerMessage.includes('team') || lowerMessage.includes('company') || lowerMessage.includes('about')) {
+      return "Great question! 👥 Ruvab IT is a technology solutions company with a passionate team of developers, AI specialists, and business analysts. We've:\n\n• Completed 100+ successful projects\n• Served clients across 15+ industries\n• Maintained 98% client satisfaction rate\n• Specialized in cutting-edge technologies\n\nWe're based in India but serve clients globally. Our mission is to make advanced technology accessible to businesses of all sizes. What would you like to know about our expertise?";
+    }
+    
+    if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
+      return "I'm here to help! 🤝 Let me know what specific challenge you're facing:\n\n• Technical questions about our services\n• Project scope and requirements discussion\n• Pricing and timeline information\n• Integration and implementation guidance\n\nOr if you prefer, I can connect you directly with one of our technical specialists. What area do you need assistance with?";
+    }
+    
+    if (lowerMessage.includes('thank') || lowerMessage.includes('appreciate')) {
+      return "You're very welcome! 😊 I'm glad I could help. Is there anything else you'd like to know about our services? I'm here whenever you need assistance with AI solutions, software development, or any technology needs. Feel free to ask anything!";
+    }
+    
+    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+      return "Hello! 👋 Welcome to Ruvab IT support. I'm excited to help you explore our technology solutions! We specialize in AI implementation, custom software development, data analytics, and digital transformation. What brings you here today?";
+    }
+
+    // Default intelligent response
+    return "Thank you for your message! 🤔 I want to make sure I give you the most helpful information. Could you tell me a bit more about what you're looking for? I can help with:\n\n• AI and Machine Learning solutions\n• Software Development projects\n• Data Analytics and Business Intelligence\n• Cloud Solutions and Digital Transformation\n\nWhat specific area interests you most?";
+  }
 
   // Session configuration
   app.use(session({
@@ -458,8 +597,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/payment/create-order", async (req, res) => {
     try {
       // Check if Razorpay is properly configured
-      if (!razorpay) {
-        return res.status(500).json({ error: "Payment gateway not configured. Please contact support." });
+      if (!razorpay || !razorpayInitialized) {
+        return res.status(503).json({ 
+          error: "Payment service not available",
+          message: "Razorpay is not configured. Please contact support.",
+          debug: {
+            razorpayExists: !!razorpay,
+            initialized: razorpayInitialized,
+            hasKeyId: !!process.env.RAZORPAY_KEY_ID,
+            hasKeySecret: !!process.env.RAZORPAY_KEY_SECRET
+          }
+        });
       }
 
       const { amount, serviceType, customerName, customerEmail, customerPhone, description } = req.body;
@@ -749,7 +897,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-
-  const httpServer = createServer(app);
+  // Return the HTTP server with WebSocket support
   return httpServer;
 }
