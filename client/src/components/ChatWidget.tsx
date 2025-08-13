@@ -95,8 +95,8 @@ const ChatWidget: React.FC = () => {
       return "Awesome! 🚀 Our AI solutions are really powerful. We offer:\n\n• Custom AI model development\n• Predictive analytics\n• Natural language processing\n• Computer vision solutions\n• Intelligent automation\n\nWe've helped businesses increase efficiency by up to 40%. What specific AI challenge are you looking to solve?";
     }
     
-    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing')) {
-      return "Great question! 💰 Our pricing is very competitive:\n\n• AI Implementation: Starting from ₹50,000\n• Custom Software: Starting from ₹75,000  \n• Data Analytics: Starting from ₹40,000\n• QR Code Generator: Completely FREE! 🎉\n\nWe offer free consultations to give you accurate quotes. Would you like to schedule one?";
+    if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('quote') || lowerMessage.includes('budget')) {
+      return "Great question about pricing! 💰 Our costs are customized based on your specific needs and requirements. For accurate pricing and detailed quotes, please connect with our sales and support team:\n\n📧 support@ruvabit.com\n\nOur team will provide:\n• Detailed cost breakdown\n• Customized solutions for your budget\n• Free consultation and project assessment\n\nNote: Our QR Code Generator is completely FREE! 🎉\n\nIs there anything else about our services I can help you with?";
     }
     
     if (lowerMessage.includes('software') || lowerMessage.includes('development') || lowerMessage.includes('app')) {

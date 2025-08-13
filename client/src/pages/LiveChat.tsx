@@ -196,8 +196,8 @@ export default function LiveChat() {
       
       if (lowerMessage.includes('ai') || lowerMessage.includes('artificial intelligence')) {
         response = "Great question about AI! We specialize in AI implementation, machine learning solutions, and intelligent automation. Our AI services include predictive analytics, natural language processing, and custom AI model development. Would you like to know more about any specific AI solution?";
-      } else if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing')) {
-        response = "Our pricing varies based on project scope and requirements. We offer:\n\n• AI Implementation: Starting from ₹50,000\n• Custom Software Development: Starting from ₹75,000\n• Data Analytics & BI: Starting from ₹40,000\n• Cloud Solutions: Starting from ₹35,000\n\nWould you like to schedule a free consultation to discuss your specific needs?";
+      } else if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('quote') || lowerMessage.includes('budget')) {
+        response = "Thank you for your interest in our pricing! Our costs vary based on project scope, requirements, and customization needs. For accurate pricing and detailed quotes, I'd be happy to connect you with our sales and support team.\n\nPlease reach out to: support@ruvabit.com\n\nOur sales team will:\n• Understand your specific requirements\n• Provide detailed cost breakdown\n• Offer customized solutions within your budget\n• Schedule a free consultation\n\nWould you like me to help you with anything else about our services?";
       } else if (lowerMessage.includes('software') || lowerMessage.includes('development')) {
         response = "We provide comprehensive software development services including web applications, mobile apps, enterprise solutions, and custom software. Our tech stack includes React, Node.js, Python, AI/ML frameworks, and cloud technologies. What type of software solution are you looking for?";
       } else if (lowerMessage.includes('qr') || lowerMessage.includes('qr code')) {

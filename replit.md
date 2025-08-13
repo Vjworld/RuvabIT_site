@@ -189,6 +189,13 @@ componentSettings: {
 
 ## Recent Changes
 
+### February 14, 2025 - Live Chat Pricing Policy Update COMPLETED ✅
+- **Pricing Inquiry Handling**: Updated both LiveChat system and ChatWidget to redirect pricing questions to sales team
+- **Professional Redirection**: All pricing inquiries now directed to support@ruvabit.com instead of providing direct quotes
+- **Consistent Messaging**: Standardized response across both chat systems for pricing-related questions
+- **Sales Team Integration**: Enhanced lead qualification process through proper sales team connection
+- **Policy Documentation**: Created comprehensive pricing policy guidelines for chat agent training
+
 ### February 14, 2025 - Advanced Security Implementation COMPLETED ✅
 - **Complete Security Audit**: Comprehensive security measures implemented across all 9 advanced features
 - **Environment Variables**: All API keys and secrets moved to environment variables with no hardcoded fallbacks
