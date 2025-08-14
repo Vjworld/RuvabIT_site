@@ -40,6 +40,7 @@ import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
 import QRGenTool from "./pages/QRGenTool";
+import TechnologyNewsPage from "./pages/TechnologyNewsPage";
 import PaymentPage from "./pages/PaymentPage";
 import LiveChat from "./pages/LiveChat";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
@@ -81,6 +82,7 @@ function Router() {
       <Route path="/blog" component={BlogPage} />
       <Route path="/blog/:slug" component={BlogPostDetail} />
       <Route path="/search" component={SearchPage} />
+      <Route path="/technology-news" component={TechnologyNewsPage} />
 
       {/* Admin Pages */}
       <Route path="/vsadmin/login" component={AdminLogin} />

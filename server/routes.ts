@@ -904,6 +904,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Technology News API endpoint
+  app.get("/api/technology-news", async (req: Request, res: Response) => {
+    try {
+      const apiKey = process.env.NEWS_API_KEY;
+      console.log("NewsAPI key present:", !!apiKey);
+      
+      if (!apiKey) {
+        console.error("NEWS_API_KEY environment variable not found");
+        return res.status(500).json({ 
+          error: "News API key not configured" 
+        });
+      }
+
+      const url = `https://newsapi.org/v2/everything?q=technology&sortBy=publishedAt&pageSize=20&language=en&apiKey=${apiKey}`;
+      console.log("Fetching from NewsAPI...");
+      
+      const response = await fetch(url);
+      console.log("NewsAPI response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`NewsAPI error ${response.status}:`, errorText);
+        
+        // Provide specific error messages for common issues
+        if (response.status === 401) {
+          return res.status(500).json({ 
+            error: "NewsAPI authentication failed",
+            details: "API key may be invalid or expired. Please check your NewsAPI key.",
+            suggestion: "Verify your NewsAPI key at https://newsapi.org"
+          });
+        } else if (response.status === 429) {
+          return res.status(500).json({ 
+            error: "NewsAPI rate limit exceeded",
+            details: "Too many requests to NewsAPI. Please try again later.",
+            suggestion: "Consider upgrading your NewsAPI plan for higher limits"
+          });
+        }
+        
+        return res.status(500).json({ 
+          error: `NewsAPI error: ${response.status}`,
+          details: response.statusText || "Unknown error",
+          statusCode: response.status
+        });
+      }
+
+      const data = await response.json();
+      console.log("NewsAPI articles found:", data.articles?.length || 0);
+      res.json(data);
+    } catch (error) {
+      console.error("News API error:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch technology news",
+        details: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   // Return the HTTP server with WebSocket support
   return httpServer;
 }

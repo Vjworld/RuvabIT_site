@@ -39,6 +39,7 @@ function Header() {
     },
     { name: 'About', href: '/about' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Tech News', href: '/technology-news' },
     { name: 'Contact', href: '/contact' },
   ];
 

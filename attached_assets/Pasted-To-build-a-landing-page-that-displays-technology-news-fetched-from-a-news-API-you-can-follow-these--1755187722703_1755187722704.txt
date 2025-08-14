@@ -1,0 +1,75 @@
+To build a landing page that displays technology news fetched from a news API, you can follow these steps to create a new component and integrate it into your application.
+
+Step 1: Create a Technology News Component
+Create a new file called TechnologyNews.tsx in client/src/components/ with the following code:
+
+
+Copy
+import React, { useEffect, useState } from 'react';
+ 
+const TechnologyNews = () => {
+  const [news, setNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+ 
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('https://newsapi.org/v2/everything?q=technology&apiKey=YOUR_API_KEY');
+        if (!response.ok) throw new Error('Failed to fetch news');
+        const data = await response.json();
+        setNews(data.articles);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+ 
+    fetchNews();
+  }, []);
+ 
+  if (loading) return <div>Loading news...</div>;
+  if (error) return <div>Error: {error}</div>;
+ 
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Latest Technology News</h1>
+      <div className="grid gap-6">
+        {news.map((item, index) => (
+          <article key={index} className="border rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-2">
+              <a href={item.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">{item.title}</a>
+            </h2>
+            <p className="text-gray-600 mb-4">{item.description}</p>
+            <p className="text-sm text-gray-500">{item.publishedAt}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+};
+ 
+export default TechnologyNews;
+Note: Replace YOUR_API_KEY with your actual News API key.
+
+Step 2: Integrate the Component into Your Landing Page
+Edit your landing page file (e.g., client/src/pages/Home.tsx) to include the TechnologyNews component:
+
+
+Copy
+import React from 'react';
+import TechnologyNews from '../components/TechnologyNews';
+ 
+const HomePage = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="py-6">
+        <h1 className="text-4xl text-center font-bold">Welcome to the Tech Hub</h1>
+      </header>
+      <TechnologyNews />
+    </div>
+  );
+};
+ 
+export default HomePage;
