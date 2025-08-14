@@ -40,42 +40,49 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Initialize default data
-  console.log("Initializing default data...");
-  await storage.initializeDefaultData();
-  console.log("Default data initialized successfully");
-  
-  // Register API routes first
-  const server = await registerRoutes(app);
+  try {
+    // Initialize default data
+    console.log("Initializing default data...");
+    await storage.initializeDefaultData();
+    console.log("Default data initialized successfully");
+    
+    // Register API routes first
+    const server = await registerRoutes(app);
 
-  // The QR Gen Tool proxy is already registered above, before Vite
-  // This ensures it runs before Vite's catch-all route
+    // The QR Gen Tool proxy is already registered above, before Vite
+    // This ensures it runs before Vite's catch-all route
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
-  });
+      res.status(status).json({ message });
+      throw err;
+    });
 
-  // Setup Vite AFTER all other routes so the catch-all route
-  // doesn't interfere with our QR proxy or API routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+    // Setup Vite AFTER all other routes so the catch-all route
+    // doesn't interfere with our QR proxy or API routes
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+    } else {
+      serveStatic(app);
+    }
+
+    // Use PORT environment variable for Cloud Run compatibility with fallback to 5000
+    // Cloud Run provides the PORT environment variable
+    const port = parseInt(process.env.PORT || "5000", 10);
+    const host = process.env.NODE_ENV === "production" ? "0.0.0.0" : "0.0.0.0";
+    
+    // Use the correct server.listen() format for Cloud Run deployment
+    server.listen(port, host, (err?: Error) => {
+      if (err) {
+        console.error("❌ Server failed to start:", err.message);
+        process.exit(1);
+      }
+      log(`✅ serving on ${host}:${port}`);
+    });
+  } catch (error) {
+    console.error("❌ Server initialization failed:", error);
+    process.exit(1);
   }
-
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
 })();
