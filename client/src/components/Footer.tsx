@@ -92,7 +92,6 @@ function Footer() {
           </div>
         </div>
       </div>
-      <GoToTop />
     </footer>
   );
 }
