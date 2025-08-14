@@ -219,12 +219,12 @@ const PartnersPage = () => {
                               {partner.description}
                             </CardDescription>
                             
-                            <div className="flex gap-2 mt-auto">
+                            <div className="mt-auto">
                               <Button
                                 variant="default"
                                 size="sm"
                                 asChild
-                                className="flex-1 group/btn bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-xs"
+                                className="w-full group/btn bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-xs"
                               >
                                 <a
                                   href={partner.referralUrl}
@@ -234,23 +234,6 @@ const PartnersPage = () => {
                                 >
                                   Get Started
                                   <ArrowRight className="h-3.5 w-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                                </a>
-                              </Button>
-                              
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                asChild
-                                className="border-2 border-gray-200 hover:border-indigo-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all duration-300"
-                              >
-                                <a
-                                  href={partner.websiteUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 text-xs"
-                                >
-                                  <ExternalLink className="h-3.5 w-3.5" />
-                                  Visit
                                 </a>
                               </Button>
                             </div>
