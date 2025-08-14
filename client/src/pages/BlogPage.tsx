@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import AdSenseAd from "@/components/AdSenseAd";
 import GoToTopButton from "@/components/GoToTopButton";
 import { BlogPost } from "@shared/schema";
 
@@ -176,6 +177,20 @@ const BlogPage = () => {
           </div>
         </section>
       )}
+
+      {/* AdSense Ad - After Featured Post */}
+      <section className="py-8 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center">
+            <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+            <AdSenseAd 
+              adSlot="7834958244" 
+              adFormat="horizontal" 
+              className="mx-auto"
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Blog Posts Grid */}
       <section className="py-16 bg-white">

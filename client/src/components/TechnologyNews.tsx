@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Clock, Calendar } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import AdSenseAd from '@/components/AdSenseAd';
 
 interface NewsArticle {
   title: string;
@@ -131,6 +132,18 @@ const TechnologyNews = () => {
         <p className="text-lg text-muted-foreground">
           Stay updated with the latest developments in technology
         </p>
+      </div>
+      
+      {/* AdSense Ad - After Header */}
+      <div className="py-6 flex justify-center">
+        <div className="text-center max-w-2xl">
+          <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+          <AdSenseAd 
+            adSlot="7834958241" 
+            adFormat="horizontal" 
+            className="mx-auto"
+          />
+        </div>
       </div>
       
       {news.length === 0 ? (

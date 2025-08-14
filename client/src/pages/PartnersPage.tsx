@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AdSenseAd from '@/components/AdSenseAd';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -120,6 +121,20 @@ const PartnersPage = () => {
           </div>
         </section>
 
+        {/* AdSense Ad - After Hero */}
+        <section className="py-8 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="text-center">
+              <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+              <AdSenseAd 
+                adSlot="7834958238" 
+                adFormat="rectangle" 
+                className="max-w-lg mx-auto"
+              />
+            </div>
+          </div>
+        </section>
+
         {/* Partners Content */}
         <section className="py-12">
           <div className="container mx-auto px-4 max-w-7xl">
@@ -149,8 +164,9 @@ const PartnersPage = () => {
               </div>
             ) : (
               <div className="space-y-12">
-                {Object.entries(groupedPartners).map(([category, categoryPartners]) => (
-                  <div key={category} className="space-y-6">
+                {Object.entries(groupedPartners).map(([category, categoryPartners], index) => (
+                  <div key={category}>
+                    <div className="space-y-6">
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-3 mb-4">
                         <div className={`p-3 rounded-xl ${getCategoryColor(category)} text-white shadow-lg`}>
@@ -242,6 +258,21 @@ const PartnersPage = () => {
                         </Card>
                       ))}
                     </div>
+                    </div>
+                    
+                    {/* Ad placement between categories (after every 2nd category) */}
+                    {index === 1 && (
+                      <div className="py-8 flex justify-center">
+                        <div className="text-center max-w-lg">
+                          <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+                          <AdSenseAd 
+                            adSlot="7834958239" 
+                            adFormat="rectangle" 
+                            className="mx-auto"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

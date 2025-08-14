@@ -3,6 +3,7 @@ import { Users, Target, Award, Zap, CheckCircle } from 'lucide-react';
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import AdSenseAd from "@/components/AdSenseAd";
 import GoToTopButton from "@/components/GoToTopButton";
 import vsProfileImage from "@/assets/vs_profile.jpg";
 
@@ -72,6 +73,18 @@ const AboutPage = () => {
                   <strong>Our specialization</strong> lies in AI implementation, data analytics, and process automation—not as abstract concepts, but as practical tools that drive measurable business results. From <em>LangScribe's</em> intelligent transcription capabilities to <em>TrendSolver's</em> real-time trend analysis for content creators, every solution we develop is tested, validated, and optimized for market success.
                 </p>
               </div>
+            </div>
+          </div>
+          
+          {/* AdSense Ad - After Company Story */}
+          <div className="py-8 flex justify-center">
+            <div className="text-center max-w-2xl">
+              <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+              <AdSenseAd 
+                adSlot="7834958242" 
+                adFormat="horizontal" 
+                className="mx-auto"
+              />
             </div>
           </div>
           
@@ -162,6 +175,20 @@ const AboutPage = () => {
                 We adapt quickly to changing technology landscapes and evolving customer needs.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AdSense Ad - After Mission & Values */}
+      <section className="py-8 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center">
+            <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+            <AdSenseAd 
+              adSlot="7834958245" 
+              adFormat="rectangle" 
+              className="mx-auto"
+            />
           </div>
         </div>
       </section>
