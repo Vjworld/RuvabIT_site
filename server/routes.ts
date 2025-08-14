@@ -2,6 +2,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
+import { fetchTechnologyNews } from "./news-api-helper";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
 import session from "express-session";
@@ -904,56 +905,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Technology News API endpoint
+  // Technology News API endpoint (RapidAPI)
   app.get("/api/technology-news", async (req: Request, res: Response) => {
     try {
-      const apiKey = process.env.NEWS_API_KEY;
-      console.log("NewsAPI key present:", !!apiKey);
+      const rapidApiKey = process.env.RAPIDAPI_KEY;
+      const rapidApiHost = process.env.RAPIDAPI_HOST;
       
-      if (!apiKey) {
-        console.error("NEWS_API_KEY environment variable not found");
+      console.log("RapidAPI key present:", !!rapidApiKey);
+      console.log("RapidAPI host:", rapidApiHost);
+      
+      if (!rapidApiKey || !rapidApiHost) {
+        console.error("RapidAPI credentials not found");
         return res.status(500).json({ 
-          error: "News API key not configured" 
+          error: "RapidAPI credentials not configured",
+          details: "Missing RAPIDAPI_KEY or RAPIDAPI_HOST environment variables",
+          setup: "Add your RapidAPI credentials to environment variables"
         });
       }
 
-      const url = `https://newsapi.org/v2/everything?q=technology&sortBy=publishedAt&pageSize=20&language=en&apiKey=${apiKey}`;
-      console.log("Fetching from NewsAPI...");
+      const result = await fetchTechnologyNews(rapidApiKey, rapidApiHost);
       
-      const response = await fetch(url);
-      console.log("NewsAPI response status:", response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`NewsAPI error ${response.status}:`, errorText);
-        
-        // Provide specific error messages for common issues
-        if (response.status === 401) {
-          return res.status(500).json({ 
-            error: "NewsAPI authentication failed",
-            details: "API key may be invalid or expired. Please check your NewsAPI key.",
-            suggestion: "Verify your NewsAPI key at https://newsapi.org"
-          });
-        } else if (response.status === 429) {
-          return res.status(500).json({ 
-            error: "NewsAPI rate limit exceeded",
-            details: "Too many requests to NewsAPI. Please try again later.",
-            suggestion: "Consider upgrading your NewsAPI plan for higher limits"
-          });
-        }
-        
-        return res.status(500).json({ 
-          error: `NewsAPI error: ${response.status}`,
-          details: response.statusText || "Unknown error",
-          statusCode: response.status
+      if (!result.success) {
+        return res.status(500).json({
+          error: result.error,
+          details: result.details,
+          suggestion: result.suggestion,
+          testedPatterns: result.testedPatterns || [],
+          host: rapidApiHost
         });
       }
 
-      const data = await response.json();
-      console.log("NewsAPI articles found:", data.articles?.length || 0);
-      res.json(data);
+      // Normalize response format to match our component expectations
+      const data = result.data;
+      let normalizedData;
+      
+      if (data.articles) {
+        normalizedData = data;
+      } else if (data.data || data.results) {
+        normalizedData = { articles: data.data || data.results };
+      } else if (Array.isArray(data)) {
+        normalizedData = { articles: data };
+      } else {
+        normalizedData = { articles: [] };
+      }
+      
+      console.log("Technology articles found:", normalizedData.articles?.length || 0);
+      res.json(normalizedData);
     } catch (error) {
-      console.error("News API error:", error);
+      console.error("RapidAPI error:", error);
       res.status(500).json({ 
         error: "Failed to fetch technology news",
         details: error instanceof Error ? error.message : "Unknown error"
