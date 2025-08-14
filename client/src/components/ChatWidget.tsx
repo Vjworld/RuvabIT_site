@@ -256,20 +256,20 @@ const ChatWidget: React.FC = () => {
 
             {/* Input */}
             <div className="p-3 border-t">
-              <div className="flex space-x-2">
+              <div className="flex items-center space-x-2">
                 <Input
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
-                  className="text-sm flex-1"
+                  className="text-sm flex-1 h-9"
                   disabled={isTyping}
                 />
                 <Button
                   onClick={sendMessage}
                   disabled={!newMessage.trim() || isTyping}
                   size="sm"
-                  className="px-3"
+                  className="px-3 h-9 w-9 flex items-center justify-center"
                 >
                   <Send className="h-3 w-3" />
                 </Button>
