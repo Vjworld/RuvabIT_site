@@ -1,0 +1,32 @@
+Refused to load the script 'https://replit.com/public/js/replit-dev-banner.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+Understand this error
+pagead2.googlesyndication.com/:1 Refused to frame 'https://googleads.g.doubleclick.net/' because it violates the following Content Security Policy directive: "frame-src 'self' https://checkout.razorpay.com".
+Understand this error
+pagead2.googlesyndication.com/:1 Refused to frame 'https://googleads.g.doubleclick.net/' because it violates the following Content Security Policy directive: "frame-src 'self' https://checkout.razorpay.com".
+Understand this error
+show_ads_impl_fy2021.js:116 Refused to connect to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20250813&st=env' because it violates the following Content Security Policy directive: "connect-src 'self' https://www.google-analytics.com https://api.razorpay.com".
+
+(anonymous) @ show_ads_impl_fy2021.js:116Understand this error
+index-CZ8agZV5.js:40 ReferenceError: GoToTop is not defined
+    at oe (index-CZ8agZV5.js:553:65578)
+    at Cm (index-CZ8agZV5.js:38:16998)
+    at py (index-CZ8agZV5.js:40:43963)
+    at my (index-CZ8agZV5.js:40:39727)
+    at l1 (index-CZ8agZV5.js:40:39655)
+    at So (index-CZ8agZV5.js:40:39508)
+    at au (index-CZ8agZV5.js:40:35875)
+    at cy (index-CZ8agZV5.js:40:34826)
+    at k (index-CZ8agZV5.js:25:1563)
+    at MessagePort.U (index-CZ8agZV5.js:25:1931)
+Qd @ index-CZ8agZV5.js:40Understand this error
+index-CZ8agZV5.js:40 Uncaught ReferenceError: GoToTop is not defined
+    at oe (index-CZ8agZV5.js:553:65578)
+    at Cm (index-CZ8agZV5.js:38:16998)
+    at py (index-CZ8agZV5.js:40:43963)
+    at my (index-CZ8agZV5.js:40:39727)
+    at l1 (index-CZ8agZV5.js:40:39655)
+    at So (index-CZ8agZV5.js:40:39508)
+    at au (index-CZ8agZV5.js:40:35875)
+    at cy (index-CZ8agZV5.js:40:34826)
+    at k (index-CZ8agZV5.js:25:1563)
+    at MessagePort.U (index-CZ8agZV5.js:25:1931)

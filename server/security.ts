@@ -17,12 +17,12 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   // Content Security Policy (CSP)
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.google-analytics.com https://replit.com https://ep1.adtrafficquality.google",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: http:",
-    "connect-src 'self' https://www.google-analytics.com https://api.razorpay.com",
-    "frame-src 'self' https://checkout.razorpay.com",
+    "connect-src 'self' https://www.google-analytics.com https://api.razorpay.com https://ep1.adtrafficquality.google",
+    "frame-src 'self' https://checkout.razorpay.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
     "object-src 'none'",
     "base-uri 'self'"
   ].join('; ');
