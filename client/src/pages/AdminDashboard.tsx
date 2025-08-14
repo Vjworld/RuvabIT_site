@@ -31,6 +31,7 @@ import { useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { BlogPost, User, PageContent, NewsletterLead } from "@shared/schema";
+import AdminReferralPartners from "@/components/AdminReferralPartners";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -111,7 +112,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="posts" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Blog Posts
@@ -127,6 +128,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="newsletter" className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
               Newsletter
+            </TabsTrigger>
+            <TabsTrigger value="partners" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Partners
             </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
@@ -233,6 +238,11 @@ export default function AdminDashboard() {
               </Button>
             </div>
             <NewsletterLeadsManager />
+          </TabsContent>
+
+          {/* Referral Partners Management */}
+          <TabsContent value="partners" className="space-y-6">
+            <AdminReferralPartners />
           </TabsContent>
 
           {/* User Management */}

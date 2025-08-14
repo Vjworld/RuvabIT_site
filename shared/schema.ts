@@ -125,6 +125,23 @@ export const newsletterLeads = pgTable("newsletter_leads", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Referral partners table
+export const referralPartners = pgTable("referral_partners", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  logoUrl: text("logo_url"),
+  websiteUrl: text("website_url").notNull(),
+  referralUrl: text("referral_url").notNull(),
+  category: varchar("category", { length: 100 }).notNull(), // hosting, payment, email, database, etc.
+  isActive: boolean("is_active").default(true).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  commissionRate: varchar("commission_rate", { length: 50 }), // e.g., "10%", "$50 per signup"
+  createdBy: integer("created_by").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Orders table
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
@@ -175,6 +192,13 @@ export const paymentsRelations = relations(payments, ({ one }) => ({
   }),
 }));
 
+export const referralPartnersRelations = relations(referralPartners, ({ one }) => ({
+  createdByUser: one(users, {
+    fields: [referralPartners.createdBy],
+    references: [users.id],
+  }),
+}));
+
 export type NewsletterLead = typeof newsletterLeads.$inferSelect;
 export type InsertNewsletterLead = typeof newsletterLeads.$inferInsert;
 
@@ -195,11 +219,19 @@ export const insertPaymentSchema = createInsertSchema(payments).omit({
   createdAt: true,
 });
 
+export const insertReferralPartnerSchema = createInsertSchema(referralPartners).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
 export type Payment = typeof payments.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
+export type ReferralPartner = typeof referralPartners.$inferSelect;
+export type InsertReferralPartner = z.infer<typeof insertReferralPartnerSchema>;
 
 // Type exports
 export type User = typeof users.$inferSelect;

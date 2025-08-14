@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { fetchTechnologyNews } from "./news-api-helper";
+import { insertReferralPartnerSchema } from "@shared/schema";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
 import session from "express-session";
@@ -957,6 +958,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: "Failed to fetch technology news",
         details: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // Referral Partners API Routes
+  // Get all active referral partners (public)
+  app.get("/api/referral-partners", async (req: Request, res: Response) => {
+    try {
+      const partners = await storage.getReferralPartners();
+      const activePartners = partners.filter(partner => partner.isActive);
+      res.json(activePartners);
+    } catch (error) {
+      console.error("Error fetching referral partners:", error);
+      res.status(500).json({ error: "Failed to fetch referral partners" });
+    }
+  });
+
+  // Get single referral partner (public)
+  app.get("/api/referral-partners/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const partner = await storage.getReferralPartner(id);
+      
+      if (!partner) {
+        return res.status(404).json({ error: "Referral partner not found" });
+      }
+      
+      res.json(partner);
+    } catch (error) {
+      console.error("Error fetching referral partner:", error);
+      res.status(500).json({ error: "Failed to fetch referral partner" });
+    }
+  });
+
+  // Admin routes for referral partners management
+  // Get all referral partners (admin only)
+  app.get("/api/admin/referral-partners", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const partners = await storage.getReferralPartners();
+      res.json(partners);
+    } catch (error) {
+      console.error("Error fetching referral partners:", error);
+      res.status(500).json({ error: "Failed to fetch referral partners" });
+    }
+  });
+
+  // Create new referral partner (admin only)
+  app.post("/api/admin/referral-partners", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const validationResult = insertReferralPartnerSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          error: "Validation failed", 
+          details: validationResult.error.issues 
+        });
+      }
+      
+      const partner = await storage.createReferralPartner(validationResult.data);
+      res.status(201).json(partner);
+    } catch (error) {
+      console.error("Error creating referral partner:", error);
+      res.status(500).json({ error: "Failed to create referral partner" });
+    }
+  });
+
+  // Update referral partner (admin only)
+  app.put("/api/admin/referral-partners/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validationResult = insertReferralPartnerSchema.partial().safeParse(req.body);
+      
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          error: "Validation failed", 
+          details: validationResult.error.issues 
+        });
+      }
+      
+      const partner = await storage.updateReferralPartner(id, validationResult.data);
+      
+      if (!partner) {
+        return res.status(404).json({ error: "Referral partner not found" });
+      }
+      
+      res.json(partner);
+    } catch (error) {
+      console.error("Error updating referral partner:", error);
+      res.status(500).json({ error: "Failed to update referral partner" });
+    }
+  });
+
+  // Delete referral partner (admin only)
+  app.delete("/api/admin/referral-partners/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteReferralPartner(id);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Referral partner not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting referral partner:", error);
+      res.status(500).json({ error: "Failed to delete referral partner" });
     }
   });
 

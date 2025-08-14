@@ -2,10 +2,10 @@ import {
   type BlogPost, type InsertBlogPost, type User, type InsertUser,
   type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex,
   type NewsletterLead, type InsertNewsletterLead, type Order, type InsertOrder,
-  type Payment, type InsertPayment
+  type Payment, type InsertPayment, type ReferralPartner, type InsertReferralPartner
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments } from "@shared/schema";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners } from "@shared/schema";
 import { eq, like, or, desc, and } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
@@ -50,6 +50,13 @@ export interface IStorage {
   createPayment(insertPayment: InsertPayment): Promise<Payment>;
   getPaymentsByOrderId(orderId: number): Promise<Payment[]>;
   getPaymentByRazorpayId(razorpayPaymentId: string): Promise<Payment | undefined>;
+
+  // Referral partner operations
+  getReferralPartners(): Promise<ReferralPartner[]>;
+  getReferralPartner(id: number): Promise<ReferralPartner | undefined>;
+  createReferralPartner(insertPartner: InsertReferralPartner): Promise<ReferralPartner>;
+  updateReferralPartner(id: number, updates: Partial<InsertReferralPartner>): Promise<ReferralPartner | undefined>;
+  deleteReferralPartner(id: number): Promise<boolean>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -438,6 +445,17 @@ export class DatabaseStorage implements IStorage {
       await this.createDefaultBlogPosts(adminId);
       console.log("Storage: Created default blog posts");
     }
+
+    // Create default referral partners if none exist
+    const existingPartners = await db.select().from(referralPartners).limit(1);
+    
+    if (existingPartners.length === 0) {
+      const adminUser = await db.select().from(users).where(eq(users.isAdmin, true)).limit(1);
+      const adminId = adminUser[0]?.id || 1;
+      
+      await this.createDefaultReferralPartners(adminId);
+      console.log("Storage: Created default referral partners");
+    }
     
     console.log("Storage: Database initialization complete");
   }
@@ -471,6 +489,125 @@ export class DatabaseStorage implements IStorage {
     for (const post of samplePosts) {
       await this.createBlogPost(post);
     }
+  }
+
+  private async createDefaultReferralPartners(adminId: number) {
+    const samplePartners = [
+      {
+        name: "Replit",
+        description: "The collaborative browser-based IDE for modern development teams. Build, test, and deploy applications directly in your browser with real-time collaboration features.",
+        logoUrl: "https://replit.com/public/images/replit-logo.png",
+        websiteUrl: "https://replit.com",
+        referralUrl: "https://replit.com?ref=ruvab-it",
+        category: "development",
+        isActive: true,
+        sortOrder: 1,
+        commissionRate: "20% recurring",
+        createdBy: adminId,
+      },
+      {
+        name: "Namecheap",
+        description: "Affordable domain names, web hosting, SSL certificates, and website builder tools. Reliable hosting solutions for businesses of all sizes.",
+        logoUrl: "https://www.namecheap.com/assets/img/nc-icon.png",
+        websiteUrl: "https://www.namecheap.com",
+        referralUrl: "https://www.namecheap.com?aff=ruvab",
+        category: "hosting",
+        isActive: true,
+        sortOrder: 2,
+        commissionRate: "$50 per sale",
+        createdBy: adminId,
+      },
+      {
+        name: "Razorpay",
+        description: "Complete payment solution for businesses in India. Accept payments, automate payouts, and manage finances with powerful APIs and dashboard.",
+        logoUrl: "https://razorpay.com/assets/razorpay-logo.svg",
+        websiteUrl: "https://razorpay.com",
+        referralUrl: "https://razorpay.com/refer?code=ruvab-it",
+        category: "payment",
+        isActive: true,
+        sortOrder: 3,
+        commissionRate: "Revenue share",
+        createdBy: adminId,
+      },
+      {
+        name: "SendGrid",
+        description: "Email delivery platform trusted by developers and marketers. Send transactional and marketing emails with reliable delivery and analytics.",
+        logoUrl: "https://sendgrid.com/brand/sg-twilio-lockup.svg",
+        websiteUrl: "https://sendgrid.com",
+        referralUrl: "https://sendgrid.com?ref=ruvab",
+        category: "email",
+        isActive: true,
+        sortOrder: 4,
+        commissionRate: "15% commission",
+        createdBy: adminId,
+      },
+      {
+        name: "Zoho",
+        description: "Comprehensive suite of business applications including CRM, email, project management, and productivity tools for growing businesses.",
+        logoUrl: "https://www.zoho.com/logo/zoho-logo.svg",
+        websiteUrl: "https://www.zoho.com",
+        referralUrl: "https://www.zoho.com?ref=ruvab-it",
+        category: "other",
+        isActive: true,
+        sortOrder: 5,
+        commissionRate: "25% recurring",
+        createdBy: adminId,
+      },
+      {
+        name: "NewsNow API",
+        description: "Real-time news aggregation API providing access to thousands of news sources worldwide. Perfect for building news applications and staying informed.",
+        logoUrl: "https://www.newsnow.com/favicon.ico",
+        websiteUrl: "https://rapidapi.com/newsnow/api/newsnow",
+        referralUrl: "https://rapidapi.com/newsnow/api/newsnow?ref=ruvab",
+        category: "news",
+        isActive: true,
+        sortOrder: 6,
+        commissionRate: "10% per subscription",
+        createdBy: adminId,
+      }
+    ];
+
+    for (const partner of samplePartners) {
+      await this.createReferralPartner(partner);
+    }
+  }
+
+  // Referral partner operations
+  async getReferralPartners(): Promise<ReferralPartner[]> {
+    return await db.select().from(referralPartners).orderBy(referralPartners.sortOrder, referralPartners.name);
+  }
+
+  async getReferralPartner(id: number): Promise<ReferralPartner | undefined> {
+    const [partner] = await db.select().from(referralPartners).where(eq(referralPartners.id, id));
+    return partner;
+  }
+
+  async createReferralPartner(insertPartner: InsertReferralPartner): Promise<ReferralPartner> {
+    const [partner] = await db
+      .insert(referralPartners)
+      .values({
+        ...insertPartner,
+        updatedAt: new Date(),
+      })
+      .returning();
+    return partner;
+  }
+
+  async updateReferralPartner(id: number, updates: Partial<InsertReferralPartner>): Promise<ReferralPartner | undefined> {
+    const [partner] = await db
+      .update(referralPartners)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(referralPartners.id, id))
+      .returning();
+    return partner;
+  }
+
+  async deleteReferralPartner(id: number): Promise<boolean> {
+    const result = await db.delete(referralPartners).where(eq(referralPartners.id, id));
+    return result.rowCount ? result.rowCount > 0 : false;
   }
 }
 

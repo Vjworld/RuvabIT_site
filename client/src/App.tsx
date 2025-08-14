@@ -41,6 +41,7 @@ import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
 import QRGenTool from "./pages/QRGenTool";
 import TechnologyNewsPage from "./pages/TechnologyNewsPage";
+import PartnersPage from "./pages/PartnersPage";
 import PaymentPage from "./pages/PaymentPage";
 import LiveChat from "./pages/LiveChat";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
@@ -83,6 +84,7 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPostDetail} />
       <Route path="/search" component={SearchPage} />
       <Route path="/technology-news" component={TechnologyNewsPage} />
+      <Route path="/partners" component={PartnersPage} />
 
       {/* Admin Pages */}
       <Route path="/vsadmin/login" component={AdminLogin} />
