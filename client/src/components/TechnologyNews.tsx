@@ -181,7 +181,7 @@ const TechnologyNews = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200/50 dark:border-blue-800/50 rounded-full px-4 py-2 mb-6">
             <TrendingUp className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Multi-Source Feed Active</span>
+            <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Smart 12-Hour Caching Active</span>
           </div>
           <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-6 tracking-tight">
             Tech News Hub

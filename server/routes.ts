@@ -910,6 +910,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Technology News API endpoint (Multi-source: NewsNow + NewsAPI.ai)
   app.get("/api/technology-news", async (req: Request, res: Response) => {
     try {
+      const CACHE_KEY = 'technology_news';
+      const CACHE_HOURS = 12;
+      
+      // First, check if we have valid cached data
+      const isValid = await storage.isNewsCacheValid(CACHE_KEY);
+      
+      if (isValid) {
+        console.log("✅ Serving cached technology news (fresh within 12 hours)");
+        const cachedData = await storage.getNewsCache(CACHE_KEY);
+        if (cachedData) {
+          return res.json({
+            articles: cachedData.articles,
+            cached: true,
+            fetchedAt: cachedData.fetchedAt,
+            expiresAt: cachedData.expiresAt,
+            sourceInfo: cachedData.sourceInfo,
+            message: "Serving cached articles to optimize API usage"
+          });
+        }
+      }
+      
+      console.log("🔄 Cache expired or not found, fetching fresh technology news...");
+      
       const rapidApiKey = process.env.RAPIDAPI_KEY;
       const rapidApiHost = process.env.RAPIDAPI_HOST;
       const newsApiAiKey = process.env.NEWSAPI_AI_KEY;
@@ -1077,10 +1100,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log(`Total articles from ${sources.join(', ')}: ${limitedArticles.length}`);
       
+      // Cache the fresh data for 12 hours
+      if (limitedArticles.length > 0) {
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + (CACHE_HOURS * 60 * 60 * 1000)); // 12 hours from now
+        
+        const sourceInfo = {
+          sources: sources,
+          totalSources: sources.length,
+          articlesCount: limitedArticles.length,
+          fetchedSources: sources.join(', ')
+        };
+        
+        try {
+          await storage.setNewsCache({
+            cacheKey: CACHE_KEY,
+            articles: limitedArticles,
+            expiresAt: expiresAt,
+            sourceInfo: sourceInfo,
+            articleCount: limitedArticles.length
+          });
+          console.log(`💾 Cached ${limitedArticles.length} articles, expires at ${expiresAt.toLocaleString()}`);
+        } catch (cacheError) {
+          console.error("Failed to cache articles:", cacheError);
+        }
+        
+        // Clear any expired cache entries (cleanup)
+        try {
+          await storage.clearExpiredNewsCache();
+        } catch (cleanupError) {
+          console.error("Failed to cleanup expired cache:", cleanupError);
+        }
+      }
+      
       res.json({ 
         articles: limitedArticles,
         sources: sources,
-        totalSources: sources.length
+        totalSources: sources.length,
+        cached: false,
+        fetchedAt: new Date(),
+        message: "Fresh articles fetched and cached for 12 hours"
       });
     } catch (error) {
       console.error("RapidAPI error:", error);

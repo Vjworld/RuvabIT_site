@@ -113,6 +113,17 @@ export const searchSchema = z.object({
   offset: z.number().min(0).optional().default(0),
 });
 
+// News cache table for 12-hour interval caching
+export const newsCache = pgTable("news_cache", {
+  id: serial("id").primaryKey(),
+  cacheKey: varchar("cache_key", { length: 255 }).notNull().unique(), // e.g. 'technology_news'
+  articles: jsonb("articles").notNull(), // Store the fetched articles array
+  fetchedAt: timestamp("fetched_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  sourceInfo: jsonb("source_info"), // Store info about which sources were used
+  articleCount: integer("article_count").default(0),
+});
+
 // Newsletter leads table
 export const newsletterLeads = pgTable("newsletter_leads", {
   id: serial("id").primaryKey(),
@@ -225,6 +236,11 @@ export const insertReferralPartnerSchema = createInsertSchema(referralPartners).
   updatedAt: true,
 });
 
+export const insertNewsCacheSchema = createInsertSchema(newsCache).omit({
+  id: true,
+  fetchedAt: true,
+});
+
 export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
@@ -242,3 +258,5 @@ export type PageContent = typeof pageContents.$inferSelect;
 export type InsertPageContent = z.infer<typeof insertPageContentSchema>;
 export type SearchQuery = z.infer<typeof searchSchema>;
 export type SearchIndex = typeof searchIndex.$inferSelect;
+export type NewsCache = typeof newsCache.$inferSelect;
+export type InsertNewsCache = z.infer<typeof insertNewsCacheSchema>;

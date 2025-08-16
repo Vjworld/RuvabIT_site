@@ -2,11 +2,12 @@ import {
   type BlogPost, type InsertBlogPost, type User, type InsertUser,
   type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex,
   type NewsletterLead, type InsertNewsletterLead, type Order, type InsertOrder,
-  type Payment, type InsertPayment, type ReferralPartner, type InsertReferralPartner
+  type Payment, type InsertPayment, type ReferralPartner, type InsertReferralPartner,
+  type NewsCache, type InsertNewsCache
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners } from "@shared/schema";
-import { eq, like, or, desc, and } from "drizzle-orm";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache } from "@shared/schema";
+import { eq, like, or, desc, and, lt } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 export interface IStorage {
@@ -57,6 +58,12 @@ export interface IStorage {
   createReferralPartner(insertPartner: InsertReferralPartner): Promise<ReferralPartner>;
   updateReferralPartner(id: number, updates: Partial<InsertReferralPartner>): Promise<ReferralPartner | undefined>;
   deleteReferralPartner(id: number): Promise<boolean>;
+
+  // News cache operations for 12-hour caching
+  getNewsCache(cacheKey: string): Promise<NewsCache | undefined>;
+  setNewsCache(cacheData: InsertNewsCache): Promise<NewsCache>;
+  isNewsCacheValid(cacheKey: string): Promise<boolean>;
+  clearExpiredNewsCache(): Promise<void>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -608,6 +615,40 @@ export class DatabaseStorage implements IStorage {
   async deleteReferralPartner(id: number): Promise<boolean> {
     const result = await db.delete(referralPartners).where(eq(referralPartners.id, id));
     return result.rowCount ? result.rowCount > 0 : false;
+  }
+
+  // News cache operations for 12-hour caching
+  async getNewsCache(cacheKey: string): Promise<NewsCache | undefined> {
+    const [cache] = await db.select().from(newsCache).where(eq(newsCache.cacheKey, cacheKey));
+    return cache;
+  }
+
+  async setNewsCache(cacheData: InsertNewsCache): Promise<NewsCache> {
+    // First, delete any existing cache with the same key
+    await db.delete(newsCache).where(eq(newsCache.cacheKey, cacheData.cacheKey));
+    
+    // Insert new cache entry
+    const [cache] = await db
+      .insert(newsCache)
+      .values(cacheData)
+      .returning();
+    return cache;
+  }
+
+  async isNewsCacheValid(cacheKey: string): Promise<boolean> {
+    const [cache] = await db.select().from(newsCache).where(eq(newsCache.cacheKey, cacheKey));
+    
+    if (!cache) {
+      return false;
+    }
+    
+    const now = new Date();
+    return cache.expiresAt > now;
+  }
+
+  async clearExpiredNewsCache(): Promise<void> {
+    const now = new Date();
+    await db.delete(newsCache).where(lt(newsCache.expiresAt, now));
   }
 }
 
