@@ -1,5 +1,8 @@
 import React from 'react';
 import TechnologyNews from '../components/TechnologyNews';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import GoToTopButton from '@/components/GoToTopButton';
 import AdSenseAd from '@/components/AdSenseAd';
 import { Helmet } from 'react-helmet-async';
 
@@ -42,13 +45,14 @@ const TechnologyNewsPage = () => {
       </Helmet>
       
       <div className="min-h-screen bg-background">
+        <Header />
         <TechnologyNews />
         
         {/* AdSense Ad - Bottom of Tech News */}
-        <section className="py-8 bg-gray-50">
+        <section className="py-8 bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="text-center">
-              <div className="text-xs text-gray-500 mb-2">Advertisement</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Advertisement</div>
               <AdSenseAd 
                 adSlot="7834958240" 
                 adFormat="horizontal" 
@@ -57,6 +61,9 @@ const TechnologyNewsPage = () => {
             </div>
           </div>
         </section>
+        
+        <Footer />
+        <GoToTopButton />
       </div>
     </>
   );
