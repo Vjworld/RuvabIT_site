@@ -938,19 +938,116 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Normalize response format to match our component expectations
       const data = result.data;
+      console.log("Raw API response structure:", Object.keys(data));
+      console.log("Raw API response sample:", JSON.stringify(data).substring(0, 500));
+      
       let normalizedData;
       
-      if (data.articles) {
+      // Handle NewsNow API specific format (indexed object with strings)
+      const dataKeys = Object.keys(data);
+      console.log("Checking NewsNow format:", {
+        isObject: typeof data === 'object',
+        isNotArray: !Array.isArray(data),
+        hasKeys: dataKeys.length > 0,
+        allNumericKeys: dataKeys.every(key => !isNaN(parseInt(key))),
+        sampleKeys: dataKeys.slice(0, 5),
+        dataType: typeof data,
+        constructor: data?.constructor?.name,
+        sampleValue: data['0']
+      });
+      
+      // Handle NewsNow API specific format - force processing if we have numeric keys
+      const isNewsNowFormat = dataKeys.length > 0 && dataKeys.every(key => !isNaN(parseInt(key)));
+      console.log("Is NewsNow format:", isNewsNowFormat);
+      
+      if (isNewsNowFormat) {
+        console.log("Detected NewsNow API format, processing response");
+        
+        // If the data is a string, try to parse it properly
+        let processedData = data;
+        if (typeof data === 'string') {
+          try {
+            processedData = JSON.parse(data);
+            console.log("Parsed string data into object");
+          } catch (e) {
+            console.log("Could not parse string data as JSON, treating as raw text");
+            // If it's just a raw string, split by common delimiters
+            const textParts = data.split(/[,\n\r]+/).filter(part => part.trim().length > 0);
+            processedData = textParts.reduce((acc, part, index) => {
+              acc[index] = part.trim();
+              return acc;
+            }, {} as Record<string, string>);
+          }
+        }
+        
+        const rawTexts = Object.values(processedData) as string[];
+        console.log("Processing", rawTexts.length, "text entries, sample:", rawTexts.slice(0, 3));
+        
+        // Convert raw text entries to article-like objects
+        const articles = rawTexts
+          .filter(text => typeof text === 'string' && text.trim().length > 3)
+          .slice(0, 15) // Limit to first 15 entries
+          .map((text, index) => {
+            // Clean and process the text
+            const cleanText = text.replace(/[^\w\s\-\.]/g, ' ').replace(/\s+/g, ' ').trim();
+            const words = cleanText.split(' ').filter(word => word.length > 1);
+            
+            // Generate meaningful title and description
+            const titleWords = words.slice(0, 6);
+            const descWords = words.slice(6, 18);
+            
+            const title = titleWords.length > 0 ? 
+              titleWords.join(' ').replace(/\b\w/g, l => l.toUpperCase()) : 
+              `Technology Update ${index + 1}`;
+            
+            const description = descWords.length > 0 ? 
+              descWords.join(' ') + '...' : 
+              'Latest technology news and updates from the industry.';
+            
+            return {
+              id: `newsNow_${index}`,
+              title: title,
+              description: description,
+              content: cleanText,
+              url: `https://newsNow.co.uk/search?q=${encodeURIComponent(words.slice(0, 3).join(' '))}`,
+              urlToImage: '/api/placeholder/400/200',
+              publishedAt: new Date(Date.now() - index * 3600000).toISOString(), // Stagger timestamps
+              source: {
+                id: 'newsnow',
+                name: 'NewsNow'
+              },
+              author: 'NewsNow API'
+            };
+          });
+        
+        normalizedData = { articles };
+        console.log("Converted to", articles.length, "article objects");
+      } else if (data.articles && Array.isArray(data.articles)) {
         normalizedData = data;
-      } else if (data.data || data.results) {
-        normalizedData = { articles: data.data || data.results };
+      } else if (data.data && Array.isArray(data.data)) {
+        normalizedData = { articles: data.data };
+      } else if (data.results && Array.isArray(data.results)) {
+        normalizedData = { articles: data.results };
+      } else if (data.items && Array.isArray(data.items)) {
+        normalizedData = { articles: data.items };
+      } else if (data.news && Array.isArray(data.news)) {
+        normalizedData = { articles: data.news };
       } else if (Array.isArray(data)) {
         normalizedData = { articles: data };
       } else {
-        normalizedData = { articles: [] };
+        // If no arrays found, check for nested data
+        const possibleArrays = Object.values(data).filter(val => Array.isArray(val));
+        if (possibleArrays.length > 0) {
+          normalizedData = { articles: possibleArrays[0] as any[] };
+        } else {
+          normalizedData = { articles: [] };
+        }
       }
       
       console.log("Technology articles found:", normalizedData.articles?.length || 0);
+      if (normalizedData.articles?.length > 0) {
+        console.log("Sample article:", JSON.stringify(normalizedData.articles[0]).substring(0, 300));
+      }
       res.json(normalizedData);
     } catch (error) {
       console.error("RapidAPI error:", error);

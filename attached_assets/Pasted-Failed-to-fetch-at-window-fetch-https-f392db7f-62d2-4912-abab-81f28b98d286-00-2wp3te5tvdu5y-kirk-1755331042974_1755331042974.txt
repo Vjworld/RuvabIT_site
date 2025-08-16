@@ -1,0 +1,38 @@
+Failed to fetch
+at window.fetch (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at Object.apply (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/injected.js:253:39)
+at Or.Mr [as l] (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:511)
+at Or.A (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:732)
+at Or.g (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:200)
+at Oq.Rd (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:131:1101)
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:608:467
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:763
+at sC.Ub (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:588)
+at IntersectionObserver.<anonymous> (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:752)
+Failed to fetch
+at window.fetch (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at Object.apply (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/injected.js:253:39)
+at Or.Mr [as l] (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:511)
+at Or.A (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:732)
+at Or.g (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:200)
+at Nq.Rd (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:131:996)
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:609:38
+Failed to fetch
+at window.fetch (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at Object.apply (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/injected.js:253:39)
+at Or.Mr [as l] (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:511)
+at Or.A (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:732)
+at Or.g (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:200)
+at Oq.Rd (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:131:1101)
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:608:467
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:763
+at sC.Ub (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:588)
+at IntersectionObserver.<anonymous> (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:209:752)
+Failed to fetch
+at window.fetch (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:218642)
+at Object.apply (https://f392db7f-62d2-4912-abab-81f28b98d286-00-2wp3te5tvdu5y.kirk.replit.dev/__replco/static/devtools/injected.js:253:39)
+at Or.Mr [as l] (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:511)
+at Or.A (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:732)
+at Or.g (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:139:200)
+at Nq.Rd (https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:131:996)
+at https://pagead2.googlesyndication.com/pagead/managed/js/adsense/m202508120101/show_ads_impl_fy2021.js:609:38

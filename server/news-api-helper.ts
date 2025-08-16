@@ -2,8 +2,12 @@
 export async function fetchTechnologyNews(rapidApiKey: string, rapidApiHost: string) {
   // Common endpoint patterns for news APIs on RapidAPI
   const commonPatterns = [
-    { path: '', params: '?q=AI OR "artificial intelligence" OR technology OR software OR programming&lang=en&max=30' },
-    { path: '', params: '?q=technology&lang=en&max=20' },
+    { path: '', params: '?q=technology&lang=en&max=30' },
+    { path: '', params: '?q=AI&lang=en&max=20' },
+    { path: '', params: '?q=software&lang=en&max=20' },
+    { path: '', params: '?q=tech&lang=en&max=20' },
+    { path: '', params: '?q=programming&lang=en&max=20' },
+    { path: '', params: '?query=technology&language=en&limit=20' },
     { path: '/news', params: '?query=technology&language=en&limit=20' },
     { path: '/headlines', params: '?country=us&category=technology' },
     { path: '/search', params: '?q=technology&sortBy=publishedAt&pageSize=20' },
