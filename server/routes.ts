@@ -1096,11 +1096,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Sort articles by date (newest first) and limit total
-      allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-      const limitedArticles = allArticles.slice(0, 20);
+      // Filter articles to ensure only technology-related content
+      const technologyKeywords = [
+        'technology', 'tech', 'software', 'ai', 'artificial intelligence', 'machine learning',
+        'programming', 'coding', 'development', 'cybersecurity', 'blockchain', 'cloud',
+        'data science', 'big data', 'iot', 'internet of things', 'robotics', 'automation',
+        'digital', 'cyber', 'compute', 'algorithm', 'app', 'web', 'mobile', 'startup',
+        'innovation', 'gadget', 'device', 'platform', 'database', 'network', 'security',
+        'microsoft', 'google', 'apple', 'meta', 'amazon', 'nvidia', 'intel', 'ibm'
+      ];
       
-      console.log(`Total articles from ${sources.join(', ')}: ${limitedArticles.length}`);
+      const filteredTechArticles = allArticles.filter(article => {
+        const searchText = `${article.title} ${article.description || ''} ${article.content || ''}`.toLowerCase();
+        
+        // Check if article contains technology-related keywords
+        const containsTechKeywords = technologyKeywords.some(keyword => 
+          searchText.includes(keyword.toLowerCase())
+        );
+        
+        // Exclude non-tech categories
+        const excludeKeywords = [
+          'sports', 'entertainment', 'celebrity', 'music', 'movie', 'film',
+          'politics', 'election', 'government', 'weather', 'health care',
+          'medicine', 'pharmacy', 'restaurant', 'food', 'cooking', 'recipe',
+          'fashion', 'beauty', 'makeup', 'real estate', 'property', 'housing'
+        ];
+        
+        const containsExcludedKeywords = excludeKeywords.some(keyword => 
+          searchText.includes(keyword.toLowerCase())
+        );
+        
+        return containsTechKeywords && !containsExcludedKeywords;
+      });
+      
+      // Sort articles by date (newest first) and limit total
+      filteredTechArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      const limitedArticles = filteredTechArticles.slice(0, 20);
+      
+      console.log(`🔍 Technology filtering applied: ${allArticles.length} → ${filteredTechArticles.length} tech articles`);
+      console.log(`📰 Final articles from ${sources.join(', ')}: ${limitedArticles.length}`);
       
       // Cache the fresh data for 12 hours
       if (limitedArticles.length > 0) {

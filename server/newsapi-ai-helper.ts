@@ -5,14 +5,16 @@ export async function fetchNewsAPIaiData(apiKey: string) {
     
     const url = 'http://eventregistry.org/api/v1/article/getArticles';
     
-    // Use GET method with simplified parameters for better results
+    // Use GET method with technology-specific parameters
     const params = new URLSearchParams({
       apiKey: apiKey,
       action: 'getArticles',
-      keyword: 'technology',
+      keyword: 'technology OR software OR AI OR "artificial intelligence" OR programming OR cybersecurity OR blockchain OR cloud OR "machine learning"',
+      categoryUri: 'dmoz/Computers',
       lang: 'eng',
       articlesCount: '10',
-      articlesSortBy: 'date'
+      articlesSortBy: 'date',
+      dataType: 'news,pr'
     });
 
     const fullUrl = `${url}?${params.toString()}`;
