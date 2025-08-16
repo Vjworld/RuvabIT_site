@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Clock, Calendar } from 'lucide-react';
+import { ExternalLink, Clock, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import AdSenseAd from '@/components/AdSenseAd';
 
 interface NewsArticle {
+  id: string;
   title: string;
   description: string;
+  content: string;
+  summary: string[];
   url: string;
   urlToImage: string;
   publishedAt: string;
@@ -22,6 +25,7 @@ const TechnologyNews = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [expandedArticles, setExpandedArticles] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -54,6 +58,18 @@ const TechnologyNews = () => {
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
+    });
+  };
+
+  const toggleArticleExpansion = (articleId: string) => {
+    setExpandedArticles(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(articleId)) {
+        newSet.delete(articleId);
+      } else {
+        newSet.add(articleId);
+      }
+      return newSet;
     });
   };
 
@@ -174,70 +190,127 @@ const TechnologyNews = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {news.slice(0, 12).map((article, index) => (
-          <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
-            <CardHeader className="p-0">
-              {article.urlToImage && (
-                <div className="aspect-video overflow-hidden rounded-t-lg">
-                  <img
-                    src={article.urlToImage}
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                </div>
-              )}
-            </CardHeader>
-            
-            <CardContent className="p-4 flex-1 flex flex-col">
-              <div className="flex items-center gap-2 mb-3">
-                <Badge variant="secondary" className="text-xs">
-                  {article.source.name}
-                </Badge>
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <Calendar className="h-3 w-3 mr-1" />
-                  {formatDate(article.publishedAt)}
-                </div>
-              </div>
-              
-              <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                {article.title}
-              </h3>
-              
-              {article.description && (
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-1">
-                  {article.description}
-                </p>
-              )}
-              
-              <div className="flex items-center justify-between mt-auto">
-                <div className="flex items-center text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {formatTime(article.publishedAt)}
-                </div>
+          {news.slice(0, 12).map((article) => {
+            const isExpanded = expandedArticles.has(article.id);
+            return (
+              <Card key={article.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                <CardHeader className="p-0">
+                  {article.urlToImage && (
+                    <div className="aspect-video overflow-hidden rounded-t-lg relative">
+                      <a 
+                        href={article.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block w-full h-full"
+                      >
+                        <img
+                          src={article.urlToImage}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=200&fit=crop&q=80';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                          <ExternalLink className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </div>
+                      </a>
+                    </div>
+                  )}
+                </CardHeader>
                 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  asChild
-                  className="text-primary hover:text-primary/80"
-                >
-                  <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                  >
-                    Read More
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                <CardContent className="p-4 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge variant="secondary" className="text-xs">
+                      {article.source.name}
+                    </Badge>
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <Calendar className="h-3 w-3 mr-1" />
+                      {formatDate(article.publishedAt)}
+                    </div>
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {formatTime(article.publishedAt)}
+                    </div>
+                  </div>
+                  
+                  <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                    {article.title}
+                  </h3>
+                  
+                  {/* Article Summary */}
+                  {article.summary && article.summary.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="font-medium text-sm text-muted-foreground mb-2">Key Highlights:</h4>
+                      <ul className="text-sm space-y-1">
+                        {article.summary.slice(0, 4).map((point, idx) => (
+                          <li key={idx} className="flex items-start">
+                            <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                            <span className="text-muted-foreground">{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {article.description && (
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-1">
+                      {article.description}
+                    </p>
+                  )}
+                  
+                  {/* Expanded Content */}
+                  {isExpanded && article.content && (
+                    <div className="mb-4 p-3 bg-muted/50 rounded-lg border">
+                      <h4 className="font-medium text-sm mb-2">Full Article Content:</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {article.content}
+                      </p>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between mt-auto gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => toggleArticleExpansion(article.id)}
+                      className="flex items-center gap-1"
+                    >
+                      {isExpanded ? (
+                        <>
+                          Show Less
+                          <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          Read More
+                          <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      asChild
+                      className="text-primary hover:text-primary/80"
+                    >
+                      <a
+                        href={article.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                      >
+                        Visit Source
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
       
