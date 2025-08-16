@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { fetchTechnologyNews } from "./news-api-helper";
+import { fetchNewsAPIaiData } from "./newsapi-ai-helper";
 import { insertReferralPartnerSchema } from "@shared/schema";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
@@ -906,87 +907,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Technology News API endpoint (RapidAPI)
+  // Technology News API endpoint (Multi-source: NewsNow + NewsAPI.ai)
   app.get("/api/technology-news", async (req: Request, res: Response) => {
     try {
       const rapidApiKey = process.env.RAPIDAPI_KEY;
       const rapidApiHost = process.env.RAPIDAPI_HOST;
+      const newsApiAiKey = process.env.NEWSAPI_AI_KEY;
       
       console.log("RapidAPI key present:", !!rapidApiKey);
       console.log("RapidAPI host:", rapidApiHost);
+      console.log("NewsAPI.ai key present:", !!newsApiAiKey);
       
-      if (!rapidApiKey || !rapidApiHost) {
-        console.error("RapidAPI credentials not found");
-        return res.status(500).json({ 
-          error: "RapidAPI credentials not configured",
-          details: "Missing RAPIDAPI_KEY or RAPIDAPI_HOST environment variables",
-          setup: "Add your RapidAPI credentials to environment variables"
-        });
-      }
-
-      const result = await fetchTechnologyNews(rapidApiKey, rapidApiHost);
+      let allArticles: any[] = [];
+      let sources: string[] = [];
       
-      if (!result.success) {
-        return res.status(500).json({
-          error: result.error,
-          details: result.details,
-          suggestion: result.suggestion,
-          testedPatterns: result.testedPatterns || [],
-          host: rapidApiHost
-        });
-      }
-
-      // Normalize response format to match our component expectations
-      const data = result.data;
-      console.log("Raw API response structure:", Object.keys(data));
-      console.log("Raw API response sample:", JSON.stringify(data).substring(0, 500));
-      
-      let normalizedData;
-      
-      // Handle NewsNow API specific format (indexed object with strings)
-      const dataKeys = Object.keys(data);
-      console.log("Checking NewsNow format:", {
-        isObject: typeof data === 'object',
-        isNotArray: !Array.isArray(data),
-        hasKeys: dataKeys.length > 0,
-        allNumericKeys: dataKeys.every(key => !isNaN(parseInt(key))),
-        sampleKeys: dataKeys.slice(0, 5),
-        dataType: typeof data,
-        constructor: data?.constructor?.name,
-        sampleValue: data['0']
-      });
-      
-      // Handle NewsNow API specific format - force processing if we have numeric keys
-      const isNewsNowFormat = dataKeys.length > 0 && dataKeys.every(key => !isNaN(parseInt(key)));
-      console.log("Is NewsNow format:", isNewsNowFormat);
-      
-      if (isNewsNowFormat) {
-        console.log("Detected NewsNow API format, processing response");
-        
-        // If the data is a string, try to parse it properly
-        let processedData = data;
-        if (typeof data === 'string') {
-          try {
-            processedData = JSON.parse(data);
-            console.log("Parsed string data into object");
-          } catch (e) {
-            console.log("Could not parse string data as JSON, treating as raw text");
-            // If it's just a raw string, split by common delimiters
-            const textParts = data.split(/[,\n\r]+/).filter(part => part.trim().length > 0);
-            processedData = textParts.reduce((acc, part, index) => {
-              acc[index] = part.trim();
-              return acc;
-            }, {} as Record<string, string>);
-          }
-        }
-        
-        const rawTexts = Object.values(processedData) as string[];
-        console.log("Processing", rawTexts.length, "text entries, sample:", rawTexts.slice(0, 3));
-        
-        // Convert raw text entries to article-like objects
-        const articles = rawTexts
-          .filter(text => typeof text === 'string' && text.trim().length > 3)
-          .slice(0, 15) // Limit to first 15 entries
+      // Fetch from NewsNow (RapidAPI) if available
+      if (rapidApiKey && rapidApiHost) {
+        try {
+          const result = await fetchTechnologyNews(rapidApiKey, rapidApiHost);
+          
+          if (result.success) {
+            // Process NewsNow data
+            const data = result.data;
+            console.log("Processing NewsNow data...");
+            
+            // Handle NewsNow API specific format (indexed object with strings)
+            const dataKeys = Object.keys(data);
+            const isNewsNowFormat = dataKeys.length > 0 && dataKeys.every(key => !isNaN(parseInt(key)));
+            
+            if (isNewsNowFormat) {
+              let processedData = data;
+              if (typeof data === 'string') {
+                try {
+                  processedData = JSON.parse(data);
+                } catch (e) {
+                  const textParts = data.split(/[,\n\r]+/).filter(part => part.trim().length > 0);
+                  processedData = textParts.reduce((acc, part, index) => {
+                    acc[index] = part.trim();
+                    return acc;
+                  }, {} as Record<string, string>);
+                }
+              }
+              
+              const rawTexts = Object.values(processedData) as string[];
+              const articles = rawTexts
+                .filter(text => typeof text === 'string' && text.trim().length > 3)
+                .slice(0, 10) // Limit NewsNow to 10 articles
           .map((text, index) => {
             // Clean and process the text
             const cleanText = text.replace(/[^\w\s\-\.]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -1066,35 +1032,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
             };
           });
         
-        normalizedData = { articles };
-        console.log("Converted to", articles.length, "article objects");
-      } else if (data.articles && Array.isArray(data.articles)) {
-        normalizedData = data;
-      } else if (data.data && Array.isArray(data.data)) {
-        normalizedData = { articles: data.data };
-      } else if (data.results && Array.isArray(data.results)) {
-        normalizedData = { articles: data.results };
-      } else if (data.items && Array.isArray(data.items)) {
-        normalizedData = { articles: data.items };
-      } else if (data.news && Array.isArray(data.news)) {
-        normalizedData = { articles: data.news };
-      } else if (Array.isArray(data)) {
-        normalizedData = { articles: data };
-      } else {
-        // If no arrays found, check for nested data
-        const possibleArrays = Object.values(data).filter(val => Array.isArray(val));
-        if (possibleArrays.length > 0) {
-          normalizedData = { articles: possibleArrays[0] as any[] };
-        } else {
-          normalizedData = { articles: [] };
+              
+              allArticles.push(...articles);
+              sources.push('NewsNow');
+              console.log(`Added ${articles.length} articles from NewsNow`);
+            }
+          } else {
+            console.log("NewsNow fetch failed:", result.error);
+          }
+        } catch (error) {
+          console.error("NewsNow error:", error);
         }
       }
       
-      console.log("Technology articles found:", normalizedData.articles?.length || 0);
-      if (normalizedData.articles?.length > 0) {
-        console.log("Sample article:", JSON.stringify(normalizedData.articles[0]).substring(0, 300));
+      // Fetch from NewsAPI.ai if available
+      if (newsApiAiKey) {
+        try {
+          const aiResult = await fetchNewsAPIaiData(newsApiAiKey);
+          
+          if (aiResult.success && aiResult.articles) {
+            allArticles.push(...aiResult.articles.slice(0, 10)); // Limit to 10 articles
+            sources.push('NewsAPI.ai');
+            console.log(`Added ${aiResult.articles.length} articles from NewsAPI.ai`);
+          } else {
+            console.log("NewsAPI.ai fetch failed:", aiResult.error);
+          }
+        } catch (error) {
+          console.error("NewsAPI.ai error:", error);
+        }
       }
-      res.json(normalizedData);
+      
+      // If no sources are available, return error
+      if (!rapidApiKey && !newsApiAiKey) {
+        return res.status(500).json({
+          error: "No news sources configured",
+          details: "Please configure either RapidAPI (NewsNow) or NewsAPI.ai credentials",
+          setup: "Add RAPIDAPI_KEY + RAPIDAPI_HOST or NEWSAPI_AI_KEY to environment variables"
+        });
+      }
+      
+      // Sort articles by date (newest first) and limit total
+      allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+      const limitedArticles = allArticles.slice(0, 20);
+      
+      console.log(`Total articles from ${sources.join(', ')}: ${limitedArticles.length}`);
+      
+      res.json({ 
+        articles: limitedArticles,
+        sources: sources,
+        totalSources: sources.length
+      });
     } catch (error) {
       console.error("RapidAPI error:", error);
       res.status(500).json({ 
