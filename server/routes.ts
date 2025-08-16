@@ -222,13 +222,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       createTableIfMissing: false,
       tableName: 'sessions',
     }),
-    secret: process.env.SESSION_SECRET || 'dev-secret-key-change-in-production',
+    secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // CSRF protection
     },
   }));
 
@@ -1266,7 +1267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/news-archive/stats", requireAuth, requireAdmin, async (req: Request, res: Response) => {
     try {
       const stats = await storage.getArchiveStatistics();
-      const sourceStats = await storage.getSourceStatistics();
+      const sourceStats = await storage.getSourceStats();
       
       // Get recent archive activity
       const recentArticles = await storage.getArchivedArticles({ limit: 10 });

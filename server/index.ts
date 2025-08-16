@@ -4,8 +4,32 @@ import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Security-first middleware configuration
+app.use(express.json({ limit: '10mb' })); // Limit JSON payload size
+app.use(express.urlencoded({ extended: false, limit: '10mb' })); // Limit URL encoded payloads
+
+// Security headers middleware
+app.use((req, res, next) => {
+  // Prevent MIME type sniffing
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  
+  // Prevent clickjacking
+  res.setHeader('X-Frame-Options', 'DENY');
+  
+  // Enable XSS protection
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  // Remove server signature
+  res.removeHeader('X-Powered-By');
+  
+  // Strict Transport Security (HTTPS only in production)
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  
+  next();
+});
 
 
 
@@ -41,6 +65,33 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
+    // Validate critical environment variables first
+    const requiredEnvVars = ['DATABASE_URL', 'SESSION_SECRET'];
+    const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    
+    if (missingEnvVars.length > 0) {
+      console.error("❌ Critical environment variables missing:", missingEnvVars.join(', '));
+      console.error("Please set these in Replit Secrets or your .env file");
+      process.exit(1);
+    }
+
+    // Validate SESSION_SECRET strength
+    const sessionSecret = process.env.SESSION_SECRET;
+    if (sessionSecret && sessionSecret.length < 32) {
+      console.warn("⚠️  SESSION_SECRET should be at least 32 characters long for security");
+    }
+    
+    // Log optional environment variables status
+    const optionalEnvVars = ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'];
+    const missingOptionalVars = optionalEnvVars.filter(varName => !process.env[varName]);
+    
+    if (missingOptionalVars.length > 0) {
+      console.warn("⚠️  Optional environment variables not configured:");
+      missingOptionalVars.forEach(varName => console.warn(`   - ${varName}`));
+    }
+    
+    console.log("✅ Environment validation completed");
+
     // Initialize default data
     console.log("Initializing default data...");
     await storage.initializeDefaultData();
