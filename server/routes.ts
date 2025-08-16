@@ -1055,7 +1055,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               description: description,
               content: cleanText,
               summary: generateSummary(cleanText, title),
-              url: `https://newsNow.co.uk/search?q=${encodeURIComponent(words.slice(0, 3).join(' '))}`,
+              url: `https://www.newsnow.co.uk/h/Technology`, // Use main technology section
               urlToImage: getImageUrl(words),
               publishedAt: new Date(Date.now() - index * 3600000).toISOString(), // Stagger timestamps
               source: {

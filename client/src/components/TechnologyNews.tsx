@@ -197,25 +197,20 @@ const TechnologyNews = () => {
                 <CardHeader className="p-0">
                   {article.urlToImage && (
                     <div className="aspect-video overflow-hidden rounded-t-lg relative">
-                      <a 
-                        href={article.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="block w-full h-full"
-                      >
-                        <img
-                          src={article.urlToImage}
-                          alt={article.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=200&fit=crop&q=80';
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
-                          <ExternalLink className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </div>
-                      </a>
+                      <img
+                        src={article.urlToImage}
+                        alt={article.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=200&fit=crop&q=80';
+                        }}
+                      />
+                      <div className="absolute top-2 right-2">
+                        <Badge variant="secondary" className="text-xs bg-black/70 text-white">
+                          {article.source.name}
+                        </Badge>
+                      </div>
                     </div>
                   )}
                 </CardHeader>
@@ -274,8 +269,12 @@ const TechnologyNews = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleArticleExpansion(article.id)}
-                      className="flex items-center gap-1"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleArticleExpansion(article.id);
+                      }}
+                      className="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 border-primary/30"
                     >
                       {isExpanded ? (
                         <>
@@ -301,8 +300,9 @@ const TechnologyNews = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        Visit Source
+                        Visit NewsNow
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     </Button>
