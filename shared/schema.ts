@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, varchar, index, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, varchar, index, jsonb, uniqueIndex, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { sql } from "drizzle-orm";
@@ -124,6 +124,102 @@ export const newsCache = pgTable("news_cache", {
   articleCount: integer("article_count").default(0),
 });
 
+// News Archive table - Comprehensive backup system for admin contingency
+export const newsArchive = pgTable("news_archive", {
+  id: serial("id").primaryKey(),
+  articleId: varchar("article_id", { length: 500 }).notNull(), // Original article ID from API
+  title: text("title").notNull(),
+  description: text("description"),
+  content: text("content"), // Full article content if available
+  url: text("url").notNull(),
+  urlToImage: text("url_to_image"),
+  publishedAt: timestamp("published_at"),
+  sourceName: varchar("source_name", { length: 255 }).notNull(),
+  sourceUrl: text("source_url"),
+  sourceId: varchar("source_id", { length: 255 }),
+  
+  // Categorization and tagging
+  category: varchar("category", { length: 100 }).default("technology").notNull(),
+  tags: text("tags").array().default([]).notNull(), // Keywords and tags
+  language: varchar("language", { length: 10 }).default("en").notNull(),
+  country: varchar("country", { length: 10 }),
+  
+  // API and source metadata
+  apiProvider: varchar("api_provider", { length: 50 }).notNull(), // 'newsapi_ai', 'newsnow'
+  apiResponseId: varchar("api_response_id", { length: 255 }), // API-specific response ID
+  fetchMethod: varchar("fetch_method", { length: 50 }).default("api").notNull(), // 'api', 'rss', 'scrape'
+  
+  // Content analysis and metadata
+  summary: text("summary"), // Generated summary/excerpt
+  keyPoints: text("key_points").array().default([]), // Key bullet points
+  sentiment: varchar("sentiment", { length: 20 }), // 'positive', 'negative', 'neutral'
+  wordCount: integer("word_count").default(0),
+  readingTime: integer("reading_time").default(0), // Estimated reading time in minutes
+  
+  // SEO and social metadata
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  ogImage: text("og_image"),
+  twitterCard: varchar("twitter_card", { length: 50 }),
+  
+  // Technical metadata
+  contentHash: varchar("content_hash", { length: 64 }), // SHA-256 hash for duplicate detection
+  imageAnalysis: jsonb("image_analysis"), // Image metadata and analysis
+  rawApiResponse: jsonb("raw_api_response"), // Full original API response for debugging
+  
+  // Admin and quality control
+  isVerified: boolean("is_verified").default(false).notNull(), // Admin verified for quality
+  isActive: boolean("is_active").default(true).notNull(), // Active for internal use
+  qualityScore: integer("quality_score").default(0), // 0-100 quality rating
+  adminNotes: text("admin_notes"), // Admin comments and notes
+  verifiedBy: integer("verified_by").references(() => users.id), // Admin who verified
+  verifiedAt: timestamp("verified_at"),
+  
+  // Timestamps
+  archivedAt: timestamp("archived_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("news_archive_article_id_idx").on(table.articleId),
+  index("news_archive_source_idx").on(table.sourceName),
+  index("news_archive_published_idx").on(table.publishedAt),
+  index("news_archive_api_provider_idx").on(table.apiProvider),
+  index("news_archive_category_idx").on(table.category),
+  index("news_archive_archived_idx").on(table.archivedAt),
+  index("news_archive_content_hash_idx").on(table.contentHash),
+  uniqueIndex("news_archive_unique_content").on(table.contentHash),
+]);
+
+// News Source Statistics - Track API performance and source reliability
+export const newsSourceStats = pgTable("news_source_stats", {
+  id: serial("id").primaryKey(),
+  sourceName: varchar("source_name", { length: 255 }).notNull(),
+  apiProvider: varchar("api_provider", { length: 50 }).notNull(),
+  
+  // Statistics
+  totalArticles: integer("total_articles").default(0).notNull(),
+  successfulFetches: integer("successful_fetches").default(0).notNull(),
+  failedFetches: integer("failed_fetches").default(0).notNull(),
+  averageQualityScore: integer("average_quality_score").default(0),
+  lastFetchAt: timestamp("last_fetch_at"),
+  lastSuccessAt: timestamp("last_success_at"),
+  lastFailureAt: timestamp("last_failure_at"),
+  
+  // Reliability metrics
+  uptimePercentage: integer("uptime_percentage").default(100), // 0-100
+  averageResponseTime: integer("average_response_time").default(0), // milliseconds
+  reliabilityScore: integer("reliability_score").default(100), // 0-100
+  
+  // Admin tracking
+  isActive: boolean("is_active").default(true).notNull(),
+  adminNotes: text("admin_notes"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("news_source_stats_provider_idx").on(table.apiProvider),
+  index("news_source_stats_source_idx").on(table.sourceName),
+]);
+
 // Newsletter leads table
 export const newsletterLeads = pgTable("newsletter_leads", {
   id: serial("id").primaryKey(),
@@ -241,6 +337,18 @@ export const insertNewsCacheSchema = createInsertSchema(newsCache).omit({
   fetchedAt: true,
 });
 
+export const insertNewsArchiveSchema = createInsertSchema(newsArchive).omit({
+  id: true,
+  archivedAt: true,
+  updatedAt: true,
+});
+
+export const insertNewsSourceStatsSchema = createInsertSchema(newsSourceStats).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
@@ -260,3 +368,7 @@ export type SearchQuery = z.infer<typeof searchSchema>;
 export type SearchIndex = typeof searchIndex.$inferSelect;
 export type NewsCache = typeof newsCache.$inferSelect;
 export type InsertNewsCache = z.infer<typeof insertNewsCacheSchema>;
+export type NewsArchive = typeof newsArchive.$inferSelect;
+export type InsertNewsArchive = z.infer<typeof insertNewsArchiveSchema>;
+export type NewsSourceStats = typeof newsSourceStats.$inferSelect;
+export type InsertNewsSourceStats = z.infer<typeof insertNewsSourceStatsSchema>;

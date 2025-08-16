@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { storage } from "./storage";
 import { fetchTechnologyNews } from "./news-api-helper";
 import { fetchNewsAPIaiData } from "./newsapi-ai-helper";
+import { archiveNewsArticles } from "./news-archive-helper";
 import { insertReferralPartnerSchema } from "@shared/schema";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
@@ -1125,6 +1126,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error("Failed to cache articles:", cacheError);
         }
         
+        // Archive all fetched articles for admin backup/contingency
+        try {
+          console.log("📚 Starting news archive process for admin backup...");
+          const archivePromises = [];
+          
+          // Archive NewsNow articles
+          const newsNowArticles = limitedArticles.filter(article => 
+            article.id.startsWith('newsNow_') || article.source?.name === 'NewsNow'
+          );
+          if (newsNowArticles.length > 0) {
+            archivePromises.push(
+              archiveNewsArticles(newsNowArticles, 'newsnow', { sources: ['NewsNow'], timestamp: new Date() })
+            );
+          }
+          
+          // Archive NewsAPI.ai articles
+          const newsApiArticles = limitedArticles.filter(article => 
+            article.id.startsWith('eventregistry_') || article.source?.name?.includes('Event Registry')
+          );
+          if (newsApiArticles.length > 0) {
+            archivePromises.push(
+              archiveNewsArticles(newsApiArticles, 'newsapi_ai', { sources: ['NewsAPI.ai'], timestamp: new Date() })
+            );
+          }
+          
+          // Execute archive operations in parallel
+          const archiveResults = await Promise.all(archivePromises);
+          const totalArchived = archiveResults.reduce((sum, result) => sum + result.archived, 0);
+          const totalSkipped = archiveResults.reduce((sum, result) => sum + result.skipped, 0);
+          
+          console.log(`📊 Archive complete: ${totalArchived} new articles archived, ${totalSkipped} duplicates skipped`);
+        } catch (archiveError) {
+          console.error("⚠️  Failed to archive articles (non-critical):", archiveError);
+          // Archive failure is non-critical - don't break the main flow
+        }
+        
         // Clear any expired cache entries (cleanup)
         try {
           await storage.clearExpiredNewsCache();
@@ -1147,6 +1184,158 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: "Failed to fetch technology news",
         details: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // News Archive API Routes (Admin Only)
+  // Get archived articles with pagination and filtering
+  app.get("/api/admin/news-archive", requireAuth, requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { 
+        page = 1, 
+        limit = 50, 
+        provider, 
+        category, 
+        dateFrom, 
+        dateTo,
+        search 
+      } = req.query;
+      
+      const offset = (Number(page) - 1) * Number(limit);
+      const options = {
+        limit: Number(limit),
+        offset: offset,
+        apiProvider: provider as string,
+      };
+      
+      const articles = await storage.getArchivedArticles(options);
+      
+      // Apply additional filters if needed
+      let filteredArticles = articles;
+      
+      if (category) {
+        filteredArticles = filteredArticles.filter(article => 
+          article.category === category
+        );
+      }
+      
+      if (dateFrom || dateTo) {
+        filteredArticles = filteredArticles.filter(article => {
+          const articleDate = new Date(article.archivedAt);
+          const fromDate = dateFrom ? new Date(dateFrom as string) : null;
+          const toDate = dateTo ? new Date(dateTo as string) : null;
+          
+          if (fromDate && articleDate < fromDate) return false;
+          if (toDate && articleDate > toDate) return false;
+          return true;
+        });
+      }
+      
+      if (search) {
+        const searchTerm = (search as string).toLowerCase();
+        filteredArticles = filteredArticles.filter(article =>
+          article.title.toLowerCase().includes(searchTerm) ||
+          article.description?.toLowerCase().includes(searchTerm) ||
+          article.sourceName.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      res.json({
+        articles: filteredArticles,
+        pagination: {
+          page: Number(page),
+          limit: Number(limit),
+          total: filteredArticles.length,
+          hasMore: filteredArticles.length === Number(limit)
+        },
+        filters: {
+          provider,
+          category,
+          dateFrom,
+          dateTo,
+          search
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching archived articles:", error);
+      res.status(500).json({ error: "Failed to fetch archived articles" });
+    }
+  });
+  
+  // Get archive statistics and overview (Admin Only)
+  app.get("/api/admin/news-archive/stats", requireAuth, requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const stats = await storage.getArchiveStatistics();
+      const sourceStats = await storage.getSourceStatistics();
+      
+      // Get recent archive activity
+      const recentArticles = await storage.getArchivedArticles({ limit: 10 });
+      
+      res.json({
+        overview: stats,
+        sources: sourceStats,
+        recentActivity: recentArticles.map(article => ({
+          id: article.id,
+          title: article.title,
+          source: article.sourceName,
+          provider: article.apiProvider,
+          archivedAt: article.archivedAt,
+          qualityScore: article.qualityScore
+        }))
+      });
+    } catch (error) {
+      console.error("Error fetching archive statistics:", error);
+      res.status(500).json({ error: "Failed to fetch archive statistics" });
+    }
+  });
+  
+  // Export archived articles (Admin Only) - CSV format
+  app.get("/api/admin/news-archive/export", requireAuth, requireAdmin, async (req: Request, res: Response) => {
+    try {
+      const { provider, dateFrom, dateTo } = req.query;
+      
+      const articles = await storage.getArchivedArticles({
+        limit: 10000, // Large limit for export
+        apiProvider: provider as string,
+      });
+      
+      // Apply date filtering
+      let filteredArticles = articles;
+      if (dateFrom || dateTo) {
+        filteredArticles = articles.filter(article => {
+          const articleDate = new Date(article.archivedAt);
+          const fromDate = dateFrom ? new Date(dateFrom as string) : null;
+          const toDate = dateTo ? new Date(dateTo as string) : null;
+          
+          if (fromDate && articleDate < fromDate) return false;
+          if (toDate && articleDate > toDate) return false;
+          return true;
+        });
+      }
+      
+      // Create CSV content
+      const csvHeader = 'ID,Title,Source,Provider,URL,Published Date,Archived Date,Quality Score,Category,Tags\n';
+      const csvRows = filteredArticles.map(article => {
+        const title = `"${article.title.replace(/"/g, '""')}"`;
+        const source = `"${article.sourceName.replace(/"/g, '""')}"`;
+        const url = `"${article.url}"`;
+        const publishedDate = article.publishedAt ? article.publishedAt.toISOString() : '';
+        const archivedDate = article.archivedAt.toISOString();
+        const tags = `"${(article.tags || []).join(', ')}"`;
+        
+        return `${article.id},${title},${source},${article.apiProvider},${url},${publishedDate},${archivedDate},${article.qualityScore || 0},${article.category || ''},${tags}`;
+      }).join('\n');
+      
+      const csvContent = csvHeader + csvRows;
+      
+      // Set CSV headers
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="news-archive-${new Date().toISOString().split('T')[0]}.csv"`);
+      
+      res.send(csvContent);
+    } catch (error) {
+      console.error("Error exporting archived articles:", error);
+      res.status(500).json({ error: "Failed to export archived articles" });
     }
   });
 

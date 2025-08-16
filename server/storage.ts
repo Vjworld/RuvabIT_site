@@ -3,10 +3,11 @@ import {
   type PageContent, type InsertPageContent, type SearchQuery, type SearchIndex,
   type NewsletterLead, type InsertNewsletterLead, type Order, type InsertOrder,
   type Payment, type InsertPayment, type ReferralPartner, type InsertReferralPartner,
-  type NewsCache, type InsertNewsCache
+  type NewsCache, type InsertNewsCache, type NewsArchive, type InsertNewsArchive,
+  type NewsSourceStats, type InsertNewsSourceStats
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache } from "@shared/schema";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache, newsArchive, newsSourceStats } from "@shared/schema";
 import { eq, like, or, desc, and, lt } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
@@ -64,6 +65,21 @@ export interface IStorage {
   setNewsCache(cacheData: InsertNewsCache): Promise<NewsCache>;
   isNewsCacheValid(cacheKey: string): Promise<boolean>;
   clearExpiredNewsCache(): Promise<void>;
+
+  // News archive operations for admin backup/contingency
+  archiveNewsArticle(article: InsertNewsArchive): Promise<NewsArchive>;
+  archiveNewsArticles(articles: InsertNewsArchive[]): Promise<NewsArchive[]>;
+  getArchivedArticles(options?: { limit?: number; offset?: number; apiProvider?: string }): Promise<NewsArchive[]>;
+  getArchivedArticleById(id: number): Promise<NewsArchive | undefined>;
+  getArchivedArticleByHash(contentHash: string): Promise<NewsArchive | undefined>;
+  updateArchivedArticle(id: number, updates: Partial<InsertNewsArchive>): Promise<NewsArchive | undefined>;
+  deleteArchivedArticle(id: number): Promise<boolean>;
+  getArchiveStatistics(): Promise<{ totalArticles: number; byProvider: Record<string, number>; byCategory: Record<string, number> }>;
+
+  // News source statistics operations
+  updateSourceStats(sourceName: string, apiProvider: string, success: boolean, responseTime?: number): Promise<void>;
+  getSourceStats(apiProvider?: string): Promise<NewsSourceStats[]>;
+  getSourceStatsByName(sourceName: string, apiProvider: string): Promise<NewsSourceStats | undefined>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -649,6 +665,216 @@ export class DatabaseStorage implements IStorage {
   async clearExpiredNewsCache(): Promise<void> {
     const now = new Date();
     await db.delete(newsCache).where(lt(newsCache.expiresAt, now));
+  }
+
+  // News archive operations for admin backup/contingency
+  async archiveNewsArticle(article: InsertNewsArchive): Promise<NewsArchive> {
+    try {
+      const [archived] = await db
+        .insert(newsArchive)
+        .values(article)
+        .onConflictDoUpdate({
+          target: newsArchive.contentHash,
+          set: {
+            updatedAt: new Date(),
+            // Only update fields that might have changed
+            qualityScore: article.qualityScore,
+            adminNotes: article.adminNotes,
+          },
+        })
+        .returning();
+      return archived;
+    } catch (error) {
+      console.error("Error archiving news article:", error);
+      throw error;
+    }
+  }
+
+  async archiveNewsArticles(articles: InsertNewsArchive[]): Promise<NewsArchive[]> {
+    try {
+      const archived: NewsArchive[] = [];
+      for (const article of articles) {
+        const result = await this.archiveNewsArticle(article);
+        archived.push(result);
+      }
+      return archived;
+    } catch (error) {
+      console.error("Error archiving news articles:", error);
+      throw error;
+    }
+  }
+
+  async getArchivedArticles(options?: { limit?: number; offset?: number; apiProvider?: string }): Promise<NewsArchive[]> {
+    try {
+      const baseQuery = db.select().from(newsArchive);
+      
+      if (options?.apiProvider) {
+        const filteredQuery = baseQuery.where(eq(newsArchive.apiProvider, options.apiProvider))
+          .orderBy(desc(newsArchive.archivedAt));
+        
+        if (options?.limit && options?.offset) {
+          return await filteredQuery.limit(options.limit).offset(options.offset);
+        } else if (options?.limit) {
+          return await filteredQuery.limit(options.limit);
+        } else if (options?.offset) {
+          return await filteredQuery.offset(options.offset);
+        } else {
+          return await filteredQuery;
+        }
+      } else {
+        const orderedQuery = baseQuery.orderBy(desc(newsArchive.archivedAt));
+        
+        if (options?.limit && options?.offset) {
+          return await orderedQuery.limit(options.limit).offset(options.offset);
+        } else if (options?.limit) {
+          return await orderedQuery.limit(options.limit);
+        } else if (options?.offset) {
+          return await orderedQuery.offset(options.offset);
+        } else {
+          return await orderedQuery;
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching archived articles:", error);
+      throw error;
+    }
+  }
+
+  async getArchivedArticleById(id: number): Promise<NewsArchive | undefined> {
+    try {
+      const [article] = await db.select().from(newsArchive).where(eq(newsArchive.id, id));
+      return article;
+    } catch (error) {
+      console.error("Error fetching archived article by ID:", error);
+      throw error;
+    }
+  }
+
+  async getArchivedArticleByHash(contentHash: string): Promise<NewsArchive | undefined> {
+    try {
+      const [article] = await db.select().from(newsArchive).where(eq(newsArchive.contentHash, contentHash));
+      return article;
+    } catch (error) {
+      console.error("Error fetching archived article by hash:", error);
+      throw error;
+    }
+  }
+
+  async updateArchivedArticle(id: number, updates: Partial<InsertNewsArchive>): Promise<NewsArchive | undefined> {
+    try {
+      const [article] = await db
+        .update(newsArchive)
+        .set({ ...updates, updatedAt: new Date() })
+        .where(eq(newsArchive.id, id))
+        .returning();
+      return article;
+    } catch (error) {
+      console.error("Error updating archived article:", error);
+      throw error;
+    }
+  }
+
+  async deleteArchivedArticle(id: number): Promise<boolean> {
+    try {
+      const result = await db.delete(newsArchive).where(eq(newsArchive.id, id));
+      return result.rowCount ? result.rowCount > 0 : false;
+    } catch (error) {
+      console.error("Error deleting archived article:", error);
+      throw error;
+    }
+  }
+
+  async getArchiveStatistics(): Promise<{ totalArticles: number; byProvider: Record<string, number>; byCategory: Record<string, number> }> {
+    try {
+      const articles = await db.select().from(newsArchive);
+      
+      const totalArticles = articles.length;
+      const byProvider: Record<string, number> = {};
+      const byCategory: Record<string, number> = {};
+      
+      articles.forEach(article => {
+        byProvider[article.apiProvider] = (byProvider[article.apiProvider] || 0) + 1;
+        byCategory[article.category] = (byCategory[article.category] || 0) + 1;
+      });
+      
+      return { totalArticles, byProvider, byCategory };
+    } catch (error) {
+      console.error("Error getting archive statistics:", error);
+      throw error;
+    }
+  }
+
+  // News source statistics operations
+  async updateSourceStats(sourceName: string, apiProvider: string, success: boolean, responseTime?: number): Promise<void> {
+    try {
+      const existingStats = await this.getSourceStatsByName(sourceName, apiProvider);
+      
+      if (existingStats) {
+        // Update existing stats
+        const newStats = {
+          totalArticles: success ? existingStats.totalArticles + 1 : existingStats.totalArticles,
+          successfulFetches: success ? existingStats.successfulFetches + 1 : existingStats.successfulFetches,
+          failedFetches: success ? existingStats.failedFetches : existingStats.failedFetches + 1,
+          lastFetchAt: new Date(),
+          lastSuccessAt: success ? new Date() : existingStats.lastSuccessAt,
+          lastFailureAt: success ? existingStats.lastFailureAt : new Date(),
+          averageResponseTime: responseTime ? Math.round(((existingStats.averageResponseTime || 0) + responseTime) / 2) : (existingStats.averageResponseTime || 0),
+          uptimePercentage: Math.round((existingStats.successfulFetches / (existingStats.successfulFetches + existingStats.failedFetches)) * 100),
+          updatedAt: new Date(),
+        };
+        
+        await db
+          .update(newsSourceStats)
+          .set(newStats)
+          .where(and(eq(newsSourceStats.sourceName, sourceName), eq(newsSourceStats.apiProvider, apiProvider)));
+      } else {
+        // Create new stats record
+        await db
+          .insert(newsSourceStats)
+          .values({
+            sourceName,
+            apiProvider,
+            totalArticles: success ? 1 : 0,
+            successfulFetches: success ? 1 : 0,
+            failedFetches: success ? 0 : 1,
+            lastFetchAt: new Date(),
+            lastSuccessAt: success ? new Date() : undefined,
+            lastFailureAt: success ? undefined : new Date(),
+            averageResponseTime: responseTime || 0,
+            uptimePercentage: success ? 100 : 0,
+            reliabilityScore: success ? 100 : 0,
+          });
+      }
+    } catch (error) {
+      console.error("Error updating source stats:", error);
+      throw error;
+    }
+  }
+
+  async getSourceStats(apiProvider?: string): Promise<NewsSourceStats[]> {
+    try {
+      if (apiProvider) {
+        return await db.select().from(newsSourceStats).where(eq(newsSourceStats.apiProvider, apiProvider));
+      } else {
+        return await db.select().from(newsSourceStats);
+      }
+    } catch (error) {
+      console.error("Error fetching source stats:", error);
+      throw error;
+    }
+  }
+
+  async getSourceStatsByName(sourceName: string, apiProvider: string): Promise<NewsSourceStats | undefined> {
+    try {
+      const [stats] = await db
+        .select()
+        .from(newsSourceStats)
+        .where(and(eq(newsSourceStats.sourceName, sourceName), eq(newsSourceStats.apiProvider, apiProvider)));
+      return stats;
+    } catch (error) {
+      console.error("Error fetching source stats by name:", error);
+      throw error;
+    }
   }
 }
 
