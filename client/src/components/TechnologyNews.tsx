@@ -213,8 +213,8 @@ const TechnologyNews = () => {
           </p>
           <div className="mt-4 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
             {isFromArchive 
-              ? "Currently displaying recent archived articles during API maintenance - 24/7 availability guaranteed"
-              : "Advanced filtering ensures only AI, software, cybersecurity, blockchain, and tech industry news appears here"
+              ? "🔄 Archive Mode: Displaying verified technology articles during API maintenance - 24/7/365 availability"
+              : "🎯 STRICT Technology Filtering: Only AI, software, cybersecurity, blockchain, and verified tech industry news"
             }
           </div>
           {userMessage && (

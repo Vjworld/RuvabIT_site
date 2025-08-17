@@ -462,7 +462,8 @@ export class DatabaseStorage implements IStorage {
         .where(
           and(
             eq(newsArchive.isActive, true),
-            eq(newsArchive.category, 'technology')
+            eq(newsArchive.category, 'technology'),
+            eq(newsArchive.isVerified, true) // Only verified technology content
           )
         )
         .orderBy(desc(newsArchive.archivedAt))

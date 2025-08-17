@@ -1137,14 +1137,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Filter articles to ensure only technology-related content
+      // STRICT technology filtering for 24/7/365 content accuracy
       const technologyKeywords = [
-        'technology', 'tech', 'software', 'ai', 'artificial intelligence', 'machine learning',
-        'programming', 'coding', 'development', 'cybersecurity', 'blockchain', 'cloud',
-        'data science', 'big data', 'iot', 'internet of things', 'robotics', 'automation',
-        'digital', 'cyber', 'compute', 'algorithm', 'app', 'web', 'mobile', 'startup',
-        'innovation', 'gadget', 'device', 'platform', 'database', 'network', 'security',
-        'microsoft', 'google', 'apple', 'meta', 'amazon', 'nvidia', 'intel', 'ibm'
+        // Core AI & Computing
+        'artificial intelligence', 'ai', 'machine learning', 'ml', 'deep learning', 'neural network',
+        'computer science', 'algorithm', 'data structure', 'programming', 'coding', 'software',
+        'development', 'developer', 'tech', 'technology', 'digital transformation', 'innovation',
+        
+        // Cybersecurity (Priority Focus)
+        'cybersecurity', 'cyber security', 'security', 'hacking', 'privacy', 'encryption',
+        'malware', 'ransomware', 'firewall', 'vulnerability', 'data breach', 'phishing',
+        
+        // Blockchain & Web3
+        'blockchain', 'cryptocurrency', 'bitcoin', 'ethereum', 'crypto', 'defi', 'nft',
+        'smart contract', 'web3', 'metaverse', 'decentralized',
+        
+        // Cloud & DevOps
+        'cloud computing', 'aws', 'azure', 'google cloud', 'saas', 'paas', 'iaas',
+        'serverless', 'microservices', 'kubernetes', 'docker', 'devops', 'containerization',
+        
+        // Programming & Development
+        'javascript', 'python', 'react', 'typescript', 'node.js', 'java', 'c++',
+        'web development', 'frontend', 'backend', 'full stack', 'api', 'framework',
+        'open source', 'github', 'git', 'version control',
+        
+        // Data & Analytics
+        'data science', 'big data', 'analytics', 'database', 'sql', 'nosql',
+        'business intelligence', 'data mining', 'predictive analytics', 'data visualization',
+        
+        // Emerging Tech
+        'iot', 'internet of things', 'edge computing', 'robotics', 'automation',
+        'virtual reality', 'vr', 'augmented reality', 'ar', 'mixed reality',
+        '5g', '6g', 'quantum computing', 'quantum', 'semiconductor',
+        
+        // Hardware & Infrastructure
+        'processor', 'gpu', 'cpu', 'chip', 'hardware', 'server', 'datacenter',
+        'computer', 'mobile', 'smartphone', 'tablet', 'wearable', 'tech device',
+        
+        // Major Tech Companies (Context Indicators)
+        'microsoft', 'google', 'apple', 'meta', 'amazon', 'nvidia', 'intel', 'ibm',
+        'openai', 'anthropic', 'tesla', 'spacex', 'uber', 'netflix'
       ];
       
       const filteredTechArticles = allArticles.filter(article => {
@@ -1155,12 +1187,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
           searchText.includes(keyword.toLowerCase())
         );
         
-        // Exclude non-tech categories
+        // STRICT EXCLUSION - Non-technology content (24/7/365 enforcement)
         const excludeKeywords = [
-          'sports', 'entertainment', 'celebrity', 'music', 'movie', 'film',
-          'politics', 'election', 'government', 'weather', 'health care',
-          'medicine', 'pharmacy', 'restaurant', 'food', 'cooking', 'recipe',
-          'fashion', 'beauty', 'makeup', 'real estate', 'property', 'housing'
+          // Sports & Entertainment
+          'sports', 'football', 'basketball', 'soccer', 'tennis', 'baseball', 'olympics',
+          'entertainment', 'celebrity', 'music', 'movie', 'film', 'hollywood', 'actor', 'actress',
+          'gaming tournament', 'esports final', 'sports event', 'concert', 'festival',
+          
+          // Politics & Government
+          'politics', 'political', 'election', 'government', 'congress', 'senate', 'president',
+          'policy', 'law', 'legislation', 'voting', 'campaign', 'democrat', 'republican',
+          
+          // Health & Medical
+          'health', 'healthcare', 'medical', 'medicine', 'hospital', 'disease', 'virus',
+          'pharmacy', 'drug', 'treatment', 'doctor', 'patient', 'clinical trial',
+          
+          // Lifestyle & Consumer
+          'weather', 'climate news', 'restaurant', 'food', 'cooking', 'recipe', 'diet',
+          'fashion', 'beauty', 'makeup', 'lifestyle', 'travel', 'tourism', 'hotel',
+          'real estate', 'property', 'housing market', 'home buying',
+          
+          // Finance (Non-Tech)
+          'stock market', 'wall street', 'trading', 'investment banking', 'mortgage',
+          'insurance', 'pension', 'retirement', 'personal finance'
         ];
         
         const containsExcludedKeywords = excludeKeywords.some(keyword => 
@@ -1174,8 +1223,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       filteredTechArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       const limitedArticles = filteredTechArticles.slice(0, 20);
       
-      console.log(`🔍 Technology filtering applied: ${allArticles.length} → ${filteredTechArticles.length} tech articles`);
-      console.log(`📰 Final articles from ${sources.join(', ')}: ${limitedArticles.length}`);
+      console.log(`🔍 STRICT Technology filtering applied: ${allArticles.length} → ${filteredTechArticles.length} tech articles`);
+      console.log(`📰 Final TECHNOLOGY-ONLY articles from ${sources.join(', ')}: ${limitedArticles.length}`);
       
       // Cache the fresh data for 12 hours
       if (limitedArticles.length > 0) {
