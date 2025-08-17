@@ -8,7 +8,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache, newsArchive, newsSourceStats } from "@shared/schema";
-import { eq, like, or, desc, and, lt } from "drizzle-orm";
+import { eq, like, or, desc, and, lt, sql } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 export interface IStorage {
@@ -436,6 +436,141 @@ export class DatabaseStorage implements IStorage {
     } catch (error) {
       console.error("Error fetching payment by Razorpay ID:", error);
       throw error;
+    }
+  }
+
+  // Archive management for 24/7 news availability
+  async getRecentArchiveArticles(limit: number = 20): Promise<any[]> {
+    try {
+      const archiveArticles = await db
+        .select({
+          id: newsArchive.articleId,
+          title: newsArchive.title,
+          description: newsArchive.description,
+          content: newsArchive.content,
+          summary: newsArchive.summary,
+          url: newsArchive.url,
+          urlToImage: newsArchive.urlToImage,
+          publishedAt: newsArchive.publishedAt,
+          source: {
+            name: newsArchive.sourceName,
+            id: newsArchive.sourceId
+          },
+          author: newsArchive.apiProvider
+        })
+        .from(newsArchive)
+        .where(
+          and(
+            eq(newsArchive.isActive, true),
+            eq(newsArchive.category, 'technology')
+          )
+        )
+        .orderBy(desc(newsArchive.archivedAt))
+        .limit(limit);
+
+      return archiveArticles.map(article => ({
+        ...article,
+        summary: article.summary ? article.summary.split('\n').filter(s => s.trim()) : []
+      }));
+    } catch (error) {
+      console.error("Error fetching archive articles:", error);
+      throw error;
+    }
+  }
+
+  // Monthly cleanup system to optimize database space
+  async performMonthlyCleanup(): Promise<{ deletedCount: number, retainedCount: number }> {
+    try {
+      console.log("🧹 Starting monthly news archive cleanup...");
+      
+      // Calculate cutoff date (30 days ago)
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - 30);
+      
+      // Count articles to be deleted
+      const [countResult] = await db
+        .select({ count: sql`count(*)`.mapWith(Number) })
+        .from(newsArchive)
+        .where(lt(newsArchive.archivedAt, cutoffDate));
+      
+      const deleteCount = countResult.count;
+      
+      // Delete old archive articles (older than 30 days)
+      await db
+        .delete(newsArchive)
+        .where(lt(newsArchive.archivedAt, cutoffDate));
+      
+      // Count remaining articles
+      const [retainedResult] = await db
+        .select({ count: sql`count(*)`.mapWith(Number) })
+        .from(newsArchive);
+      
+      const retainedCount = retainedResult.count;
+      
+      console.log(`🧹 Monthly cleanup complete: Deleted ${deleteCount} old articles, retained ${retainedCount}`);
+      
+      return { deletedCount: deleteCount, retainedCount };
+    } catch (error) {
+      console.error("Error during monthly cleanup:", error);
+      throw error;
+    }
+  }
+
+  // Check if monthly cleanup is needed and perform it
+  async checkAndPerformCleanup(): Promise<void> {
+    try {
+      const lastCleanupKey = 'last_news_cleanup';
+      
+      // Get last cleanup date from a simple key-value system (using newsCache table for simplicity)
+      const lastCleanup = await db
+        .select()
+        .from(newsCache)
+        .where(eq(newsCache.cacheKey, lastCleanupKey))
+        .limit(1);
+      
+      const now = new Date();
+      let shouldCleanup = false;
+      
+      if (lastCleanup.length === 0) {
+        // No previous cleanup recorded
+        shouldCleanup = true;
+      } else {
+        const lastCleanupDate = lastCleanup[0].expiresAt;
+        const daysSinceLastCleanup = (now.getTime() - lastCleanupDate.getTime()) / (1000 * 60 * 60 * 24);
+        
+        // Cleanup if it's been more than 30 days
+        shouldCleanup = daysSinceLastCleanup >= 30;
+      }
+      
+      if (shouldCleanup) {
+        const result = await this.performMonthlyCleanup();
+        
+        // Update last cleanup record
+        const nextCleanup = new Date();
+        nextCleanup.setDate(nextCleanup.getDate() + 30); // Next cleanup in 30 days
+        
+        await db
+          .insert(newsCache)
+          .values({
+            cacheKey: lastCleanupKey,
+            articles: [],
+            expiresAt: nextCleanup,
+            sourceInfo: { lastCleanup: now, deletedCount: result.deletedCount },
+            articleCount: 0
+          })
+          .onConflictDoUpdate({
+            target: newsCache.cacheKey,
+            set: {
+              expiresAt: nextCleanup,
+              sourceInfo: { lastCleanup: now, deletedCount: result.deletedCount },
+              fetchedAt: now
+            }
+          });
+        
+        console.log(`🎯 Next automatic cleanup scheduled for: ${nextCleanup.toLocaleDateString()}`);
+      }
+    } catch (error) {
+      console.error("Error checking cleanup schedule:", error);
     }
   }
 

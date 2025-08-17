@@ -935,6 +935,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log("🔄 Cache expired or not found, fetching fresh technology news...");
       
+      // Check and perform monthly cleanup if needed
+      try {
+        await storage.checkAndPerformCleanup();
+      } catch (cleanupError) {
+        console.error("Cleanup check failed:", cleanupError);
+      }
+      
       const rapidApiKey = process.env.RAPIDAPI_KEY;
       const rapidApiHost = process.env.RAPIDAPI_HOST;
       const newsApiAiKey = process.env.NEWSAPI_AI_KEY;
@@ -1087,13 +1094,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // If no sources are available, return error
-      if (!rapidApiKey && !newsApiAiKey) {
-        return res.status(500).json({
-          error: "No news sources configured",
-          details: "Please configure either RapidAPI (NewsNow) or NewsAPI.ai credentials",
-          setup: "Add RAPIDAPI_KEY + RAPIDAPI_HOST or NEWSAPI_AI_KEY to environment variables"
-        });
+      // If no fresh articles available, try to serve from archive
+      if (allArticles.length === 0) {
+        console.log("⚠️ No fresh articles available, attempting to serve from archive...");
+        try {
+          const archiveArticles = await storage.getRecentArchiveArticles(20);
+          if (archiveArticles && archiveArticles.length > 0) {
+            console.log(`📚 Serving ${archiveArticles.length} articles from archive database`);
+            return res.json({
+              articles: archiveArticles,
+              cached: false,
+              fromArchive: true,
+              message: "Serving recent articles from archive due to API unavailability",
+              archiveInfo: {
+                count: archiveArticles.length,
+                source: "news_archive",
+                note: "Recent archived content displayed during API downtime"
+              }
+            });
+          }
+        } catch (archiveError) {
+          console.error("Failed to retrieve archive articles:", archiveError);
+        }
+        
+        // If no archive articles available either, return informative error
+        if (!rapidApiKey && !newsApiAiKey) {
+          return res.status(503).json({
+            error: "News service temporarily unavailable",
+            details: "Both live news sources and archive are currently inaccessible",
+            userMessage: "We're experiencing technical difficulties. Please try again in a few minutes.",
+            technicalInfo: "No news sources configured and archive unavailable",
+            setup: "Add RAPIDAPI_KEY + RAPIDAPI_HOST or NEWSAPI_AI_KEY to environment variables"
+          });
+        } else {
+          return res.status(503).json({
+            error: "News service temporarily unavailable", 
+            details: "News APIs are currently rate-limited or experiencing issues",
+            userMessage: "We're experiencing high traffic. Our news service will be back shortly.",
+            retryAfter: "Please try again in 15-30 minutes",
+            technicalInfo: "API rate limits exceeded, archive fallback attempted"
+          });
+        }
       }
       
       // Filter articles to ensure only technology-related content

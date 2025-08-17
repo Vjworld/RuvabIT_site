@@ -25,15 +25,22 @@ const TechnologyNews = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isFromArchive, setIsFromArchive] = useState(false);
+  const [userMessage, setUserMessage] = useState("");
   const [expandedArticles, setExpandedArticles] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await fetch(`/api/technology-news`);
-        if (!response.ok) throw new Error('Failed to fetch news');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.userMessage || errorData.error || 'Failed to fetch news');
+        }
         const data = await response.json();
         setNews(data.articles || []);
+        setIsFromArchive(data.fromArchive || false);
+        setUserMessage(data.message || "");
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -136,9 +143,12 @@ const TechnologyNews = () => {
               Tech News Hub
             </h1>
             <div className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border border-red-200/50 dark:border-red-800/50 rounded-2xl p-12 max-w-2xl mx-auto backdrop-blur-sm">
-              <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 mb-4">News Service Configuration Needed</h2>
+              <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 mb-4">News Service Temporarily Unavailable</h2>
               <p className="text-red-600 dark:text-red-400 mb-6 leading-relaxed">
-                To display live technology news, please verify your NewsAPI configuration:
+                {error.includes('API') 
+                  ? "We're experiencing high traffic on our news sources. Please try again in a few minutes."
+                  : "We're experiencing technical difficulties. Our team is working to restore service."
+                }
               </p>
               <div className="text-left space-y-3 mb-6 bg-white/50 dark:bg-slate-900/50 rounded-xl p-4">
                 <p className="text-sm font-medium text-red-700 dark:text-red-300">Configuration steps:</p>
@@ -188,6 +198,12 @@ const TechnologyNews = () => {
               <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Smart Filtering Active</span>
             </div>
+            {isFromArchive && (
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10 backdrop-blur-sm border border-amber-200/50 dark:border-amber-800/50 rounded-full px-4 py-2">
+                <ArrowUpRight className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <span className="text-sm font-medium text-amber-700 dark:text-amber-300">Archive Mode</span>
+              </div>
+            )}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent mb-6 tracking-tight">
             Tech News Hub
@@ -196,8 +212,16 @@ const TechnologyNews = () => {
             Exclusively curated technology articles from NewsNow and Event Registry
           </p>
           <div className="mt-4 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
-            Advanced filtering ensures only AI, software, cybersecurity, blockchain, and tech industry news appears here
+            {isFromArchive 
+              ? "Currently displaying recent archived articles during API maintenance - 24/7 availability guaranteed"
+              : "Advanced filtering ensures only AI, software, cybersecurity, blockchain, and tech industry news appears here"
+            }
           </div>
+          {userMessage && (
+            <div className="mt-4 text-sm text-blue-600 dark:text-blue-400 max-w-2xl mx-auto bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
+              {userMessage}
+            </div>
+          )}
         </div>
         
         {/* AdSense Ad - After Header */}
