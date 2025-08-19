@@ -693,7 +693,7 @@ export class DatabaseStorage implements IStorage {
         description: "Complete payment solution for businesses in India. Accept payments, automate payouts, and manage finances with powerful APIs and dashboard.",
         logoUrl: "https://razorpay.com/assets/razorpay-logo.svg",
         websiteUrl: "https://razorpay.com",
-        referralUrl: "https://razorpay.com/refer?code=ruvab-it",
+        referralUrl: "https://rzp.io/rzp/JADb7Mz",
         category: "payment",
         isActive: true,
         sortOrder: 3,
