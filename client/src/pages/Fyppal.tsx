@@ -6,14 +6,14 @@ import { Footer } from "@/components/Footer";
 import ProductDemoWidget from "@/components/ProductDemoWidget";
 import GoToTopButton from "@/components/GoToTopButton";
 
-const XmenRise = () => {
+const Fyppal = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>XMENRISE - Next-Gen Team Management & Productivity | Ruvab IT</title>
-        <meta name="description" content="Supercharge your team's productivity with XMENRISE's advanced management tools, real-time collaboration, and intelligent workflow optimization." />
+        <title>FYPPAL - Next-Gen Team Management & Productivity | Ruvab IT</title>
+        <meta name="description" content="Supercharge your team's productivity with FYPPAL's advanced management tools, real-time collaboration, and intelligent workflow optimization." />
         <meta name="keywords" content="team management, productivity tools, collaboration software, workflow optimization, project management, team analytics" />
-        <link rel="canonical" href="https://ruvab.it.com/xmenrise" />
+        <link rel="canonical" href="https://ruvab.it.com/fyppal" />
       </Helmet>
       
       <Header />
@@ -25,17 +25,17 @@ const XmenRise = () => {
             <div>
               <div className="flex items-center mb-4">
                 <Shield className="h-12 w-12 text-cyan-300 mr-4" />
-                <h1 className="text-5xl font-bold">XMENRISE</h1>
+                <h1 className="text-5xl font-bold">FYPPAL</h1>
               </div>
               <p className="text-2xl text-blue-100 mb-8 leading-relaxed">
                 Supercharge your team's productivity with advanced management tools, real-time collaboration, and intelligent workflow optimization.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button 
-                  onClick={() => window.open('https://xmenrise.ruvab.it.com', '_blank')}
+                  onClick={() => window.open('https://fyppal.ruvab.it.com', '_blank')}
                   className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors"
                 >
-                  Launch XMENRISE
+                  Launch FYPPAL
                 </button>
                 <button 
                   onClick={() => window.location.href = '/about'}
@@ -227,14 +227,14 @@ const XmenRise = () => {
           <div className="text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Experience the power of next-gen team management with XMENRISE
+              Experience the power of next-gen team management with FYPPAL
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={() => window.open('https://xmenrise.ruvab.it.com', '_blank')}
+                onClick={() => window.open('https://fyppal.ruvab.it.com', '_blank')}
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors"
               >
-                Launch XMENRISE
+                Launch FYPPAL
               </button>
               <button 
                 onClick={() => window.location.href = '/contact'}
@@ -253,4 +253,4 @@ const XmenRise = () => {
   );
 };
 
-export default XmenRise;
+export default Fyppal;

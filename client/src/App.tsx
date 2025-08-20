@@ -39,7 +39,7 @@ import ContactPage from "@/pages/ContactPage";
 import ServicesPage from "@/pages/ServicesPage";
 import TrendSolver from "@/pages/TrendSolver";
 import LangScribe from "@/pages/LangScribe";
-import XmenRise from "@/pages/XmenRise";
+import Fyppal from "@/pages/Fyppal";
 import QRGenTool from "./pages/QRGenTool";
 import TechnologyNewsPage from "./pages/TechnologyNewsPage";
 import PartnersPage from "./pages/PartnersPage";
@@ -107,7 +107,7 @@ function Router() {
       {/* Product Pages */}
       <Route path="/trend-solver" component={TrendSolver} />
       <Route path="/langscribe" component={LangScribe} />
-      <Route path="/xmenrise" component={XmenRise} />
+      <Route path="/fyppal" component={Fyppal} />
       <Route path="/qr-gen-tool" component={QRGenTool} />
       <Route path="/payment" component={PaymentPage} />
       <Route path="/live-chat" component={LiveChat} />

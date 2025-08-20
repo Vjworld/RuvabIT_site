@@ -21,7 +21,7 @@ function Header() {
       submenu: [
         { name: 'Trend Solver', href: '/trend-solver' },
         { name: 'LangScribe', href: '/langscribe' },
-        { name: 'XMENRISE', href: '/xmenrise' },
+        { name: 'FYPPAL', href: '/fyppal' },
         { name: 'QR Gen Tool', href: 'https://qr-gen.ruvab.it.com', external: true },
       ]
     },

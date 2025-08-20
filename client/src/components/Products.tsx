@@ -10,8 +10,8 @@ export default function Products() {
       window.open('https://langscribe.ruvab.it.com', '_blank');
     } else if (product === 'qr_gen_tool') {
       window.open('https://qr-gen.ruvab.it.com', '_blank');
-    } else if (product === 'xmenrise') {
-      window.open('https://xmenrise.ruvab.it.com', '_blank');
+    } else if (product === 'fyppal') {
+      window.open('https://fyppal.ruvab.it.com', '_blank');
     }
   };
 
@@ -96,7 +96,7 @@ export default function Products() {
             </Button>
           </div>
 
-          {/* XMENRISE Product */}
+          {/* FYPPAL Product */}
           <div className="bg-gradient-to-br from-cyan-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="mb-4 sm:mb-6">
               <img
@@ -105,7 +105,7 @@ export default function Products() {
                 className="rounded-xl w-full h-40 sm:h-48 object-cover"
               />
             </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">XMENRISE</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">FYPPAL</h3>
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
               Next-generation team management platform that supercharges productivity with advanced collaboration tools, intelligent workflow optimization, and real-time analytics.
             </p>
@@ -124,10 +124,10 @@ export default function Products() {
               </li>
             </ul>
             <Button
-              onClick={() => handleLearnMore('xmenrise')}
+              onClick={() => handleLearnMore('fyppal')}
               className="bg-cyan-600 text-white hover:bg-cyan-700 transition-colors w-full text-sm sm:text-base"
             >
-              Launch XMENRISE
+              Launch FYPPAL
             </Button>
           </div>
 
