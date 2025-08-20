@@ -14,6 +14,7 @@ import sgMail from '@sendgrid/mail';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import { securityHeaders, rateLimiter, sanitizeInput, maskPII, validateEnvironment } from './security';
+import path from 'path';
 
 // Extend Express Request type for user session
 declare module 'express-session' {
@@ -279,6 +280,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json({ success: true });
     });
+  });
+
+  // Service Worker route for monetization (fix MIME type issue)
+  app.get('/sw.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Service-Worker-Allowed', '/');
+    res.sendFile(path.resolve(process.cwd(), 'sw.js'));
   });
 
   app.get("/api/auth/me", requireAuth, async (req, res) => {

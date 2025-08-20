@@ -56,6 +56,7 @@ import HelpDocumentation from "@/pages/HelpDocumentation";
 import Disclaimer from "@/pages/Disclaimer";
 import CancellationRefundPolicy from "@/pages/CancellationRefundPolicy";
 import ShippingDeliveryPolicy from "@/pages/ShippingDeliveryPolicy";
+import MonetagVerification from "@/pages/MonetagVerification";
 
 function Router() {
   // Track page views when routes change
@@ -122,8 +123,9 @@ function Router() {
 
       {/* Additional Pages */}
       <Route path="/help-documentation" component={HelpDocumentation} />
-
-
+      
+      {/* Temporary Verification Pages */}
+      <Route path="/monetag-verification" component={MonetagVerification} />
 
       <Route component={NotFound} />
     </Switch>
