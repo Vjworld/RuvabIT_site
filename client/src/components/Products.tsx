@@ -10,6 +10,8 @@ export default function Products() {
       window.open('https://langscribe.ruvab.it.com', '_blank');
     } else if (product === 'qr_gen_tool') {
       window.open('https://qr-gen.ruvab.it.com', '_blank');
+    } else if (product === 'xmenrise') {
+      window.open('https://xmenrise.ruvab.it.com', '_blank');
     }
   };
 
@@ -23,7 +25,7 @@ export default function Products() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 sm:gap-8">
           {/* Trend Solver Product */}
           <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
             <div className="mb-4 sm:mb-6">
@@ -91,6 +93,41 @@ export default function Products() {
               className="bg-purple-600 text-white hover:bg-purple-700 transition-colors w-full"
             >
               Launch LangScribe
+            </Button>
+          </div>
+
+          {/* XMENRISE Product */}
+          <div className="bg-gradient-to-br from-cyan-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <div className="mb-4 sm:mb-6">
+              <img
+                src="https://images.unsplash.com/photo-1553484771-371a605b060b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400"
+                alt="Team collaboration and management dashboard"
+                className="rounded-xl w-full h-40 sm:h-48 object-cover"
+              />
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">XMENRISE</h3>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+              Next-generation team management platform that supercharges productivity with advanced collaboration tools, intelligent workflow optimization, and real-time analytics.
+            </p>
+            <ul className="space-y-2 mb-4 sm:mb-6">
+              <li className="flex items-center text-sm sm:text-base text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Smart team analytics & insights
+              </li>
+              <li className="flex items-center text-sm sm:text-base text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Real-time collaboration tools
+              </li>
+              <li className="flex items-center text-sm sm:text-base text-gray-700">
+                <span className="text-accent mr-2">✓</span>
+                Automated workflow optimization
+              </li>
+            </ul>
+            <Button
+              onClick={() => handleLearnMore('xmenrise')}
+              className="bg-cyan-600 text-white hover:bg-cyan-700 transition-colors w-full text-sm sm:text-base"
+            >
+              Launch XMENRISE
             </Button>
           </div>
 
