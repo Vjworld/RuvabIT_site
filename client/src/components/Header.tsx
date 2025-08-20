@@ -22,7 +22,7 @@ function Header() {
         { name: 'Trend Solver', href: '/trend-solver' },
         { name: 'LangScribe', href: '/langscribe' },
         { name: 'FYPPAL', href: '/fyppal' },
-        { name: 'QR Gen Tool', href: 'https://qr-gen.ruvab.it.com', external: true },
+        { name: 'QR Gen Pro', href: 'https://qr-gen.ruvab.it.com', external: true },
       ]
     },
     { 
