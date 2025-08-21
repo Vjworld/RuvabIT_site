@@ -107,27 +107,27 @@ export default function Products() {
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">FYPPAL</h3>
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-              Next-generation team management platform that supercharges productivity with advanced collaboration tools, intelligent workflow optimization, and real-time analytics.
+              Find Your Passion, Find Your Pal - Transform your IT experience into freelance opportunities with personalized micro-niche gig plans and professional resume reviews.
             </p>
             <ul className="space-y-2 mb-4 sm:mb-6">
               <li className="flex items-center text-sm sm:text-base text-gray-700">
                 <span className="text-accent mr-2">✓</span>
-                Smart team analytics & insights
+                Personalized freelance gig plans
               </li>
               <li className="flex items-center text-sm sm:text-base text-gray-700">
                 <span className="text-accent mr-2">✓</span>
-                Real-time collaboration tools
+                AI-powered skill matching
               </li>
               <li className="flex items-center text-sm sm:text-base text-gray-700">
                 <span className="text-accent mr-2">✓</span>
-                Automated workflow optimization
+                Professional resume reviews
               </li>
             </ul>
             <Button
               onClick={() => handleLearnMore('fyppal')}
               className="bg-cyan-600 text-white hover:bg-cyan-700 transition-colors w-full text-sm sm:text-base"
             >
-              Launch FYPPAL
+              Start Your Escape Plan
             </Button>
           </div>
 

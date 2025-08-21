@@ -10,9 +10,9 @@ const Fyppal = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>FYPPAL - Next-Gen Team Management & Productivity | Ruvab IT</title>
-        <meta name="description" content="Supercharge your team's productivity with FYPPAL's advanced management tools, real-time collaboration, and intelligent workflow optimization." />
-        <meta name="keywords" content="team management, productivity tools, collaboration software, workflow optimization, project management, team analytics" />
+        <title>FYPPAL - Find Your Passion, Find Your Pal | Freelance Career Platform | Ruvab IT</title>
+        <meta name="description" content="Transform your IT experience into freelance opportunities. Get personalized micro-niche gig plans, resume reviews, and discover freelance work that matches your expertise." />
+        <meta name="keywords" content="freelance platform, IT freelancing, micro-niche gigs, career transition, freelance opportunities, resume review, gig economy" />
         <link rel="canonical" href="https://ruvab.it.com/fyppal" />
       </Helmet>
       
@@ -24,18 +24,19 @@ const Fyppal = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center mb-4">
-                <Shield className="h-12 w-12 text-cyan-300 mr-4" />
+                <Target className="h-12 w-12 text-cyan-300 mr-4" />
                 <h1 className="text-5xl font-bold">FYPPAL</h1>
               </div>
-              <p className="text-2xl text-blue-100 mb-8 leading-relaxed">
-                Supercharge your team's productivity with advanced management tools, real-time collaboration, and intelligent workflow optimization.
+              <h2 className="text-3xl font-semibold text-cyan-100 mb-4">Find Your Passion, Find Your Pal</h2>
+              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+                Your supportive companion for transforming IT experience into freelance opportunity. Get personalized micro-niche gig plans and discover freelance opportunities that match your expertise.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button 
                   onClick={() => window.open('https://fyppal.ruvab.it.com', '_blank')}
                   className="bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-50 transition-colors"
                 >
-                  Launch FYPPAL
+                  Start Your Escape Plan (Free)
                 </button>
                 <button 
                   onClick={() => window.location.href = '/about'}
@@ -44,20 +45,26 @@ const Fyppal = () => {
                   Learn More
                 </button>
               </div>
-              <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-6 text-sm text-cyan-100">
                 <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="ml-1 text-blue-100">4.9/5 rating</span>
+                  <Users className="h-5 w-5 mr-1" />
+                  <span>2,847+ Plans Generated</span>
                 </div>
-                <div className="text-blue-100">Real-time collaboration</div>
+                <div className="flex items-center">
+                  <Target className="h-5 w-5 mr-1" />
+                  <span>$127K+ Avg Annual Income</span>
+                </div>
               </div>
             </div>
             <div className="relative">
               <img 
-                src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800" 
-                alt="Team Management Dashboard" 
+                src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                alt="Freelance Career Success Dashboard" 
                 className="rounded-lg shadow-2xl"
               />
+              <div className="absolute -top-4 -right-4 bg-yellow-400 text-black px-4 py-2 rounded-lg font-bold shadow-lg">
+                🏆 Contest Live!
+              </div>
             </div>
           </div>
         </div>
@@ -68,60 +75,48 @@ const Fyppal = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Advanced Team Management Features
+              How FYPPAL Works
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Everything you need to manage teams, optimize workflows, and boost productivity
+              Three simple steps to transform your IT experience into a thriving freelance career
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Users className="h-12 w-12 text-blue-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Smart Team Analytics</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Get deep insights into team performance, productivity patterns, and collaboration metrics with AI-powered analytics.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <span className="text-2xl font-bold text-blue-600">📋</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">1. Quick Skills Assessment</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Answer 5-7 questions about your IT background, experience level, and preferences to get started.
               </p>
+              <div className="text-sm text-cyan-600 font-semibold">3.2 mins average completion</div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Target className="h-12 w-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Goal Tracking</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Set, track, and achieve team goals with automated progress monitoring and milestone celebrations.
+            {/* Step 2 */}
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center">
+              <div className="w-16 h-16 bg-cyan-100 dark:bg-cyan-900 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <span className="text-2xl font-bold text-cyan-600">🎯</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">2. AI-Powered Matching</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Our algorithm identifies the best micro-niches and freelance opportunities perfectly suited for your skillset.
               </p>
+              <div className="text-sm text-cyan-600 font-semibold">Personalized recommendations</div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Layers className="h-12 w-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Workflow Automation</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Streamline repetitive tasks with intelligent workflow automation and custom process builders.
+            {/* Step 3 */}
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <span className="text-2xl font-bold text-purple-600">🚀</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">3. Actionable Plan</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Get your personalized gig plan with templates, pricing guides, and direct platform links to start earning.
               </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Globe className="h-12 w-12 text-cyan-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Remote Collaboration</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Enable seamless remote work with virtual workspaces, real-time collaboration, and team communication tools.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Zap className="h-12 w-12 text-yellow-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Performance Optimization</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Optimize team performance with AI-driven recommendations, workload balancing, and productivity insights.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-              <Shield className="h-12 w-12 text-red-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Security & Compliance</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Enterprise-grade security with role-based access control, data encryption, and compliance management.
-              </p>
+              <div className="text-sm text-cyan-600 font-semibold">Ready-to-use resources</div>
             </div>
           </div>
         </div>
@@ -132,20 +127,20 @@ const Fyppal = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Choose XMENRISE?
+              Professional Resume Review Service
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Transform your team management with cutting-edge technology
+              Stand out from the competition with expert resume optimization
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               {[
-                { title: "40% Increase in Team Productivity", description: "Streamlined workflows and intelligent task allocation boost overall team efficiency" },
-                { title: "Real-time Collaboration", description: "Seamless communication tools keep your team connected and aligned on goals" },
-                { title: "AI-Powered Insights", description: "Data-driven recommendations help optimize team performance and identify bottlenecks" },
-                { title: "Scalable Architecture", description: "Grows with your team from startup to enterprise with flexible pricing tiers" }
+                { title: "Resume Analysis", description: "Detailed feedback on structure, content, and formatting to maximize impact" },
+                { title: "ATS Optimization", description: "Ensure your resume passes applicant tracking systems used by employers" },
+                { title: "Platform Bios", description: "Optimized profiles for freelance platforms like Upwork, Fiverr, and LinkedIn" },
+                { title: "24-48 Hour Turnaround", description: "Get expert feedback from career coaches quickly to accelerate your job search" }
               ].map((benefit, index) => (
                 <div key={index} className="flex items-start">
                   <CheckCircle className="h-6 w-6 text-green-500 mt-1 mr-4 flex-shrink-0" />
@@ -162,10 +157,16 @@ const Fyppal = () => {
             </div>
 
             <div className="bg-gradient-to-br from-blue-600 to-cyan-600 p-8 rounded-xl text-white">
-              <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Team?</h3>
+              <h3 className="text-2xl font-bold mb-4">Get Professional Review for ₹99</h3>
               <p className="text-blue-100 mb-6">
-                Join thousands of teams already using XMENRISE to boost productivity and achieve their goals faster.
+                Stand out from the competition with a resume that attracts clients and opportunities.
               </p>
+              <button 
+                onClick={() => window.open('https://fyppal.ruvab.it.com/resume-review', '_blank')}
+                className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Get Resume Review
+              </button>
               <div className="space-y-4">
                 <div className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
@@ -227,7 +228,7 @@ const Fyppal = () => {
           <div className="text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Experience the power of next-gen team management with FYPPAL
+              Ready to start your freelance journey? Join thousands of IT professionals who've successfully transitioned.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
