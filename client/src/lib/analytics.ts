@@ -7,40 +7,18 @@ declare global {
   }
 }
 
-// Initialize Google Analytics
+// Google Analytics is now loaded directly in HTML head
+// This function is kept for backward compatibility but is no longer needed
 export const initGA = () => {
-  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
-  if (!measurementId) {
-    console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    return;
-  }
-
-  // Add Google Analytics script to the head
-  const script1 = document.createElement('script');
-  script1.async = true;
-  script1.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-  document.head.appendChild(script1);
-
-  // Initialize gtag safely without innerHTML
-  const script2 = document.createElement('script');
-  script2.text = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', ${JSON.stringify(measurementId)});
-  `;
-  document.head.appendChild(script2);
+  console.log('Google Analytics is already initialized in HTML head with G-487BHE09VJ');
 };
 
 // Track page views - useful for single-page applications
 export const trackPageView = (url: string) => {
   if (typeof window === 'undefined' || !window.gtag) return;
   
-  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  if (!measurementId) return;
-  
-  window.gtag('config', measurementId, {
+  // Use the hardcoded measurement ID since it's now in HTML
+  window.gtag('config', 'G-487BHE09VJ', {
     page_path: url
   });
 };

@@ -135,31 +135,16 @@ function Router() {
 }
 
 function App() {
-  // Initialize analytics based on existing consent on app load
+  // Initialize services on app load
   useEffect(() => {
-    // Check if user has already given consent
-    const existingConsent = localStorage.getItem('cookieConsent');
-    if (existingConsent) {
-      try {
-        const preferences = JSON.parse(existingConsent);
-        if (preferences.analytics) {
-          // Initialize analytics if consent was already given
-          initGA();
-          initGTM();
-        }
-      } catch (error) {
-        console.error('Error parsing cookie consent:', error);
-      }
-    }
-    
-    // Verify environment variables are present
-    if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
-      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    }
-
+    // Google Analytics is now loaded directly in HTML head
+    // GTM is also loaded directly in HTML head
+    // Only need to verify AdSense environment variable
     if (!import.meta.env.VITE_ADSENSE_CLIENT_ID) {
       console.warn('Missing required AdSense key: VITE_ADSENSE_CLIENT_ID');
     }
+    
+    console.log('Analytics tracking is active with measurement ID: G-487BHE09VJ');
   }, []);
 
   return (

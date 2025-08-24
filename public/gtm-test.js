@@ -4,20 +4,21 @@ function testAnalytics() {
   
   // Test Google Analytics
   if (typeof window.gtag !== 'undefined') {
-    console.log('✅ Google Analytics (gtag) is available');
+    console.log('✅ Google Analytics (gtag) is available with G-487BHE09VJ');
     
     // Send a test page view
     try {
       window.gtag('event', 'page_view', {
-        page_title: 'Test Page',
-        page_location: window.location.href
+        page_title: 'Test Page - Analytics Working',
+        page_location: window.location.href,
+        custom_parameter_1: 'Direct HTML Implementation'
       });
-      console.log('✅ Test page view sent to GA');
+      console.log('✅ Test page view sent to GA (G-487BHE09VJ)');
     } catch (error) {
       console.log('❌ Error sending GA event:', error);
     }
   } else {
-    console.log('❌ Google Analytics (gtag) not found');
+    console.log('❌ Google Analytics (gtag) not found - it may still be loading');
   }
   
   // Test Google Tag Manager
