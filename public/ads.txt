@@ -1,11 +1,1 @@
-# ads.txt for Ruvab IT - ruvabit.com
-# This file is required for Google AdSense verification
-
-# Google AdSense
 google.com, pub-4204204667108655, DIRECT, f08c47fec0942fa0
-
-# Google Ad Manager
-google.com, pub-4204204667108655, DIRECT, f08c47fec0942fa0
-
-# Additional ad networks can be added here
-# Format: domain, publisher_id, relationship, certification_authority_id

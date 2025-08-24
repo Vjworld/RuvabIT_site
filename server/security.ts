@@ -21,8 +21,8 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: http:",
-    "connect-src 'self' https://www.google-analytics.com https://api.razorpay.com https://ep1.adtrafficquality.google",
-    "frame-src 'self' https://checkout.razorpay.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+    "connect-src 'self' https://www.google-analytics.com https://api.razorpay.com https://ep1.adtrafficquality.google https://www.googletagmanager.com",
+    "frame-src 'self' https://checkout.razorpay.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.googletagmanager.com",
     "object-src 'none'",
     "base-uri 'self'"
   ].join('; ');

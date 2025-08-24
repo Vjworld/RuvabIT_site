@@ -3,6 +3,7 @@ declare global {
   interface Window {
     dataLayer: any[];
     gtag: (...args: any[]) => void;
+    google_tag_manager?: any;
   }
 }
 
@@ -44,6 +45,27 @@ export const trackPageView = (url: string) => {
   });
 };
 
+// Initialize Google Tag Manager
+export const initGTM = () => {
+  if (typeof window === 'undefined' || window.google_tag_manager) return;
+  
+  try {
+    // GTM is already loaded in the HTML head, we just need to ensure dataLayer exists
+    window.dataLayer = window.dataLayer || [];
+    
+    // Push consent update for GTM
+    window.dataLayer.push({
+      'event': 'gtm_consent_update',
+      'analytics_consent': 'granted',
+      'ad_consent': 'granted'
+    });
+    
+    console.log('Google Tag Manager initialized successfully');
+  } catch (error) {
+    console.error('Error initializing GTM:', error);
+  }
+};
+
 // Track events
 export const trackEvent = (
   action: string, 
@@ -58,4 +80,47 @@ export const trackEvent = (
     event_label: label,
     value: value,
   });
+};
+
+// GTM-specific event tracking
+export const trackGTMEvent = (eventName: string, parameters?: Record<string, any>) => {
+  if (typeof window === 'undefined' || !window.dataLayer) return;
+  
+  window.dataLayer.push({
+    event: eventName,
+    ...parameters
+  });
+};
+
+// Initialize all analytics services based on consent
+export const initializeAllAnalytics = (consent: {
+  analytics: boolean;
+  marketing: boolean;
+  functional: boolean;
+}) => {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    if (consent.analytics) {
+      // Initialize Google Analytics
+      initGA();
+      
+      // Initialize Google Tag Manager
+      initGTM();
+      
+      console.log('Analytics services initialized with consent');
+    }
+    
+    if (consent.marketing) {
+      // Initialize AdSense (already handled by consent in the AdSense component)
+      console.log('Marketing analytics enabled');
+    }
+    
+    if (consent.functional) {
+      // Initialize functional analytics
+      console.log('Functional analytics enabled');
+    }
+  } catch (error) {
+    console.error('Error initializing analytics services:', error);
+  }
 };

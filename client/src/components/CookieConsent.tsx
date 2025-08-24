@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Settings, Cookie } from "lucide-react";
-import { initializeAllAnalytics } from "../utils/analytics";
+import { initializeAllAnalytics } from "../lib/analytics";
 
 const CookieConsent: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
