@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HelmetProvider } from "react-helmet-async";
 import { useEffect } from "react";
-import { initGA } from "./lib/analytics";
+import { initGA, initGTM } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { useScrollToTop } from "./hooks/use-scroll-to-top";
 import { initAdSense } from "./lib/adsense";
@@ -135,22 +135,30 @@ function Router() {
 }
 
 function App() {
-  // Initialize Google Analytics and AdSense when app loads
+  // Initialize analytics based on existing consent on app load
   useEffect(() => {
-    // Verify required environment variables are present
+    // Check if user has already given consent
+    const existingConsent = localStorage.getItem('cookieConsent');
+    if (existingConsent) {
+      try {
+        const preferences = JSON.parse(existingConsent);
+        if (preferences.analytics) {
+          // Initialize analytics if consent was already given
+          initGA();
+          initGTM();
+        }
+      } catch (error) {
+        console.error('Error parsing cookie consent:', error);
+      }
+    }
+    
+    // Verify environment variables are present
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
-    } else {
-      initGA();
     }
 
     if (!import.meta.env.VITE_ADSENSE_CLIENT_ID) {
       console.warn('Missing required AdSense key: VITE_ADSENSE_CLIENT_ID');
-    } else {
-      // Only initialize AdSense in production or when explicitly needed
-      if (import.meta.env.NODE_ENV === 'production' || import.meta.env.VITE_ADSENSE_CLIENT_ID !== 'ca-pub-4204204667108655') {
-        initAdSense();
-      }
     }
   }, []);
 

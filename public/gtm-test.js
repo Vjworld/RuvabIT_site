@@ -1,11 +1,37 @@
-// Google Tag Manager Test Script
-function testGTM() {
-  console.log('Testing Google Tag Manager...');
+// Google Analytics & GTM Test Script
+function testAnalytics() {
+  console.log('🔍 Testing Google Analytics & GTM...');
   
-  // Check if dataLayer exists
+  // Test Google Analytics
+  if (typeof window.gtag !== 'undefined') {
+    console.log('✅ Google Analytics (gtag) is available');
+    
+    // Send a test page view
+    try {
+      window.gtag('event', 'page_view', {
+        page_title: 'Test Page',
+        page_location: window.location.href
+      });
+      console.log('✅ Test page view sent to GA');
+    } catch (error) {
+      console.log('❌ Error sending GA event:', error);
+    }
+  } else {
+    console.log('❌ Google Analytics (gtag) not found');
+  }
+  
+  // Test Google Tag Manager
   if (typeof window.dataLayer !== 'undefined') {
     console.log('✅ GTM dataLayer is available');
-    console.log('DataLayer contents:', window.dataLayer);
+    console.log('📊 DataLayer contents:', window.dataLayer);
+    
+    // Push a test event
+    window.dataLayer.push({
+      'event': 'test_analytics_setup',
+      'test_param': 'Analytics working correctly',
+      'measurement_id': 'G-487BHE09VJ'
+    });
+    console.log('✅ Test event pushed to GTM dataLayer');
   } else {
     console.log('❌ GTM dataLayer not found');
   }
@@ -17,19 +43,21 @@ function testGTM() {
     console.log('❌ Google Tag Manager container not loaded');
   }
   
-  // Push a test event
-  if (typeof window.dataLayer !== 'undefined') {
-    window.dataLayer.push({
-      'event': 'gtm_test',
-      'test_param': 'GTM is working'
-    });
-    console.log('✅ Test event pushed to dataLayer');
+  // Check cookie consent status
+  const consent = localStorage.getItem('cookieConsent');
+  if (consent) {
+    const preferences = JSON.parse(consent);
+    console.log('🍪 Cookie consent status:', preferences);
+  } else {
+    console.log('🍪 No cookie consent found - analytics may be blocked');
   }
 }
 
 // Run test after page loads
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', testGTM);
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(testAnalytics, 2000); // Wait 2 seconds for scripts to load
+  });
 } else {
-  testGTM();
+  setTimeout(testAnalytics, 2000);
 }
