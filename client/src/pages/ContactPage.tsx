@@ -91,6 +91,17 @@ const ContactPage = () => {
         <meta name="description" content="Contact Ruvab IT for technology solutions, AI services, and business consulting. Get expert support for your digital transformation needs." />
         <meta name="keywords" content="contact, support, consulting, technology solutions, AI services, business intelligence" />
         <link rel="canonical" href="https://ruvab.it.com/contact" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />

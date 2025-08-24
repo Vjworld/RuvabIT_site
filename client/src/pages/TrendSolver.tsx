@@ -28,6 +28,17 @@ const TrendSolver = () => {
         <meta name="description" content="Advanced AI-powered analytics and business intelligence platform. Get actionable insights from your data with TrendSolver's cutting-edge algorithms." />
         <meta name="keywords" content="AI analytics, business intelligence, data analysis, predictive analytics, trend analysis, dashboard" />
         <link rel="canonical" href="https://ruvab.it.com/trendsolver" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
       
       <Header />

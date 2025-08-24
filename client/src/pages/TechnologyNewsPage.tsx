@@ -42,6 +42,17 @@ const TechnologyNewsPage = () => {
             }
           })}
         </script>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
       
       <div className="min-h-screen bg-background">

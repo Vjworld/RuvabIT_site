@@ -32,6 +32,17 @@ const QRGenTool = () => {
         <meta name="description" content="Professional QR code generator with advanced customization, bulk generation, analytics tracking. Create custom QR codes for marketing campaigns and business applications." />
         <meta name="keywords" content="QR code generator, custom QR codes, bulk QR generation, QR analytics, marketing QR codes, business QR codes" />
         <link rel="canonical" href="https://ruvab.it.com/qr-gen-tool/" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />

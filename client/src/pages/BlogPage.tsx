@@ -73,6 +73,17 @@ const BlogPage = () => {
         <meta name="description" content="Stay ahead of the curve with expert insights on technology trends, best practices, and industry innovations from Ruvab IT." />
         <meta name="keywords" content="technology blog, AI trends, tech insights, industry analysis, innovation, Ruvab IT articles" />
         <link rel="canonical" href="https://ruvab.it.com/blog" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />

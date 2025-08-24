@@ -14,6 +14,17 @@ const Fyppal = () => {
         <meta name="description" content="Transform your IT experience into freelance opportunities. Get personalized micro-niche gig plans, resume reviews, and discover freelance work that matches your expertise." />
         <meta name="keywords" content="freelance platform, IT freelancing, micro-niche gigs, career transition, freelance opportunities, resume review, gig economy" />
         <link rel="canonical" href="https://ruvab.it.com/fyppal" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
       
       <Header />

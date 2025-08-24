@@ -14,6 +14,17 @@ const LangScribe = () => {
         <meta name="description" content="Transform your content creation with LangScribe's advanced language processing, translation, and AI-powered writing assistance. 50+ languages supported." />
         <meta name="keywords" content="content creation, AI writing, translation, language processing, multilingual content, automated writing" />
         <link rel="canonical" href="https://ruvab.it.com/langscribe" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
       
       <Header />

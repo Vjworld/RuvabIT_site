@@ -2,11 +2,29 @@ import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Mail } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import GoToTopButton from '@/components/GoToTopButton';
 
 export default function Terms() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <Helmet>
+        <title>Terms of Service | Legal Terms & Conditions | Ruvab IT</title>
+        <meta name="description" content="Read Ruvab IT's terms of service, legal conditions, and user agreements for our technology solutions and services." />
+        <meta name="keywords" content="terms of service, legal terms, conditions, user agreement, policy" />
+        <link rel="canonical" href="https://ruvab.it.com/terms" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
+      </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <Link href="/">

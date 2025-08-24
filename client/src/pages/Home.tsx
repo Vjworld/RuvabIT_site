@@ -8,10 +8,23 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import AdSenseAd from '@/components/AdSenseAd';
 import GoToTopButton from '@/components/GoToTopButton';
+import { Helmet } from 'react-helmet-async';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
+      </Helmet>
       <Header />
       <Hero />
       <Products />

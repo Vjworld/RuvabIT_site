@@ -15,6 +15,17 @@ export default function Privacy() {
         <meta name="description" content="Learn how Ruvab IT protects your privacy and personal data. Our comprehensive privacy policy covers data collection, usage, and your rights." />
         <meta name="keywords" content="privacy policy, data protection, GDPR, user rights, data collection, personal information" />
         <link rel="canonical" href="https://ruvab.it.com/privacy" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />

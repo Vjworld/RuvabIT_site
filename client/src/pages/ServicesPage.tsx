@@ -23,6 +23,17 @@ const ServicesPage = () => {
         <meta name="description" content="Comprehensive technology solutions including AI implementation, cloud services, cybersecurity, and business intelligence to transform your business." />
         <meta name="keywords" content="technology services, AI implementation, cloud solutions, cybersecurity, business intelligence, consulting" />
         <link rel="canonical" href="https://ruvab.it.com/services" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />

@@ -15,6 +15,17 @@ const AboutPage = () => {
         <meta name="description" content="Learn about Ruvab IT's mission, team, and commitment to providing innovative technology solutions that help businesses thrive in the digital age." />
         <meta name="keywords" content="about ruvab it, technology company, AI solutions, business intelligence, team, mission" />
         <link rel="canonical" href="https://ruvab.it.com/about" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-487BHE09VJ');
+          `}
+        </script>
       </Helmet>
 
       <Header />
