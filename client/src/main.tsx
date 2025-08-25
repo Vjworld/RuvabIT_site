@@ -3,7 +3,8 @@ import App from "./App";
 import "./index.css";
 
 // Service Worker registration for monetization
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && 'production' === 'production') {
+  // Only register service worker in production to avoid dev issues
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
