@@ -274,6 +274,75 @@ const PartnersPage = () => {
           </div>
         </section>
 
+        {/* Featured Partner - Monetag */}
+        <section className="py-12 bg-gradient-to-br from-orange-50 to-amber-50">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="p-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg">
+                  <Star className="h-5 w-5" />
+                </div>
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-700 to-amber-700 bg-clip-text text-transparent">
+                  Featured Partner
+                </h2>
+              </div>
+              <div className="w-20 h-1 mx-auto rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
+            </div>
+
+            <div className="max-w-md mx-auto">
+              <Card className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white border-2 hover:border-transparent hover:ring-2 hover:ring-orange-200 hover:bg-gradient-to-br hover:from-white hover:to-orange-50">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                        M
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg group-hover:bg-gradient-to-r group-hover:from-orange-600 group-hover:to-amber-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                        Monetag
+                      </CardTitle>
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        <Badge className="text-xs capitalize text-white border-0 bg-gradient-to-r from-orange-500 to-amber-500">
+                          Advertising
+                        </Badge>
+                        <Badge variant="secondary" className="text-xs bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700">
+                          Revenue Share
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="flex flex-col gap-3 pt-0">
+                  <CardDescription className="text-sm leading-relaxed">
+                    Monetize your website traffic with high-performing ad formats. Monetag offers competitive rates, global coverage, and advanced optimization tools for maximum revenue.
+                  </CardDescription>
+                  
+                  <div className="mt-4">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      asChild
+                      className="w-full group/btn bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-xs"
+                    >
+                      <a
+                        href="https://monetag.com/?ref_id=zF3E"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5"
+                      >
+                        Get Started with Monetag
+                        <ExternalLink className="h-3.5 w-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* Call to Action */}
         <section className="bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100 py-16">
           <div className="container mx-auto px-4">
