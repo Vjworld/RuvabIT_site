@@ -76,12 +76,12 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
   if (!req.session?.userId) {
     return res.status(401).json({ message: "Authentication required" });
   }
-  
+
   const user = await storage.getUser(req.session.userId);
   if (!user?.isAdmin) {
     return res.status(403).json({ message: "Admin access required" });
   }
-  
+
   req.user = user;
   next();
 };
@@ -89,10 +89,10 @@ const requireAdmin = async (req: Request, res: Response, next: NextFunction) => 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Validate environment variables on startup
   validateEnvironment();
-  
+
   // Apply security headers to all routes
   app.use(securityHeaders);
-  
+
   // Create HTTP server
   const httpServer = createServer(app);
 
@@ -104,7 +104,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   wss.on('connection', (ws: WebSocket, req) => {
     console.log('New WebSocket connection established');
-    
+
     const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
     chatSessions.set(sessionId, { ws, sessionId });
 
@@ -120,7 +120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     ws.on('message', async (data) => {
       try {
         const message = JSON.parse(data.toString());
-        
+
         if (message.type === 'message') {
           // Broadcast to support team (in production, this would route to actual agents)
           // For now, simulate intelligent auto-responses
@@ -175,39 +175,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Smart response generator for chat
   function generateSmartResponse(userMessage: string): string {
     const lowerMessage = userMessage.toLowerCase();
-    
+
     if (lowerMessage.includes('ai') || lowerMessage.includes('artificial intelligence') || lowerMessage.includes('machine learning')) {
       return "Great question about AI! 🚀 We specialize in AI implementation and machine learning solutions. Our services include predictive analytics, natural language processing, computer vision, and custom AI model development. We've helped businesses increase efficiency by up to 40% through intelligent automation. Would you like to know more about any specific AI solution?";
     } 
-    
+
     if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('pricing') || lowerMessage.includes('budget')) {
       return "Thank you for your interest in our pricing! Our costs vary based on project scope, requirements, and customization needs. For accurate pricing and detailed quotes, I'd be happy to connect you with our sales and support team.\n\nPlease reach out to: support@ruvabit.com\n\nOur sales team will:\n• Understand your specific requirements\n• Provide detailed cost breakdown\n• Offer customized solutions within your budget\n• Schedule a free consultation\n\nWould you like me to help you with anything else about our services?";
     }
-    
+
     if (lowerMessage.includes('software') || lowerMessage.includes('development') || lowerMessage.includes('app') || lowerMessage.includes('web')) {
       return "Excellent! 💻 We're experts in software development with 5+ years of experience. We build:\n\n• Web Applications (React, Node.js, Python)\n• Mobile Apps (React Native, Flutter)\n• Enterprise Solutions\n• E-commerce Platforms\n• Custom APIs and Integrations\n\nWe follow agile methodology and provide ongoing support. What type of software solution are you looking for?";
     }
-    
+
     if (lowerMessage.includes('qr') || lowerMessage.includes('qr code')) {
       return "Our QR Code Generator is awesome! 📱 Visit https://qr-gen.ruvab.it.com - it's completely free and offers:\n\n• Custom QR codes for URLs, text, contacts\n• Bulk generation capabilities\n• High-resolution downloads\n• Professional design options\n\nIt's part of our suite of digital tools. Are you interested in our other business solutions too?";
     }
-    
+
     if (lowerMessage.includes('contact') || lowerMessage.includes('meeting') || lowerMessage.includes('consultation') || lowerMessage.includes('call')) {
       return "I'd love to arrange that! 📞 Here are your options:\n\n• Free 30-minute consultation call\n• Technical demo session\n• In-person meeting (if you're in our area)\n• Video conference at your convenience\n\nOur consultations are completely free with no obligations. What works best for your schedule? I can connect you with our senior consultant right away.";
     }
-    
+
     if (lowerMessage.includes('team') || lowerMessage.includes('company') || lowerMessage.includes('about')) {
       return "Great question! 👥 Ruvab IT is a technology solutions company with a passionate team of developers, AI specialists, and business analysts. We've:\n\n• Completed 100+ successful projects\n• Served clients across 15+ industries\n• Maintained 98% client satisfaction rate\n• Specialized in cutting-edge technologies\n\nWe're based in India but serve clients globally. Our mission is to make advanced technology accessible to businesses of all sizes. What would you like to know about our expertise?";
     }
-    
+
     if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
       return "I'm here to help! 🤝 Let me know what specific challenge you're facing:\n\n• Technical questions about our services\n• Project scope and requirements discussion\n• Pricing and timeline information\n• Integration and implementation guidance\n\nOr if you prefer, I can connect you directly with one of our technical specialists. What area do you need assistance with?";
     }
-    
+
     if (lowerMessage.includes('thank') || lowerMessage.includes('appreciate')) {
       return "You're very welcome! 😊 I'm glad I could help. Is there anything else you'd like to know about our services? I'm here whenever you need assistance with AI solutions, software development, or any technology needs. Feel free to ask anything!";
     }
-    
+
     if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
       return "Hello! 👋 Welcome to Ruvab IT support. I'm excited to help you explore our technology solutions! We specialize in AI implementation, custom software development, data analytics, and digital transformation. What brings you here today?";
     }
@@ -238,24 +238,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
       }
-      
+
       const user = await storage.getUserByUsername(username);
       if (!user) {
         return res.status(401).json({ message: "Invalid username or password" });
       }
-      
+
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         return res.status(401).json({ message: "Invalid username or password" });
       }
-      
+
       req.session.userId = user.id;
       req.session.isAdmin = user.isAdmin;
-      
+
       res.json({
         success: true,
         user: {
@@ -295,7 +295,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       res.json({
         id: user.id,
         username: user.username,
@@ -313,32 +313,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/change-password", requireAuth, async (req, res) => {
     try {
       const { currentPassword, newPassword } = req.body;
-      
+
       if (!currentPassword || !newPassword) {
         return res.status(400).json({ message: "Current password and new password are required" });
       }
-      
+
       if (newPassword.length < 6) {
         return res.status(400).json({ message: "New password must be at least 6 characters long" });
       }
-      
+
       const user = await storage.getUser(req.session.userId!);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       // Verify current password
       const isValidPassword = await bcrypt.compare(currentPassword, user.password);
       if (!isValidPassword) {
         return res.status(401).json({ message: "Current password is incorrect" });
       }
-      
+
       // Hash new password
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-      
+
       // Update password
       await storage.updateUserPassword(user.id, hashedNewPassword);
-      
+
       res.json({ 
         success: true, 
         message: "Password updated successfully" 
@@ -366,7 +366,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!result.success) {
         return res.status(400).json({ message: "Invalid user data", errors: result.error.errors });
       }
-      
+
       const user = await storage.createUser(result.data);
       res.json({
         id: user.id,
@@ -424,11 +424,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         authorId: req.session.userId,
       });
-      
+
       if (!result.success) {
         return res.status(400).json({ message: "Invalid blog post data", errors: result.error.errors });
       }
-      
+
       const post = await storage.createBlogPost(result.data);
       res.json(post);
     } catch (error) {
@@ -443,12 +443,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
-      
+
       const post = await storage.updateBlogPost(id, req.body);
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }
-      
+
       res.json(post);
     } catch (error) {
       console.error("Update blog post error:", error);
@@ -462,12 +462,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
-      
+
       const success = await storage.deleteBlogPost(id);
       if (!success) {
         return res.status(404).json({ message: "Post not found" });
       }
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Delete blog post error:", error);
@@ -505,11 +505,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         updatedBy: req.session.userId,
       });
-      
+
       if (!result.success) {
         return res.status(400).json({ message: "Invalid page data", errors: result.error.errors });
       }
-      
+
       const page = await storage.createPageContent(result.data);
       res.json(page);
     } catch (error) {
@@ -524,11 +524,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         updatedBy: req.session.userId,
       });
-      
+
       if (!page) {
         return res.status(404).json({ message: "Page not found" });
       }
-      
+
       res.json(page);
     } catch (error) {
       console.error("Update page error:", error);
@@ -546,12 +546,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         limit: req.query.limit ? parseInt(req.query.limit as string, 10) : 10,
         offset: req.query.offset ? parseInt(req.query.offset as string, 10) : 0,
       };
-      
+
       const result = searchSchema.safeParse(searchParams);
       if (!result.success) {
         return res.status(400).json({ message: "Invalid search parameters", errors: result.error.errors });
       }
-      
+
       const results = await storage.searchContent(result.data);
       res.json(results);
     } catch (error) {
@@ -564,21 +564,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/newsletter/subscribe", async (req, res) => {
     try {
       const { email } = req.body;
-      
+
       if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
-      
+
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ message: "Invalid email format" });
       }
-      
+
       // Get user agent and IP for tracking
       const userAgent = req.get('User-Agent') || 'Unknown';
       const ipAddress = req.ip || req.connection.remoteAddress || 'Unknown';
-      
+
       const lead = await storage.createNewsletterLead({
         email: email.toLowerCase().trim(),
         source: "website",
@@ -586,7 +586,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ipAddress,
         isActive: true,
       });
-      
+
       res.json({ 
         success: true, 
         message: "Successfully subscribed to newsletter",
@@ -876,15 +876,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Email content
       const emailContent = `
         <h2>New Contact Form Submission</h2>
-        
+
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Company:</strong> ${company || 'Not specified'}</p>
         <p><strong>Subject:</strong> ${subject || 'Contact Form Submission'}</p>
-        
+
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
-        
+
         <p><em>Submitted at: ${new Date().toISOString()}</em></p>
       `;
 
@@ -906,10 +906,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     } catch (error) {
       console.error('SendGrid error:', error);
-      
+
       // Log the contact data even if email fails
       console.log("Contact form submission (email failed):", req.body);
-      
+
       res.json({ 
         success: true, 
         message: "Thank you for your message. We'll get back to you within 24 hours." 
@@ -922,10 +922,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const CACHE_KEY = 'technology_news';
       const CACHE_HOURS = 12;
-      
+
+      // Set response timeout
+      req.setTimeout(8000, () => {
+        res.status(408).json({ error: 'Request timeout', message: 'The request to fetch technology news timed out. Please try again later.' });
+      });
+
       // First, check if we have valid cached data
       const isValid = await storage.isNewsCacheValid(CACHE_KEY);
-      
+
       if (isValid) {
         console.log("✅ Serving cached technology news (fresh within 12 hours)");
         const cachedData = await storage.getNewsCache(CACHE_KEY);
@@ -940,41 +945,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       }
-      
+
       console.log("🔄 Cache expired or not found, fetching fresh technology news...");
-      
+
       // Check and perform monthly cleanup if needed
       try {
         await storage.checkAndPerformCleanup();
       } catch (cleanupError) {
         console.error("Cleanup check failed:", cleanupError);
       }
-      
+
       const rapidApiKey = process.env.RAPIDAPI_KEY;
       const rapidApiHost = process.env.RAPIDAPI_HOST;
       const newsApiAiKey = process.env.NEWSAPI_AI_KEY;
-      
+
       console.log("RapidAPI key present:", !!rapidApiKey);
       console.log("RapidAPI host:", rapidApiHost);
       console.log("NewsAPI.ai key present:", !!newsApiAiKey);
-      
+
       let allArticles: any[] = [];
       let sources: string[] = [];
-      
+
       // Fetch from NewsNow (RapidAPI) if available
       if (rapidApiKey && rapidApiHost) {
         try {
           const result = await fetchTechnologyNews(rapidApiKey, rapidApiHost);
-          
+
           if (result.success) {
             // Process NewsNow data
             const data = result.data;
             console.log("Processing NewsNow data...");
-            
+
             // Handle NewsNow API specific format (indexed object with strings)
             const dataKeys = Object.keys(data);
             const isNewsNowFormat = dataKeys.length > 0 && dataKeys.every(key => !isNaN(parseInt(key)));
-            
+
             if (isNewsNowFormat) {
               let processedData = data;
               if (typeof data === 'string') {
@@ -988,7 +993,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   }, {} as Record<string, string>);
                 }
               }
-              
+
               const rawTexts = Object.values(processedData) as string[];
               const articles = rawTexts
                 .filter(text => typeof text === 'string' && text.trim().length > 3)
@@ -997,15 +1002,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Clean and process the text
             const cleanText = text.replace(/[^\w\s\-\.]/g, ' ').replace(/\s+/g, ' ').trim();
             const words = cleanText.split(' ').filter(word => word.length > 1);
-            
+
             // Generate meaningful title and description
             const titleWords = words.slice(0, 6);
             const descWords = words.slice(6, 18);
-            
+
             const title = titleWords.length > 0 ? 
               titleWords.join(' ').replace(/\b\w/g, l => l.toUpperCase()) : 
               `Technology Update ${index + 1}`;
-            
+
             const description = descWords.length > 0 ? 
               descWords.join(' ') + '...' : 
               'Latest technology news and updates from the industry.';
@@ -1014,7 +1019,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const generateSummary = (text: string, title: string) => {
               const keyWords = words.filter(word => word.length > 3);
               const summaryPoints = [];
-              
+
               if (keyWords.includes('yahoo') || keyWords.includes('finance')) {
                 summaryPoints.push('Yahoo Finance reports on latest market developments');
               }
@@ -1027,7 +1032,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               if (keyWords.includes('news') || keyWords.includes('update')) {
                 summaryPoints.push('Breaking news affecting technology markets');
               }
-              
+
               // Add generic tech points if we have fewer than 4
               const genericPoints = [
                 'Industry analysts predict continued growth',
@@ -1035,11 +1040,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 'Enterprise solutions driving digital transformation',
                 'Investment opportunities emerging in tech sector'
               ];
-              
+
               while (summaryPoints.length < 4 && genericPoints.length > 0) {
                 summaryPoints.push(genericPoints.shift()!);
               }
-              
+
               return summaryPoints.slice(0, 5);
             };
 
@@ -1054,7 +1059,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Default tech image
               return 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=200&fit=crop&q=80';
             };
-            
+
             return {
               id: `newsNow_${index}`,
               title: title,
@@ -1071,8 +1076,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               author: 'NewsNow API'
             };
           });
-        
-              
+
+
               allArticles.push(...articles);
               sources.push('NewsNow');
               console.log(`Added ${articles.length} articles from NewsNow`);
@@ -1084,12 +1089,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error("NewsNow error:", error);
         }
       }
-      
+
       // Fetch from NewsAPI.ai if available
       if (newsApiAiKey) {
         try {
           const aiResult = await fetchNewsAPIaiData(newsApiAiKey);
-          
+
           if (aiResult.success && aiResult.articles) {
             allArticles.push(...aiResult.articles.slice(0, 10)); // Limit to 10 articles
             sources.push('NewsAPI.ai');
@@ -1101,7 +1106,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error("NewsAPI.ai error:", error);
         }
       }
-      
+
       // If no fresh articles available, try to serve from archive
       if (allArticles.length === 0) {
         console.log("⚠️ No fresh articles available, attempting to serve from archive...");
@@ -1124,7 +1129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (archiveError) {
           console.error("Failed to retrieve archive articles:", archiveError);
         }
-        
+
         // If no archive articles available either, return informative error
         if (!rapidApiKey && !newsApiAiKey) {
           return res.status(503).json({
@@ -1144,108 +1149,108 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       }
-      
+
       // STRICT technology filtering for 24/7/365 content accuracy
       const technologyKeywords = [
         // Core AI & Computing
         'artificial intelligence', 'ai', 'machine learning', 'ml', 'deep learning', 'neural network',
         'computer science', 'algorithm', 'data structure', 'programming', 'coding', 'software',
         'development', 'developer', 'tech', 'technology', 'digital transformation', 'innovation',
-        
+
         // Cybersecurity (Priority Focus)
         'cybersecurity', 'cyber security', 'security', 'hacking', 'privacy', 'encryption',
         'malware', 'ransomware', 'firewall', 'vulnerability', 'data breach', 'phishing',
-        
+
         // Blockchain & Web3
         'blockchain', 'cryptocurrency', 'bitcoin', 'ethereum', 'crypto', 'defi', 'nft',
         'smart contract', 'web3', 'metaverse', 'decentralized',
-        
+
         // Cloud & DevOps
         'cloud computing', 'aws', 'azure', 'google cloud', 'saas', 'paas', 'iaas',
         'serverless', 'microservices', 'kubernetes', 'docker', 'devops', 'containerization',
-        
+
         // Programming & Development
         'javascript', 'python', 'react', 'typescript', 'node.js', 'java', 'c++',
         'web development', 'frontend', 'backend', 'full stack', 'api', 'framework',
         'open source', 'github', 'git', 'version control',
-        
+
         // Data & Analytics
         'data science', 'big data', 'analytics', 'database', 'sql', 'nosql',
         'business intelligence', 'data mining', 'predictive analytics', 'data visualization',
-        
+
         // Emerging Tech
         'iot', 'internet of things', 'edge computing', 'robotics', 'automation',
         'virtual reality', 'vr', 'augmented reality', 'ar', 'mixed reality',
         '5g', '6g', 'quantum computing', 'quantum', 'semiconductor',
-        
+
         // Hardware & Infrastructure
         'processor', 'gpu', 'cpu', 'chip', 'hardware', 'server', 'datacenter',
         'computer', 'mobile', 'smartphone', 'tablet', 'wearable', 'tech device',
-        
+
         // Major Tech Companies (Context Indicators)
         'microsoft', 'google', 'apple', 'meta', 'amazon', 'nvidia', 'intel', 'ibm',
         'openai', 'anthropic', 'tesla', 'spacex', 'uber', 'netflix'
       ];
-      
+
       const filteredTechArticles = allArticles.filter(article => {
         const searchText = `${article.title} ${article.description || ''} ${article.content || ''}`.toLowerCase();
-        
+
         // Check if article contains technology-related keywords
         const containsTechKeywords = technologyKeywords.some(keyword => 
           searchText.includes(keyword.toLowerCase())
         );
-        
+
         // STRICT EXCLUSION - Non-technology content (24/7/365 enforcement)
         const excludeKeywords = [
           // Sports & Entertainment
           'sports', 'football', 'basketball', 'soccer', 'tennis', 'baseball', 'olympics',
           'entertainment', 'celebrity', 'music', 'movie', 'film', 'hollywood', 'actor', 'actress',
           'gaming tournament', 'esports final', 'sports event', 'concert', 'festival',
-          
+
           // Politics & Government
           'politics', 'political', 'election', 'government', 'congress', 'senate', 'president',
           'policy', 'law', 'legislation', 'voting', 'campaign', 'democrat', 'republican',
-          
+
           // Health & Medical
           'health', 'healthcare', 'medical', 'medicine', 'hospital', 'disease', 'virus',
           'pharmacy', 'drug', 'treatment', 'doctor', 'patient', 'clinical trial',
-          
+
           // Lifestyle & Consumer
           'weather', 'climate news', 'restaurant', 'food', 'cooking', 'recipe', 'diet',
           'fashion', 'beauty', 'makeup', 'lifestyle', 'travel', 'tourism', 'hotel',
           'real estate', 'property', 'housing market', 'home buying',
-          
+
           // Finance (Non-Tech)
           'stock market', 'wall street', 'trading', 'investment banking', 'mortgage',
           'insurance', 'pension', 'retirement', 'personal finance'
         ];
-        
+
         const containsExcludedKeywords = excludeKeywords.some(keyword => 
           searchText.includes(keyword.toLowerCase())
         );
-        
+
         return containsTechKeywords && !containsExcludedKeywords;
       });
-      
+
       // Sort articles by date (newest first) and limit total
       filteredTechArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
       const limitedArticles = filteredTechArticles.slice(0, 20);
-      
+
       console.log(`🔍 STRICT Technology filtering applied: ${allArticles.length} → ${filteredTechArticles.length} tech articles`);
       console.log(`📰 Final TECHNOLOGY-ONLY articles from ${sources.join(', ')}: ${limitedArticles.length}`);
-      
+
       // Cache the fresh data for 12 hours
       if (limitedArticles.length > 0) {
         const now = new Date();
         const expiresAt = new Date(now.getTime() + (CACHE_HOURS * 60 * 60 * 1000)); // 12 hours from now
-        
+
         const sourceInfo = {
           sources: sources,
           totalSources: sources.length,
           articlesCount: limitedArticles.length,
           fetchedSources: sources.join(', ')
         };
-        
+
         try {
           await storage.setNewsCache({
             cacheKey: CACHE_KEY,
@@ -1258,12 +1263,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } catch (cacheError) {
           console.error("Failed to cache articles:", cacheError);
         }
-        
+
         // Archive all fetched articles for admin backup/contingency
         try {
           console.log("📚 Starting news archive process for admin backup...");
           const archivePromises = [];
-          
+
           // Archive NewsNow articles
           const newsNowArticles = limitedArticles.filter(article => 
             article.id.startsWith('newsNow_') || article.source?.name === 'NewsNow'
@@ -1273,7 +1278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               archiveNewsArticles(newsNowArticles, 'newsnow', { sources: ['NewsNow'], timestamp: new Date() })
             );
           }
-          
+
           // Archive NewsAPI.ai articles
           const newsApiArticles = limitedArticles.filter(article => 
             article.id.startsWith('eventregistry_') || article.source?.name?.includes('Event Registry')
@@ -1283,18 +1288,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
               archiveNewsArticles(newsApiArticles, 'newsapi_ai', { sources: ['NewsAPI.ai'], timestamp: new Date() })
             );
           }
-          
+
           // Execute archive operations in parallel
           const archiveResults = await Promise.all(archivePromises);
           const totalArchived = archiveResults.reduce((sum, result) => sum + result.archived, 0);
           const totalSkipped = archiveResults.reduce((sum, result) => sum + result.skipped, 0);
-          
+
           console.log(`📊 Archive complete: ${totalArchived} new articles archived, ${totalSkipped} duplicates skipped`);
         } catch (archiveError) {
           console.error("⚠️  Failed to archive articles (non-critical):", archiveError);
           // Archive failure is non-critical - don't break the main flow
         }
-        
+
         // Clear any expired cache entries (cleanup)
         try {
           await storage.clearExpiredNewsCache();
@@ -1302,7 +1307,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error("Failed to cleanup expired cache:", cleanupError);
         }
       }
-      
+
       res.json({ 
         articles: limitedArticles,
         sources: sources,
@@ -1333,37 +1338,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         dateTo,
         search 
       } = req.query;
-      
+
       const offset = (Number(page) - 1) * Number(limit);
       const options = {
         limit: Number(limit),
         offset: offset,
         apiProvider: provider as string,
       };
-      
+
       const articles = await storage.getArchivedArticles(options);
-      
+
       // Apply additional filters if needed
       let filteredArticles = articles;
-      
+
       if (category) {
         filteredArticles = filteredArticles.filter(article => 
           article.category === category
         );
       }
-      
+
       if (dateFrom || dateTo) {
         filteredArticles = filteredArticles.filter(article => {
           const articleDate = new Date(article.archivedAt);
           const fromDate = dateFrom ? new Date(dateFrom as string) : null;
           const toDate = dateTo ? new Date(dateTo as string) : null;
-          
+
           if (fromDate && articleDate < fromDate) return false;
           if (toDate && articleDate > toDate) return false;
           return true;
         });
       }
-      
+
       if (search) {
         const searchTerm = (search as string).toLowerCase();
         filteredArticles = filteredArticles.filter(article =>
@@ -1372,7 +1377,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           article.sourceName.toLowerCase().includes(searchTerm)
         );
       }
-      
+
       res.json({
         articles: filteredArticles,
         pagination: {
@@ -1394,16 +1399,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch archived articles" });
     }
   });
-  
+
   // Get archive statistics and overview (Admin Only)
   app.get("/api/admin/news-archive/stats", requireAuth, requireAdmin, async (req: Request, res: Response) => {
     try {
       const stats = await storage.getArchiveStatistics();
       const sourceStats = await storage.getSourceStats();
-      
+
       // Get recent archive activity
       const recentArticles = await storage.getArchivedArticles({ limit: 10 });
-      
+
       res.json({
         overview: stats,
         sources: sourceStats,
@@ -1421,17 +1426,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch archive statistics" });
     }
   });
-  
+
   // Export archived articles (Admin Only) - CSV format
   app.get("/api/admin/news-archive/export", requireAuth, requireAdmin, async (req: Request, res: Response) => {
     try {
       const { provider, dateFrom, dateTo } = req.query;
-      
+
       const articles = await storage.getArchivedArticles({
         limit: 10000, // Large limit for export
         apiProvider: provider as string,
       });
-      
+
       // Apply date filtering
       let filteredArticles = articles;
       if (dateFrom || dateTo) {
@@ -1439,13 +1444,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const articleDate = new Date(article.archivedAt);
           const fromDate = dateFrom ? new Date(dateFrom as string) : null;
           const toDate = dateTo ? new Date(dateTo as string) : null;
-          
+
           if (fromDate && articleDate < fromDate) return false;
           if (toDate && articleDate > toDate) return false;
           return true;
         });
       }
-      
+
       // Create CSV content
       const csvHeader = 'ID,Title,Source,Provider,URL,Published Date,Archived Date,Quality Score,Category,Tags\n';
       const csvRows = filteredArticles.map(article => {
@@ -1455,16 +1460,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const publishedDate = article.publishedAt ? article.publishedAt.toISOString() : '';
         const archivedDate = article.archivedAt.toISOString();
         const tags = `"${(article.tags || []).join(', ')}"`;
-        
+
         return `${article.id},${title},${source},${article.apiProvider},${url},${publishedDate},${archivedDate},${article.qualityScore || 0},${article.category || ''},${tags}`;
       }).join('\n');
-      
+
       const csvContent = csvHeader + csvRows;
-      
+
       // Set CSV headers
       res.setHeader('Content-Type', 'text/csv');
       res.setHeader('Content-Disposition', `attachment; filename="news-archive-${new Date().toISOString().split('T')[0]}.csv"`);
-      
+
       res.send(csvContent);
     } catch (error) {
       console.error("Error exporting archived articles:", error);
@@ -1490,11 +1495,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const partner = await storage.getReferralPartner(id);
-      
+
       if (!partner) {
         return res.status(404).json({ error: "Referral partner not found" });
       }
-      
+
       res.json(partner);
     } catch (error) {
       console.error("Error fetching referral partner:", error);
@@ -1518,14 +1523,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/referral-partners", requireAuth, async (req: Request, res: Response) => {
     try {
       const validationResult = insertReferralPartnerSchema.safeParse(req.body);
-      
+
       if (!validationResult.success) {
         return res.status(400).json({ 
           error: "Validation failed", 
           details: validationResult.error.issues 
         });
       }
-      
+
       const partner = await storage.createReferralPartner(validationResult.data);
       res.status(201).json(partner);
     } catch (error) {
@@ -1539,20 +1544,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const validationResult = insertReferralPartnerSchema.partial().safeParse(req.body);
-      
+
       if (!validationResult.success) {
         return res.status(400).json({ 
           error: "Validation failed", 
           details: validationResult.error.issues 
         });
       }
-      
+
       const partner = await storage.updateReferralPartner(id, validationResult.data);
-      
+
       if (!partner) {
         return res.status(404).json({ error: "Referral partner not found" });
       }
-      
+
       res.json(partner);
     } catch (error) {
       console.error("Error updating referral partner:", error);
@@ -1565,11 +1570,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const success = await storage.deleteReferralPartner(id);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Referral partner not found" });
       }
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Error deleting referral partner:", error);

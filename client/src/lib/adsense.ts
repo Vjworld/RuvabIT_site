@@ -31,13 +31,8 @@ export const initAdSense = () => {
   }
   
   // AdSense script and meta tag are now in HTML
-  // Check if we already have page-level ads configuration
-  const hasPageLevelAds = window.adsbygoogle && Array.isArray(window.adsbygoogle) && window.adsbygoogle.some((item: any) => 
-    item && typeof item === 'object' && item.enable_page_level_ads === true
-  );
-  
-  // Only initialize page-level ads if not already done
-  if (!hasPageLevelAds) {
+  // Only initialize page-level ads once per session
+  if (!window.__adSenseInitialized) {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({
         google_ad_client: clientId,

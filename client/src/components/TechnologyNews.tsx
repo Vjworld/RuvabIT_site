@@ -32,17 +32,37 @@ const TechnologyNews = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`/api/technology-news`);
+        setLoading(true);
+        setError("");
+
+        // Add timeout controller
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        const response = await fetch(`/api/technology-news`, {
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.userMessage || errorData.error || 'Failed to fetch news');
+          throw new Error(errorData.userMessage || errorData.error || `HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
         setNews(data.articles || []);
         setIsFromArchive(data.fromArchive || false);
         setUserMessage(data.message || "");
       } catch (err: any) {
-        setError(err.message);
+        console.error('Error fetching news:', err);
+        if (err.name === 'AbortError') {
+          setError('Request timed out. Please try again later.');
+        } else {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -97,7 +117,7 @@ const TechnologyNews = () => {
               Discover the latest breakthroughs, trends, and innovations shaping our digital future
             </p>
           </div>
-          
+
           {/* Loading Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, index) => (
@@ -145,7 +165,7 @@ const TechnologyNews = () => {
             <div className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border border-red-200/50 dark:border-red-800/50 rounded-2xl p-12 max-w-2xl mx-auto backdrop-blur-sm">
               <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 mb-4">News Service Temporarily Unavailable</h2>
               <p className="text-red-600 dark:text-red-400 mb-6 leading-relaxed">
-                {error.includes('API') 
+                {error.includes('API')
                   ? "We're experiencing high traffic on our news sources. Please try again in a few minutes."
                   : "We're experiencing technical difficulties. Our team is working to restore service."
                 }
@@ -170,7 +190,7 @@ const TechnologyNews = () => {
               <div className="text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 p-3 rounded mb-4">
                 Error details: {error}
               </div>
-              <Button 
+              <Button
                 className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => window.location.reload()}
               >
@@ -212,7 +232,7 @@ const TechnologyNews = () => {
             Exclusively curated technology articles from NewsNow and Event Registry
           </p>
           <div className="mt-4 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
-            {isFromArchive 
+            {isFromArchive
               ? "🔄 Archive Mode: Displaying verified technology articles during API maintenance - 24/7/365 availability"
               : "🎯 STRICT Technology Filtering: Only AI, software, cybersecurity, blockchain, and verified tech industry news"
             }
@@ -223,19 +243,19 @@ const TechnologyNews = () => {
             </div>
           )}
         </div>
-        
+
         {/* AdSense Ad - After Header */}
         <div className="py-8 flex justify-center">
           <div className="text-center max-w-2xl">
             <div className="text-xs text-slate-500 mb-2">Advertisement</div>
-            <AdSenseAd 
-              adSlot="7834958241" 
-              adFormat="horizontal" 
+            <AdSenseAd
+              adSlot="7834958241"
+              adFormat="horizontal"
               className="mx-auto"
             />
           </div>
         </div>
-        
+
         {news.length === 0 ? (
           <div className="text-center py-16">
             <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-12 max-w-2xl mx-auto backdrop-blur-sm">
@@ -265,7 +285,7 @@ const TechnologyNews = () => {
                   </li>
                 </ul>
               </div>
-              <Button 
+              <Button
                 className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300"
                 onClick={() => window.location.reload()}
               >
@@ -300,7 +320,7 @@ const TechnologyNews = () => {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   {/* Content Section */}
                   <CardContent className="p-6 flex-1 flex flex-col">
                     {/* Meta Information */}
@@ -315,12 +335,12 @@ const TechnologyNews = () => {
                         {formatTime(article.publishedAt)}
                       </div>
                     </div>
-                    
+
                     {/* Title */}
                     <h3 className="font-bold text-xl mb-4 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 leading-tight">
                       {article.title}
                     </h3>
-                    
+
                     {/* Summary Points */}
                     {article.summary && article.summary.length > 0 && (
                       <div className="mb-4">
@@ -338,14 +358,14 @@ const TechnologyNews = () => {
                         </ul>
                       </div>
                     )}
-                    
+
                     {/* Description */}
                     {article.description && (
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 line-clamp-3 flex-1 leading-relaxed">
                         {article.description}
                       </p>
                     )}
-                    
+
                     {/* Expanded Content */}
                     {isExpanded && article.content && (
                       <div className="mb-6 p-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
@@ -355,7 +375,7 @@ const TechnologyNews = () => {
                         </p>
                       </div>
                     )}
-                    
+
                     {/* Action Buttons */}
                     <div className="flex items-center justify-between gap-3 mt-auto">
                       <Button
@@ -380,7 +400,7 @@ const TechnologyNews = () => {
                           </>
                         )}
                       </Button>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
@@ -405,7 +425,7 @@ const TechnologyNews = () => {
             })}
           </div>
         )}
-        
+
         {/* Footer */}
         <div className="text-center mt-16">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-full px-6 py-3">
