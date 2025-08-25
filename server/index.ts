@@ -81,13 +81,15 @@ app.use((req, res, next) => {
       console.warn("⚠️  SESSION_SECRET should be at least 32 characters long for security");
     }
     
-    // Log optional environment variables status
-    const optionalEnvVars = ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'];
-    const missingOptionalVars = optionalEnvVars.filter(varName => !process.env[varName]);
-    
-    if (missingOptionalVars.length > 0) {
-      console.warn("⚠️  Optional environment variables not configured:");
-      missingOptionalVars.forEach(varName => console.warn(`   - ${varName}`));
+    // Check Razorpay configuration
+    const isRazorpayConfigured = process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET;
+    if (isRazorpayConfigured) {
+      console.log("✅ Razorpay payment gateway initialized successfully");
+    } else {
+      console.warn("⚠️  Razorpay credentials not found - payment functionality will be disabled");
+      const missingRazorpayVars = ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'].filter(varName => !process.env[varName]);
+      console.warn("📋 Missing variables:");
+      missingRazorpayVars.forEach(varName => console.warn(`   - ${varName}`));
     }
     
     console.log("✅ Environment validation completed");

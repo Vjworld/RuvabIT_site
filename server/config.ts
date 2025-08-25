@@ -20,8 +20,6 @@ export interface AppConfig {
 
 export function getConfig(): AppConfig {
   const requiredEnvVars = [
-    'RAZORPAY_KEY_ID',
-    'RAZORPAY_KEY_SECRET',
     'DATABASE_URL',
     'SESSION_SECRET'
   ];
@@ -34,10 +32,18 @@ export function getConfig(): AppConfig {
     throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 
+  // Only require Razorpay credentials if both are provided
+  if (process.env.RAZORPAY_KEY_ID && !process.env.RAZORPAY_KEY_SECRET) {
+    throw new Error('RAZORPAY_KEY_SECRET is required when RAZORPAY_KEY_ID is provided');
+  }
+  if (process.env.RAZORPAY_KEY_SECRET && !process.env.RAZORPAY_KEY_ID) {
+    throw new Error('RAZORPAY_KEY_ID is required when RAZORPAY_KEY_SECRET is provided');
+  }
+
   return {
     razorpay: {
-      keyId: process.env.RAZORPAY_KEY_ID!,
-      keySecret: process.env.RAZORPAY_KEY_SECRET!,
+      keyId: process.env.RAZORPAY_KEY_ID || '',
+      keySecret: process.env.RAZORPAY_KEY_SECRET || '',
       webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET,
     },
     database: {
