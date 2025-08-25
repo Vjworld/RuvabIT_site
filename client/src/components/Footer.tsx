@@ -27,18 +27,32 @@ function Footer() {
                 </svg>
               </a>
             </div>
-            {/* Product Hunt Badge for LangScribe */}
-            <div className="mb-4">
-              <a href="https://www.producthunt.com/products/langscribe?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-langscribe" target="_blank" rel="noopener noreferrer">
-                <img 
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1008936&theme=light&t=1756136626337" 
-                  alt="LangScribe - AI Powered writing assistant transforming content creation! | Product Hunt" 
-                  style={{width: '200px', height: '43px'}} 
-                  width="200" 
-                  height="43"
-                  className="hover:opacity-90 transition-opacity"
-                />
-              </a>
+            {/* Product Hunt Badges */}
+            <div className="space-y-3 mb-4">
+              <div>
+                <a href="https://www.producthunt.com/products/langscribe?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-langscribe" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1008936&theme=light&t=1756136626337" 
+                    alt="LangScribe - AI Powered writing assistant transforming content creation! | Product Hunt" 
+                    style={{width: '200px', height: '43px'}} 
+                    width="200" 
+                    height="43"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
+              </div>
+              <div>
+                <a href="https://www.producthunt.com/products/trendsolver?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-trendsolver" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009331&theme=light&t=1756140091143" 
+                    alt="TrendSolver - Trend Solver: Your data, your insights, your success. | Product Hunt" 
+                    style={{width: '200px', height: '43px'}} 
+                    width="200" 
+                    height="43"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
+              </div>
             </div>
           </div>
           

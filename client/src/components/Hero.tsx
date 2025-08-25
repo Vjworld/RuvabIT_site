@@ -34,12 +34,22 @@ export default function Hero() {
                   Take Demo Tour
                 </Button>
               </div>
-              {/* Product Hunt Badge for LangScribe */}
-              <div className="flex justify-center lg:justify-start">
+              {/* Product Hunt Badges */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <a href="https://www.producthunt.com/products/langscribe?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-langscribe" target="_blank" rel="noopener noreferrer">
                   <img 
                     src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1008936&theme=light&t=1756136626337" 
                     alt="LangScribe - AI Powered writing assistant transforming content creation! | Product Hunt" 
+                    style={{width: '250px', height: '54px'}} 
+                    width="250" 
+                    height="54"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
+                <a href="https://www.producthunt.com/products/trendsolver?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-trendsolver" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009331&theme=light&t=1756140091143" 
+                    alt="TrendSolver - Trend Solver: Your data, your insights, your success. | Product Hunt" 
                     style={{width: '250px', height: '54px'}} 
                     width="250" 
                     height="54"

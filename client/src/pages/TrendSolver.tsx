@@ -69,12 +69,27 @@ const TrendSolver = () => {
                   Watch Demo
                 </button>
               </div>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="ml-1 text-purple-100">4.9/5 rating</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="flex items-center space-x-6">
+                  <div className="flex items-center">
+                    <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                    <span className="ml-1 text-purple-100">4.9/5 rating</span>
+                  </div>
+                  <div className="text-purple-100">Real-time analytics</div>
                 </div>
-                <div className="text-purple-100">Real-time analytics</div>
+                {/* Product Hunt Badge */}
+                <div className="mt-4 sm:mt-0">
+                  <a href="https://www.producthunt.com/products/trendsolver?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-trendsolver" target="_blank" rel="noopener noreferrer">
+                    <img 
+                      src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009331&theme=light&t=1756140091143" 
+                      alt="TrendSolver - Trend Solver: Your data, your insights, your success. | Product Hunt" 
+                      style={{width: '250px', height: '54px'}} 
+                      width="250" 
+                      height="54"
+                      className="hover:opacity-90 transition-opacity"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
             <div className="relative">
