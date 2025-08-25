@@ -154,9 +154,12 @@ function App() {
         reason.includes('WebSocket') ||
         reason.includes('localhost:undefined') ||
         reason.includes('DOMException') ||
-        reason.includes('Failed to construct')
+        reason.includes('Failed to construct') ||
+        reason.includes('SyntaxError: Failed to construct') ||
+        reason.includes('invalid')
       ) {
         event.preventDefault();
+        event.stopImmediatePropagation();
         return;
       }
     });
@@ -165,19 +168,25 @@ function App() {
     window.addEventListener('error', (event) => {
       const message = event.message || '';
       const filename = event.filename || '';
+      const error = event.error?.toString() || '';
+      
       if (
         message.includes('WebSocket') ||
         message.includes('localhost:undefined') ||
         message.includes('Failed to construct') ||
         message.includes('DOMException') ||
+        message.includes('SyntaxError') ||
+        error.includes('WebSocket') ||
+        error.includes('DOMException') ||
         filename.includes('eruda') ||
         filename.includes('__replco')
       ) {
         event.preventDefault();
         event.stopPropagation();
+        event.stopImmediatePropagation();
         return false;
       }
-    });
+    }, true); // Use capture phase
     
     // Also catch any errors from Vite's client
     if (import.meta.env.DEV) {
