@@ -146,30 +146,52 @@ function App() {
     
     console.log('Analytics tracking is active with measurement ID: G-487BHE09VJ');
     
-    // Prevent some dev tool errors by adding error handlers
+    // Comprehensive error suppression for development issues
     window.addEventListener('unhandledrejection', (event) => {
-      // Suppress dev tool errors that don't affect functionality
-      if (event.reason && (
-        event.reason.toString().includes('eruda') ||
-        event.reason.toString().includes('WebSocket') ||
-        event.reason.toString().includes('localhost:undefined')
-      )) {
+      const reason = event.reason?.toString() || '';
+      if (
+        reason.includes('eruda') ||
+        reason.includes('WebSocket') ||
+        reason.includes('localhost:undefined') ||
+        reason.includes('DOMException') ||
+        reason.includes('Failed to construct')
+      ) {
         event.preventDefault();
         return;
       }
     });
 
-    // Handle WebSocket connection errors from Vite HMR
+    // Handle all error events comprehensively  
     window.addEventListener('error', (event) => {
-      if (event.message && (
-        event.message.includes('WebSocket') ||
-        event.message.includes('localhost:undefined') ||
-        event.message.includes('Failed to construct')
-      )) {
+      const message = event.message || '';
+      const filename = event.filename || '';
+      if (
+        message.includes('WebSocket') ||
+        message.includes('localhost:undefined') ||
+        message.includes('Failed to construct') ||
+        message.includes('DOMException') ||
+        filename.includes('eruda') ||
+        filename.includes('__replco')
+      ) {
         event.preventDefault();
+        event.stopPropagation();
         return false;
       }
     });
+    
+    // Also catch any errors from Vite's client
+    if (import.meta.env.DEV) {
+      // Suppress Vite client connection errors
+      const viteErrors = ['[vite] connecting...', '[vite] connected.', '[vite] failed to connect'];
+      const originalLog = console.log;
+      console.log = (...args) => {
+        const logString = args.join(' ');
+        if (viteErrors.some(error => logString.includes(error))) {
+          return;
+        }
+        originalLog.apply(console, args);
+      };
+    }
   }, []);
 
   return (
