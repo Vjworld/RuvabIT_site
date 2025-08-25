@@ -26,13 +26,26 @@ export default function Hero() {
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Harness the power of AI, machine learning, and automation to solve complex business problems and drive growth with our innovative technology solutions.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8">
                 <Button
                   onClick={handleWatchDemo}
                   className="bg-primary text-white px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto"
                 >
                   Take Demo Tour
                 </Button>
+              </div>
+              {/* Product Hunt Badge for LangScribe */}
+              <div className="flex justify-center lg:justify-start">
+                <a href="https://www.producthunt.com/products/langscribe?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-langscribe" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1008936&theme=light&t=1756136626337" 
+                    alt="LangScribe - AI Powered writing assistant transforming content creation! | Product Hunt" 
+                    style={{width: '250px', height: '54px'}} 
+                    width="250" 
+                    height="54"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
               </div>
             </div>
             <div className="mt-8 lg:mt-0">

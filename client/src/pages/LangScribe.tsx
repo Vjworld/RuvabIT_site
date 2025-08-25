@@ -55,12 +55,27 @@ const LangScribe = () => {
                   Learn More
                 </button>
               </div>
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="ml-1 text-green-100">4.8/5 rating</span>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="flex items-center space-x-6">
+                  <div className="flex items-center">
+                    <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                    <span className="ml-1 text-green-100">4.8/5 rating</span>
+                  </div>
+                  <div className="text-green-100">50+ languages supported</div>
                 </div>
-                <div className="text-green-100">50+ languages supported</div>
+                {/* Product Hunt Badge */}
+                <div className="mt-4 sm:mt-0">
+                  <a href="https://www.producthunt.com/products/langscribe?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-langscribe" target="_blank" rel="noopener noreferrer">
+                    <img 
+                      src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1008936&theme=light&t=1756136626337" 
+                      alt="LangScribe - AI Powered writing assistant transforming content creation! | Product Hunt" 
+                      style={{width: '250px', height: '54px'}} 
+                      width="250" 
+                      height="54"
+                      className="hover:opacity-90 transition-opacity"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
             <div className="relative">
