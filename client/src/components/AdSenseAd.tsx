@@ -111,7 +111,7 @@ function AdSenseAd({
       <div className="border border-gray-200 bg-gray-50 rounded-lg p-4 mx-auto max-w-4xl">
         <div className="text-center">
           <p className="text-xs text-gray-600 font-medium mb-3 uppercase tracking-wide">
-            SPONSORED CONTENT
+            ADVERTISEMENT
           </p>
           <div className="bg-white rounded border p-2">
             <ins {...adProps} />
