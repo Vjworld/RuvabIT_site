@@ -149,9 +149,25 @@ function App() {
     // Prevent some dev tool errors by adding error handlers
     window.addEventListener('unhandledrejection', (event) => {
       // Suppress dev tool errors that don't affect functionality
-      if (event.reason && event.reason.toString().includes('eruda')) {
+      if (event.reason && (
+        event.reason.toString().includes('eruda') ||
+        event.reason.toString().includes('WebSocket') ||
+        event.reason.toString().includes('localhost:undefined')
+      )) {
         event.preventDefault();
         return;
+      }
+    });
+
+    // Handle WebSocket connection errors from Vite HMR
+    window.addEventListener('error', (event) => {
+      if (event.message && (
+        event.message.includes('WebSocket') ||
+        event.message.includes('localhost:undefined') ||
+        event.message.includes('Failed to construct')
+      )) {
+        event.preventDefault();
+        return false;
       }
     });
   }, []);
