@@ -39,14 +39,23 @@ function AdSenseAd({
         }
       }
 
-      // Check if AdSense is available
-      if (typeof window !== 'undefined' && window.adsbygoogle) {
-        try {
-          pushAd();
-          hasAdLoaded.current = true;
-        } catch (error) {
-          console.error('Error loading ad:', error);
-        }
+      // Check if AdSense is available and wait for it to load if needed
+      if (typeof window !== 'undefined') {
+        const tryLoadAd = () => {
+          if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
+            try {
+              pushAd();
+              hasAdLoaded.current = true;
+            } catch (error) {
+              console.error('Error loading ad:', error);
+            }
+          } else {
+            // Wait for AdSense to load
+            setTimeout(tryLoadAd, 500);
+          }
+        };
+        
+        tryLoadAd();
       }
     };
 

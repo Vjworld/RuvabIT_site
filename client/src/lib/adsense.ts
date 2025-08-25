@@ -30,18 +30,9 @@ export const initAdSense = () => {
     window.adsbygoogle = [];
   }
   
-  // AdSense script and meta tag are now in HTML
-  // Only initialize page-level ads once per session
-  if (!window.__adSenseInitialized) {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: clientId,
-        enable_page_level_ads: true
-      });
-    } catch (error) {
-      console.error('Error initializing AdSense page-level ads:', error);
-    }
-  }
+  // AdSense script and auto ads are now in HTML head
+  // We don't need to enable page-level ads again here as it's causing conflicts
+  // The HTML head already includes the AdSense script with auto ads
   
   // Mark as initialized to prevent duplicate initialization
   window.__adSenseInitialized = true;
@@ -50,9 +41,24 @@ export const initAdSense = () => {
 export const pushAd = (adConfig?: any) => {
   if (typeof window !== 'undefined' && window.adsbygoogle) {
     try {
-      window.adsbygoogle.push(adConfig || {});
+      // Only push ads if they haven't been pushed already
+      // Check if this is a new ad element  
+      const adElements = document.querySelectorAll('.adsbygoogle');
+      const unpushedAds = Array.from(adElements).filter(ad => 
+        !ad.hasAttribute('data-adsbygoogle-status')
+      );
+      
+      if (unpushedAds.length > 0) {
+        window.adsbygoogle.push(adConfig || {});
+      }
     } catch (error) {
       console.error('Error pushing ad:', error);
+      // Fallback: try to push anyway, but in a safer manner
+      try {
+        window.adsbygoogle.push(adConfig || {});
+      } catch (fallbackError) {
+        console.error('Fallback AdSense push also failed:', fallbackError);
+      }
     }
   }
 };
