@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AdSenseAd from "@/components/AdSenseAd";
 import GoToTopButton from "@/components/GoToTopButton";
+import Breadcrumb from "@/components/Breadcrumb";
 import { BlogPost } from "@shared/schema";
 
 const BlogPage = () => {
@@ -87,6 +88,7 @@ const BlogPage = () => {
       </Helmet>
 
       <Header />
+      <Breadcrumb />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white py-20">

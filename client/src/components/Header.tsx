@@ -16,6 +16,18 @@ function Header() {
   const navigation = [
     { name: 'Home', href: '/' },
     { 
+      name: 'Solutions', 
+      href: '/services',
+      submenu: [
+        { name: 'AI Implementation', href: '/ai-implementation' },
+        { name: 'Process Automation', href: '/process-automation' },
+        { name: 'Business Intelligence', href: '/business-intelligence' },
+        { name: 'Cloud Solutions', href: '/cloud-solutions' },
+        { name: 'Cybersecurity', href: '/cybersecurity' },
+        { name: 'Consulting', href: '/consulting' },
+      ]
+    },
+    { 
       name: 'Products', 
       href: '/#products',
       submenu: [
@@ -26,22 +38,16 @@ function Header() {
       ]
     },
     { 
-      name: 'Services', 
-      href: '/services',
+      name: 'Resources', 
+      href: '/blog',
       submenu: [
-        { name: 'AI Analytics', href: '/ai-analytics' },
-        { name: 'Process Automation', href: '/process-automation' },
-        { name: 'AI Implementation', href: '/ai-implementation' },
-        { name: 'Business Intelligence', href: '/business-intelligence' },
-        { name: 'Cloud Solutions', href: '/cloud-solutions' },
-        { name: 'Cybersecurity', href: '/cybersecurity' },
-        { name: 'Consulting', href: '/consulting' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'Tech News', href: '/technology-news' },
+        { name: 'Case Studies', href: '/case-studies' },
+        { name: 'Documentation', href: '/documentation' },
       ]
     },
     { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Tech News', href: '/technology-news' },
-    { name: 'Partners', href: '/partners' },
     { name: 'Contact', href: '/contact' },
   ];
 

@@ -14,6 +14,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import AdSenseAd from "@/components/AdSenseAd";
 import GoToTopButton from "@/components/GoToTopButton";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const ServicesPage = () => {
   return (
@@ -37,6 +38,7 @@ const ServicesPage = () => {
       </Helmet>
 
       <Header />
+      <Breadcrumb />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-700 text-white py-20">

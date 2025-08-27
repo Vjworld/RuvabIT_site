@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import GoToTopButton from "@/components/GoToTopButton";
+import Breadcrumb from "@/components/Breadcrumb";
+import AdSenseAd from "@/components/AdSenseAd";
 
 const ContactPage = () => {
   const { toast } = useToast();
@@ -105,6 +107,7 @@ const ContactPage = () => {
       </Helmet>
 
       <Header />
+      <Breadcrumb />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20">

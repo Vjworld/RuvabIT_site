@@ -98,13 +98,26 @@ function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 mt-8 pt-8">
+        {/* AdSense Compliance Disclaimer */}
+        <div className="border-t border-gray-800 mt-8 pt-6">
+          <div className="bg-gray-800 rounded-lg p-4 mb-6">
+            <h4 className="text-sm font-semibold text-white mb-2">Advertising & Content Disclaimer</h4>
+            <div className="text-xs text-gray-300 space-y-1">
+              <p>• This website displays advertisements through Google AdSense to support our free content and services.</p>
+              <p>• We partner with advertising networks and may earn commissions from affiliate links.</p>
+              <p>• All content is original, professionally created, and suitable for general audiences.</p>
+              <p>• We respect user privacy and comply with GDPR, CCPA, and other applicable data protection laws.</p>
+              <p>• Technology news content is sourced from authorized news APIs and properly attributed.</p>
+            </div>
+          </div>
+          
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm">
               <p>&copy; 2025 Ruvab IT. All rights reserved.</p>
-              <p className="text-xs text-gray-500 mt-1">Content suitable for all audiences | Professional business services</p>
+              <p className="text-xs text-gray-500 mt-1">Professional technology solutions | Family-friendly content | AdSense compliant</p>
+              <p className="text-xs text-gray-500 mt-1">Established 2019 | Mumbai, India | Reg. No: U72900MH2019PTC322844</p>
             </div>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex flex-wrap gap-4 mt-4 md:mt-0">
               <Link href="/privacy">
                 <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Privacy Policy</span>
               </Link>
@@ -114,9 +127,12 @@ function Footer() {
               <Link href="/cookie-policy">
                 <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Cookie Policy</span>
               </Link>
-              {/* <Link href="/login">
-                <span className="text-gray-500 hover:text-gray-400 text-xs transition-colors cursor-pointer opacity-50">System</span>
-              </Link> */}
+              <Link href="/disclaimer">
+                <span className="text-gray-400 hover:text-white text-sm transition-colors cursor-pointer">Disclaimer</span>
+              </Link>
+              <a href="mailto:support@ruvabit.com" className="text-gray-400 hover:text-white text-sm transition-colors">
+                Contact Support
+              </a>
             </div>
           </div>
         </div>
