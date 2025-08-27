@@ -115,7 +115,6 @@ function Footer() {
             <div className="text-gray-400 text-sm">
               <p>&copy; 2025 Ruvab IT. All rights reserved.</p>
               <p className="text-xs text-gray-500 mt-1">Professional technology solutions | Family-friendly content | AdSense compliant</p>
-              <p className="text-xs text-gray-500 mt-1">Established 2019 | Mumbai, India | Reg. No: U72900MH2019PTC322844</p>
             </div>
             <div className="flex flex-wrap gap-4 mt-4 md:mt-0">
               <Link href="/privacy">
