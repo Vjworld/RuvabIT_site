@@ -144,7 +144,8 @@ function App() {
       console.warn('Missing required AdSense key: VITE_ADSENSE_CLIENT_ID');
     }
     
-    console.log('Analytics tracking is active with measurement ID: G-HKV9TK37LR');
+    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-487BHE09VJ';
+    console.log(`Analytics tracking is active with measurement ID: ${measurementId}`);
     
     // Comprehensive error suppression for development issues
     window.addEventListener('unhandledrejection', (event) => {

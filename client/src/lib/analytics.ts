@@ -10,15 +10,17 @@ declare global {
 // Google Analytics is now loaded directly in HTML head
 // This function is kept for backward compatibility but is no longer needed
 export const initGA = () => {
-  console.log('Google Analytics is already initialized in HTML head with G-HKV9TK37LR');
+  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-487BHE09VJ';
+  console.log(`Google Analytics is already initialized in HTML head with ${measurementId}`);
 };
 
 // Track page views - useful for single-page applications
 export const trackPageView = (url: string) => {
   if (typeof window === 'undefined' || !window.gtag) return;
   
-  // Use the hardcoded measurement ID since it's now in HTML
-  window.gtag('config', 'G-HKV9TK37LR', {
+  // Use the environment variable measurement ID
+  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-487BHE09VJ';
+  window.gtag('config', measurementId, {
     page_path: url
   });
 };

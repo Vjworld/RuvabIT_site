@@ -4,7 +4,7 @@ function testAnalytics() {
   
   // Test Google Analytics
   if (typeof window.gtag !== 'undefined') {
-    console.log('✅ Google Analytics (gtag) is available with G-HKV9TK37LR');
+    console.log('✅ Google Analytics (gtag) is available with G-487BHE09VJ');
     
     // Send a test page view
     try {
@@ -13,7 +13,7 @@ function testAnalytics() {
         page_location: window.location.href,
         custom_parameter_1: 'Direct HTML Implementation'
       });
-      console.log('✅ Test page view sent to GA (G-HKV9TK37LR)');
+      console.log('✅ Test page view sent to GA (G-487BHE09VJ)');
     } catch (error) {
       console.log('❌ Error sending GA event:', error);
     }
@@ -30,7 +30,7 @@ function testAnalytics() {
     window.dataLayer.push({
       'event': 'test_analytics_setup',
       'test_param': 'Analytics working correctly',
-      'measurement_id': 'G-HKV9TK37LR'
+      'measurement_id': 'G-487BHE09VJ'
     });
     console.log('✅ Test event pushed to GTM dataLayer');
   } else {
