@@ -95,13 +95,13 @@ const ContactPage = () => {
         <link rel="canonical" href="https://ruvab.it.com/contact" />
         
         {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-487BHE09VJ"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HKV9TK37LR"></script>
         <script>
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-487BHE09VJ');
+            gtag('config', 'G-HKV9TK37LR');
           `}
         </script>
       </Helmet>
