@@ -56,6 +56,16 @@ export default function Hero() {
                     className="hover:opacity-90 transition-opacity"
                   />
                 </a>
+                <a href="https://www.producthunt.com/products/qr-generator-pro-by-ruvab-it?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-qr&#0045;generator&#0045;pro&#0045;by&#0045;ruvab&#0045;it" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009570&theme=light&t=1756551081084" 
+                    alt="QR Generator Pro by Ruvab IT - Create & share qr codes instantly | Product Hunt" 
+                    style={{width: '250px', height: '54px'}} 
+                    width="250" 
+                    height="54"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
               </div>
             </div>
             <div className="mt-8 lg:mt-0">
