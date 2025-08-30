@@ -4,38 +4,38 @@ export default function Services() {
   const services = [
     {
       icon: CheckCircle,
-      title: 'AI Implementation',
-      description: 'Custom AI solutions designed to automate processes, improve decision-making, and drive innovation across your organization.',
+      title: 'AI Implementation Consulting',
+      description: 'Partnering with founders building AI solutions - from machine learning platforms to intelligent automation tools. We provide consultation and promote innovative AI products.',
       color: 'bg-primary'
     },
     {
       icon: Zap,
-      title: 'Business Intelligence',
-      description: 'Transform raw data into actionable insights with our comprehensive business intelligence and analytics solutions.',
+      title: 'Business Intelligence Partnerships',
+      description: 'Promoting cutting-edge business intelligence solutions from innovative founders - from analytics platforms to data visualization tools.',
       color: 'bg-accent'
     },
     {
       icon: Heart,
-      title: 'Process Automation',
-      description: 'Streamline operations and reduce costs with intelligent automation solutions that handle repetitive tasks efficiently.',
+      title: 'Process Automation Solutions',
+      description: 'Collaborating with founders creating innovative automation solutions - from workflow optimization tools to robotic process automation platforms.',
       color: 'bg-purple-600'
     },
     {
       icon: Settings,
-      title: 'Cloud Solutions',
-      description: 'Scalable cloud infrastructure and migration services to enhance security, reduce costs, and improve accessibility.',
+      title: 'Cloud Solutions Consulting',
+      description: 'Supporting innovative cloud technology founders - from infrastructure tools to serverless platforms and cloud management solutions.',
       color: 'bg-orange-500'
     },
     {
       icon: Shield,
-      title: 'Cybersecurity',
-      description: 'Comprehensive security solutions to protect your digital assets and ensure compliance with industry standards.',
+      title: 'Cybersecurity Partnerships',
+      description: 'Partnering with cybersecurity innovators - from threat detection platforms to security automation tools and compliance solutions.',
       color: 'bg-red-500'
     },
     {
       icon: Users,
-      title: 'Consulting',
-      description: 'Expert technology consulting to help you make informed decisions and develop effective digital strategies.',
+      title: 'Founder Collaboration',
+      description: 'Connecting with innovative founders, providing consultation, promotional support, and fostering partnerships in our focus technology domains.',
       color: 'bg-indigo-500'
     }
   ];
@@ -44,9 +44,9 @@ export default function Services() {
     <section id="services" className="py-12 sm:py-16 lg:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
-            Comprehensive technology solutions tailored to your business needs, from AI implementation to digital transformation.
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Solutions & Partnerships</h2>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto">
+            Promoting innovative solutions and fostering collaborations with founders in AI, automation, business intelligence, cloud solutions, and cybersecurity.
           </p>
         </div>
         

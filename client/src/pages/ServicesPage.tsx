@@ -20,9 +20,9 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Our Services | Technology Solutions & AI Services | Ruvab IT</title>
-        <meta name="description" content="Comprehensive technology solutions including AI implementation, cloud services, cybersecurity, and business intelligence to transform your business." />
-        <meta name="keywords" content="technology services, AI implementation, cloud solutions, cybersecurity, business intelligence, consulting" />
+        <title>Solutions & Partnerships | Collaborate with Innovative Founders | Ruvab IT</title>
+        <meta name="description" content="Partnering with founders building innovative solutions in AI Implementation, Process Automation, Business Intelligence, Cloud Solutions, and Cybersecurity. Submit your solution for collaboration opportunities." />
+        <meta name="keywords" content="technology partnerships, founder collaboration, AI startups, automation solutions, business intelligence partnerships, cloud partnerships, cybersecurity solutions, startup consulting" />
         <link rel="canonical" href="https://ruvab.it.com/services" />
         
         {/* Google Analytics */}
@@ -45,18 +45,26 @@ const ServicesPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Our Services
+              Solutions & Partnerships
             </h1>
             <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto mb-8">
-              Comprehensive technology solutions designed to transform your
-              business and drive sustainable growth.
+              Promoting innovative solutions and fostering collaborations with founders 
+              in AI, automation, business intelligence, cloud solutions, and cybersecurity.
             </p>
-            <button 
-              onClick={() => window.location.href = '/contact'}
-              className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-indigo-50 transition-colors"
-            >
-              Get Free Consultation
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => window.location.href = '/contact'}
+                className="bg-white text-indigo-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-indigo-50 transition-colors"
+              >
+                Partner With Us
+              </button>
+              <button 
+                onClick={() => window.location.href = '/contact'}
+                className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-indigo-900 transition-colors"
+              >
+                Submit Your Solution
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -66,215 +74,278 @@ const ServicesPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Complete Technology Solutions
+              Partnership Domains & Solution Areas
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From custom software development to AI implementation, we provide
-              end-to-end services that drive digital transformation.
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              We promote and collaborate with founders building innovative solutions in these key technology domains. 
+              If you have a product in any of these areas, let's discuss collaboration opportunities.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* AI & Machine Learning */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-12">
+            {/* AI Implementation Consulting */}
             <div className="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-blue-500">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
                   <Zap className="h-6 w-6 text-blue-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  AI & Machine Learning
+                  AI Implementation Consulting
                 </h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Harness the power of artificial intelligence to automate
-                processes, gain insights, and create competitive advantages.
+                Partnering with founders building AI solutions - from machine learning platforms 
+                to intelligent automation tools. We provide consultation and promote innovative AI products.
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Custom AI model development
+                    AI solution evaluation & consulting
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Natural language processing
+                    Partnership opportunities for AI startups
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-gray-700">Predictive analytics</span>
+                  <span className="text-gray-700">Product promotion & visibility</span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Computer vision solutions
+                    Technical consultation for founders
                   </span>
                 </li>
               </ul>
               <div className="flex gap-2">
-                <button className="text-blue-600 font-semibold hover:text-blue-700 transition-colors flex items-center">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                <button 
+                  onClick={() => window.location.href = '/ai-implementation'}
+                  className="text-blue-600 font-semibold hover:text-blue-700 transition-colors flex items-center"
+                >
+                  View Solutions <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
                 <button 
-                  onClick={() => window.location.href = '/payment'}
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
-                  Book Now
+                  Collaborate
                 </button>
               </div>
             </div>
 
-            {/* Custom Software Development */}
+            {/* Process Automation Solutions */}
             <div className="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-green-500">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
                   <Code className="h-6 w-6 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  Custom Software Development
+                  Process Automation Consulting
                 </h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Build scalable, secure, and user-friendly applications tailored
-                to your specific business requirements.
+                Collaborating with founders creating innovative automation solutions - from workflow 
+                optimization tools to robotic process automation platforms.
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Web application development
+                    Automation solution partnerships
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-gray-700">Mobile app development</span>
+                  <span className="text-gray-700">RPA startup collaboration</span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    API development & integration
+                    Workflow optimization consulting
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Legacy system modernization
+                    Integration strategy guidance
                   </span>
                 </li>
               </ul>
               <div className="flex gap-2">
                 <button className="text-green-600 font-semibold hover:text-green-700 transition-colors flex items-center">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                  View Partners <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
                 <button 
-                  onClick={() => window.location.href = '/payment'}
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                 >
-                  Book Now
+                  Collaborate
                 </button>
               </div>
             </div>
 
-            {/* Data Analytics & BI */}
+            {/* Business Intelligence Solutions */}
             <div className="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-purple-500">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
                   <Database className="h-6 w-6 text-purple-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  Data Analytics & BI
+                  Business Intelligence Partnerships
                 </h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Transform your data into actionable insights with advanced
-                analytics and business intelligence solutions.
+                Promoting cutting-edge business intelligence solutions from innovative founders - 
+                from analytics platforms to data visualization tools.
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-gray-700">Data warehouse design</span>
+                  <span className="text-gray-700">BI platform partnerships</span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Real-time analytics dashboards
+                    Data visualization startup support
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Data pipeline automation
+                    Analytics tool consultation
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Advanced reporting systems
+                    Reporting solution collaboration
                   </span>
                 </li>
               </ul>
               <div className="flex gap-2">
-                <button className="text-purple-600 font-semibold hover:text-purple-700 transition-colors flex items-center">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                <button 
+                  onClick={() => window.location.href = '/business-intelligence'}
+                  className="text-purple-600 font-semibold hover:text-purple-700 transition-colors flex items-center"
+                >
+                  View Solutions <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
                 <button 
-                  onClick={() => window.location.href = '/payment'}
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
                 >
-                  Book Now
+                  Partner Up
                 </button>
               </div>
             </div>
 
-            {/* Cloud Solutions */}
+            {/* Cloud Solutions Partnerships */}
             <div className="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-orange-500">
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
                   <Cloud className="h-6 w-6 text-orange-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  Cloud Solutions
+                  Cloud Solutions Consulting
                 </h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Migrate, optimize, and scale your infrastructure with secure and
-                cost-effective cloud solutions.
+                Supporting innovative cloud technology founders - from infrastructure tools 
+                to serverless platforms and cloud management solutions.
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Cloud migration strategy
+                    Cloud startup partnerships
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    Multi-cloud architecture
+                    Infrastructure tool promotion
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span className="text-gray-700">
-                    DevOps & CI/CD implementation
+                    DevOps solution collaboration
                   </span>
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span className="text-gray-700">Cost optimization</span>
+                  <span className="text-gray-700">Migration strategy consulting</span>
                 </li>
               </ul>
               <div className="flex gap-2">
-                <button className="text-orange-600 font-semibold hover:text-orange-700 transition-colors flex items-center">
-                  Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                <button 
+                  onClick={() => window.location.href = '/cloud-solutions'}
+                  className="text-orange-600 font-semibold hover:text-orange-700 transition-colors flex items-center"
+                >
+                  Explore Partners <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
                 <button 
-                  onClick={() => window.location.href = '/payment'}
+                  onClick={() => window.location.href = '/contact'}
                   className="bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors"
                 >
-                  Book Now
+                  Join Us
+                </button>
+              </div>
+            </div>
+
+            {/* Cybersecurity Solutions */}
+            <div className="bg-white p-8 rounded-2xl shadow-xl border-l-4 border-red-500">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                  <Shield className="h-6 w-6 text-red-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  Cybersecurity Consulting
+                </h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Partnering with cybersecurity innovators - from threat detection platforms 
+                to security automation tools and compliance solutions.
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-700">
+                    Security startup partnerships
+                  </span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-700">
+                    Threat detection tool promotion
+                  </span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-700">
+                    Compliance solution consulting
+                  </span>
+                </li>
+                <li className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-700">Security strategy guidance</span>
+                </li>
+              </ul>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => window.location.href = '/cybersecurity'}
+                  className="text-red-600 font-semibold hover:text-red-700 transition-colors flex items-center"
+                >
+                  Security Partners <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/contact'}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
+                >
+                  Secure Partnership
                 </button>
               </div>
             </div>
@@ -296,242 +367,80 @@ const ServicesPage = () => {
         </div>
       </section>
 
-      {/* Service Categories */}
-      <section className="py-20 bg-gray-50">
+      {/* Partnership Call-to-Action */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Service Categories
+              Ready to Partner with Ruvab IT?
             </h2>
-            <p className="text-xl text-gray-600">
-              Specialized expertise across different technology domains
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              If you're a founder building innovative solutions in our focus domains, 
+              we'd love to explore collaboration opportunities that can accelerate your growth.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-blue-600" />
+            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Cybersecurity
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Submit Your Solution
               </h3>
-              <p className="text-gray-600 mb-4">
-                Protect your digital assets with comprehensive security audits,
-                implementation, and monitoring.
+              <p className="text-gray-600 mb-6">
+                Have an innovative product in AI, automation, BI, cloud, or cybersecurity? 
+                Tell us about your solution and let's explore partnership opportunities.
               </p>
-              <ul className="text-sm text-gray-500 space-y-1">
-                <li>Security assessments</li>
-                <li>Penetration testing</li>
-                <li>Compliance consulting</li>
+              <button 
+                onClick={() => window.location.href = '/contact'}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors w-full"
+              >
+                Submit Solution
+              </button>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="h-10 w-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Partnership Benefits
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Get visibility, technical consultation, promotional support, and access to our network 
+                of businesses looking for innovative solutions.
+              </p>
+              <ul className="text-left text-gray-600 space-y-2 mb-6">
+                <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-2" />Product promotion</li>
+                <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-2" />Technical guidance</li>
+                <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-2" />Business network access</li>
               </ul>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-green-600" />
+            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <ArrowRight className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Digital Transformation
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Get Started
               </h3>
-              <p className="text-gray-600 mb-4">
-                Guide your organization through complete digital transformation
-                with strategic planning and execution.
+              <p className="text-gray-600 mb-6">
+                Ready to discuss how we can work together? Contact us to schedule a consultation 
+                and explore collaboration opportunities tailored to your needs.
               </p>
-              <ul className="text-sm text-gray-500 space-y-1">
-                <li>Process automation</li>
-                <li>Change management</li>
-                <li>Technology roadmaps</li>
-              </ul>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Code className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Integration Services
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Connect disparate systems and streamline workflows with seamless
-                integration solutions.
-              </p>
-              <ul className="text-sm text-gray-500 space-y-1">
-                <li>API development</li>
-                <li>System integration</li>
-                <li>Data synchronization</li>
-              </ul>
+              <button 
+                onClick={() => window.location.href = '/contact'}
+                className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors w-full"
+              >
+                Schedule Consultation
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Implementation Process */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Implementation Process
-            </h2>
-            <p className="text-xl text-gray-600">
-              A proven methodology that ensures successful project delivery
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                1
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Discovery & Analysis
-              </h3>
-              <p className="text-gray-600">
-                We start by understanding your business goals, current
-                challenges, and technical requirements.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                2
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Strategy & Planning
-              </h3>
-              <p className="text-gray-600">
-                Develop a comprehensive strategy with detailed project roadmap,
-                timelines, and milestones.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                3
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Development & Testing
-              </h3>
-              <p className="text-gray-600">
-                Execute the solution using agile methodologies with continuous
-                testing and quality assurance.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                4
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Deployment & Support
-              </h3>
-              <p className="text-gray-600">
-                Deploy the solution with comprehensive training and ongoing
-                support for long-term success.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Support Services */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Comprehensive Support Services
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our commitment to your success doesn't end at deployment. We
-                provide ongoing support, maintenance, and optimization services
-                to ensure your technology solutions continue to deliver value.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      24/7 Technical Support
-                    </h4>
-                    <p className="text-gray-600">
-                      Round-the-clock assistance from our expert technical team
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Performance Monitoring
-                    </h4>
-                    <p className="text-gray-600">
-                      Proactive monitoring and optimization of your systems
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Regular Updates
-                    </h4>
-                    <p className="text-gray-600">
-                      Keep your solutions current with the latest features and
-                      security patches
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900">
-                      Training & Documentation
-                    </h4>
-                    <p className="text-gray-600">
-                      Comprehensive training programs and detailed documentation
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <img
-                src="https://images.pexels.com/photos/3184454/pexels-photo-3184454.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Support Team"
-                className="rounded-lg shadow-lg"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto">
-            Let's discuss how our services can help you achieve your technology
-            goals and drive sustainable growth.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => window.location.href = '/contact'}
-              className="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-indigo-50 transition-colors"
-            >
-              Schedule Consultation
-            </button>
-            <button 
-              onClick={() => window.location.href = '/case-studies'}
-              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-indigo-600 transition-colors"
-            >
-              View Case Studies
-            </button>
-          </div>
-        </div>
-      </section>
       <Footer />
       <GoToTopButton />
     </div>

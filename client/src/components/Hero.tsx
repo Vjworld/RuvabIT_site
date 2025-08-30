@@ -20,11 +20,11 @@ export default function Hero() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="hero-title font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-                Transform Your Business with{' '}
-                <span className="text-primary">Advanced Technology Solutions</span>
+                Partner with{' '}
+                <span className="text-primary">Innovative Technology Founders</span>
               </h1>
               <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Harness the power of AI, machine learning, and automation to solve complex business problems and drive growth with our innovative technology solutions.
+                Connecting with founders building cutting-edge solutions in AI, automation, business intelligence, cloud technologies, and cybersecurity. Let's collaborate and accelerate innovation together.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8">
                 <Button
