@@ -65,6 +65,18 @@ function Footer() {
                   />
                 </a>
               </div>
+              <div>
+                <a href="https://www.producthunt.com/products/fyppal?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-fyppal" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1009554&theme=light&t=1756551310587" 
+                    alt="FYPPAL - Find Your Purpose Passion And Leap | Product Hunt" 
+                    style={{width: '200px', height: '43px'}} 
+                    width="200" 
+                    height="43"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
+              </div>
             </div>
           </div>
           
