@@ -24,6 +24,12 @@ export default function Terms() {
             gtag('config', '${import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-487BHE09VJ'}');
           `}
         </script>
+
+        {/* Google AdSense */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4204204667108655" crossOrigin="anonymous"></script>
+        
+        {/* In-page Ad Script */}
+        <script async src="https://js.mbidadm.com/static/scripts.js" data-admpid="367193"></script>
       </Helmet>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">

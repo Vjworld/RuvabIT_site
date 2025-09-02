@@ -30,6 +30,9 @@ const AboutPage = () => {
 
         {/* Google AdSense */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4204204667108655" crossOrigin="anonymous"></script>
+        
+        {/* In-page Ad Script */}
+        <script async src="https://js.mbidadm.com/static/scripts.js" data-admpid="367193"></script>
       </Helmet>
 
       <Header />
