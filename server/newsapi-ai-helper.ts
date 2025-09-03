@@ -24,7 +24,9 @@ export async function fetchNewsAPIaiData(apiKey: string) {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
-      }
+      },
+      // Add timeout to prevent hanging requests
+      signal: AbortSignal.timeout(30000) // 30 second timeout
     });
 
     console.log(`NewsAPI.ai response status: ${response.status}`);
@@ -39,7 +41,17 @@ export async function fetchNewsAPIaiData(apiKey: string) {
       };
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (jsonError) {
+      console.error('NewsAPI.ai JSON parsing error:', jsonError);
+      return {
+        success: false,
+        error: 'Invalid JSON response from NewsAPI.ai',
+        details: 'The API returned an invalid JSON response'
+      };
+    }
     console.log("NewsAPI.ai response structure:", Object.keys(data));
     console.log("NewsAPI.ai data.articles structure:", data.articles ? Object.keys(data.articles) : 'no articles key');
     console.log("NewsAPI.ai articles count:", data.articles?.count || 'no count');
@@ -107,10 +119,26 @@ export async function fetchNewsAPIaiData(apiKey: string) {
 
   } catch (error) {
     console.error('NewsAPI.ai fetch error:', error);
-    return {
-      success: false,
-      error: 'Failed to fetch from NewsAPI.ai',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    };
+    
+    // Handle different types of errors more specifically
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'AbortError') {
+      return {
+        success: false,
+        error: "NewsAPI.ai request timeout",
+        details: 'The request took too long to complete (30 second timeout)'
+      };
+    } else if (error instanceof TypeError && error.message.includes('fetch')) {
+      return {
+        success: false,
+        error: "Network error connecting to NewsAPI.ai",
+        details: 'Unable to establish connection to the news API service'
+      };
+    } else {
+      return {
+        success: false,
+        error: "Failed to fetch from NewsAPI.ai",
+        details: error instanceof Error ? error.message : 'Unknown error occurred'
+      };
+    }
   }
 }

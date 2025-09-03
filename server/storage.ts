@@ -88,13 +88,23 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   // User operations
   async getUser(id: number): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user;
+    try {
+      const [user] = await db.select().from(users).where(eq(users.id, id));
+      return user;
+    } catch (error) {
+      console.error(`Database error fetching user by ID ${id}:`, error);
+      throw new Error('Failed to fetch user from database');
+    }
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user;
+    try {
+      const [user] = await db.select().from(users).where(eq(users.username, username));
+      return user;
+    } catch (error) {
+      console.error(`Database error fetching user by username ${username}:`, error);
+      throw new Error('Failed to fetch user from database');
+    }
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
@@ -103,17 +113,25 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    // Hash password before storing
-    const hashedPassword = await bcrypt.hash(insertUser.password, 10);
-    
-    const [user] = await db
-      .insert(users)
-      .values({
-        ...insertUser,
-        password: hashedPassword,
-      })
-      .returning();
-    return user;
+    try {
+      // Hash password before storing
+      const hashedPassword = await bcrypt.hash(insertUser.password, 10);
+      
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...insertUser,
+          password: hashedPassword,
+        })
+        .returning();
+      return user;
+    } catch (error) {
+      console.error('Database error creating user:', error);
+      if (error && typeof error === 'object' && 'code' in error && error.code === '23505') { // PostgreSQL unique violation
+        throw new Error('Username or email already exists');
+      }
+      throw new Error('Failed to create user');
+    }
   }
 
   async updateUser(id: number, updates: Partial<User>): Promise<User | undefined> {
@@ -127,11 +145,16 @@ export class DatabaseStorage implements IStorage {
 
   // Blog operations
   async getBlogPosts(): Promise<BlogPost[]> {
-    return await db
-      .select()
-      .from(blogPosts)
-      .where(eq(blogPosts.isPublished, true))
-      .orderBy(desc(blogPosts.publishedAt));
+    try {
+      return await db
+        .select()
+        .from(blogPosts)
+        .where(eq(blogPosts.isPublished, true))
+        .orderBy(desc(blogPosts.publishedAt));
+    } catch (error) {
+      console.error('Database error fetching blog posts:', error);
+      throw new Error('Failed to fetch blog posts');
+    }
   }
 
   async getBlogPost(id: number): Promise<BlogPost | undefined> {
@@ -145,15 +168,27 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBlogPost(insertBlogPost: InsertBlogPost): Promise<BlogPost> {
-    const [post] = await db
-      .insert(blogPosts)
-      .values(insertBlogPost)
-      .returning();
-    
-    // Update search index
-    await this.updateSearchIndex('blog', post.id, post.title, post.content);
-    
-    return post;
+    try {
+      const [post] = await db
+        .insert(blogPosts)
+        .values(insertBlogPost)
+        .returning();
+      
+      // Update search index (non-critical, don't fail if this fails)
+      try {
+        await this.updateSearchIndex('blog', post.id, post.title, post.content);
+      } catch (searchError) {
+        console.warn('Failed to update search index for blog post:', searchError);
+      }
+      
+      return post;
+    } catch (error) {
+      console.error('Database error creating blog post:', error);
+      if (error && typeof error === 'object' && 'code' in error && error.code === '23505') { // PostgreSQL unique violation
+        throw new Error('Blog post with this slug already exists');
+      }
+      throw new Error('Failed to create blog post');
+    }
   }
 
   async updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPost | undefined> {
@@ -172,17 +207,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteBlogPost(id: number): Promise<boolean> {
-    const result = await db.delete(blogPosts).where(eq(blogPosts.id, id));
-    
-    // Remove from search index
-    await db.delete(searchIndex).where(
-      and(
-        eq(searchIndex.contentType, 'blog'),
-        eq(searchIndex.contentId, id)
-      )
-    );
-    
-    return (result.rowCount ?? 0) > 0;
+    try {
+      const result = await db.delete(blogPosts).where(eq(blogPosts.id, id));
+      
+      // Remove from search index (non-critical)
+      try {
+        await db.delete(searchIndex).where(
+          and(
+            eq(searchIndex.contentType, 'blog'),
+            eq(searchIndex.contentId, id)
+          )
+        );
+      } catch (searchError) {
+        console.warn('Failed to remove blog post from search index:', searchError);
+      }
+      
+      return (result.rowCount ?? 0) > 0;
+    } catch (error) {
+      console.error(`Database error deleting blog post ${id}:`, error);
+      throw new Error('Failed to delete blog post');
+    }
   }
 
   // Page content operations
@@ -293,45 +337,55 @@ export class DatabaseStorage implements IStorage {
 
   // Search operations
   async searchContent(query: SearchQuery): Promise<SearchIndex[]> {
-    const searchTerm = `%${query.query}%`;
-    
-    let whereCondition = or(
-      like(searchIndex.title, searchTerm),
-      like(searchIndex.content, searchTerm)
-    );
-    
-    if (query.type !== 'all') {
-      whereCondition = and(
-        eq(searchIndex.contentType, query.type),
-        whereCondition
+    try {
+      const searchTerm = `%${query.query}%`;
+      
+      let whereCondition = or(
+        like(searchIndex.title, searchTerm),
+        like(searchIndex.content, searchTerm)
       );
+      
+      if (query.type !== 'all') {
+        whereCondition = and(
+          eq(searchIndex.contentType, query.type),
+          whereCondition
+        );
+      }
+      
+      return await db
+        .select()
+        .from(searchIndex)
+        .where(whereCondition)
+        .orderBy(desc(searchIndex.updatedAt))
+        .limit(query.limit || 10);
+    } catch (error) {
+      console.error('Database error searching content:', error);
+      throw new Error('Failed to search content');
     }
-    
-    return await db
-      .select()
-      .from(searchIndex)
-      .where(whereCondition)
-      .orderBy(desc(searchIndex.updatedAt))
-      .limit(query.limit || 10);
   }
 
   async updateSearchIndex(contentType: string, contentId: number, title: string, content: string): Promise<void> {
-    // Remove existing entry
-    await db.delete(searchIndex).where(
-      and(
-        eq(searchIndex.contentType, contentType),
-        eq(searchIndex.contentId, contentId)
-      )
-    );
+    try {
+      // Remove existing entry
+      await db.delete(searchIndex).where(
+        and(
+          eq(searchIndex.contentType, contentType),
+          eq(searchIndex.contentId, contentId)
+        )
+      );
     
-    // Create new entry
-    await db.insert(searchIndex).values({
-      contentType,
-      contentId,
-      title,
-      content: content.substring(0, 5000), // Limit content length
-      searchVector: `${title} ${content}`.toLowerCase(),
-    });
+      // Create new entry
+      await db.insert(searchIndex).values({
+        contentType,
+        contentId,
+        title,
+        content: content.substring(0, 5000), // Limit content length
+        searchVector: `${title} ${content}`.toLowerCase(),
+      });
+    } catch (error) {
+      console.error('Database error updating search index:', error);
+      throw new Error('Failed to update search index');
+    }
   }
 
   // Payment operations

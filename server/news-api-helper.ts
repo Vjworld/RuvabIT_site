@@ -35,9 +35,14 @@ export async function fetchTechnologyNews(rapidApiKey: string, rapidApiHost: str
       console.log(`${url} - Status: ${response.status}`);
 
       if (response.status === 200) {
-        const data = await response.json();
-        console.log(`Success with: ${url}`);
-        return { success: true, data, url };
+        try {
+          const data = await response.json();
+          console.log(`Success with: ${url}`);
+          return { success: true, data, url };
+        } catch (jsonError) {
+          console.warn(`JSON parsing error for ${url}:`, jsonError);
+          continue;
+        }
       } else if (response.status === 401) {
         return {
           success: false,
@@ -62,6 +67,13 @@ export async function fetchTechnologyNews(rapidApiKey: string, rapidApiHost: str
       }
     } catch (error) {
       console.log(`Error testing ${url}:`, error);
+      
+      // If this is a network error or timeout, we should handle it gracefully
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.warn(`Network error for ${url}: ${error.message}`);
+      } else if (error instanceof Error) {
+        console.warn(`Request error for ${url}: ${error.message}`);
+      }
       continue;
     }
   }

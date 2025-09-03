@@ -76,6 +76,44 @@ if (import.meta.env.DEV) {
   
 }
 
+// Global error handlers to prevent unhandled rejections
+window.addEventListener('unhandledrejection', (event) => {
+  console.warn('Unhandled promise rejection caught:', event.reason);
+  
+  // Check if it's a non-critical error that can be safely ignored
+  const reason = event.reason?.toString() || '';
+  if (
+    reason.includes('WebSocket') ||
+    reason.includes('analytics') ||
+    reason.includes('gtag') ||
+    reason.includes('google') ||
+    reason.includes('Failed to fetch')
+  ) {
+    // Prevent these non-critical errors from showing in console
+    event.preventDefault();
+    return;
+  }
+  
+  // Allow other errors to be logged normally
+});
+
+window.addEventListener('error', (event) => {
+  console.warn('Global error caught:', event.error);
+  
+  // Check if it's a non-critical error
+  const errorMsg = event.error?.message || event.message || '';
+  if (
+    errorMsg.includes('WebSocket') ||
+    errorMsg.includes('analytics') ||
+    errorMsg.includes('gtag') ||
+    errorMsg.includes('google')
+  ) {
+    // Prevent these non-critical errors from causing issues
+    event.preventDefault();
+    return;
+  }
+});
+
 // Service Worker registration for monetization
 // Only register in production, not in development
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
