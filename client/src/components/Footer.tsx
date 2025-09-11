@@ -77,6 +77,18 @@ function Footer() {
                   />
                 </a>
               </div>
+              <div>
+                <a href="https://www.producthunt.com/products/agehealthy?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-agehealthy" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1014512&theme=light&t=1757611487571" 
+                    alt="AgeHealthy - Age smarter, live healthier | Product Hunt" 
+                    style={{width: '250px', height: '54px'}} 
+                    width="250" 
+                    height="54"
+                    className="hover:opacity-90 transition-opacity"
+                  />
+                </a>
+              </div>
             </div>
           </div>
           
