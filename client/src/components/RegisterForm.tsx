@@ -111,6 +111,7 @@ export function RegisterForm({
                       <Input
                         placeholder="John"
                         {...field}
+                        value={field.value || ''}
                         disabled={registerMutation.isPending}
                         data-testid="input-firstname"
                       />
@@ -129,6 +130,7 @@ export function RegisterForm({
                       <Input
                         placeholder="Doe"
                         {...field}
+                        value={field.value || ''}
                         disabled={registerMutation.isPending}
                         data-testid="input-lastname"
                       />
@@ -176,6 +178,7 @@ export function RegisterForm({
                         placeholder="john@example.com"
                         className="pl-10"
                         {...field}
+                        value={field.value || ''}
                         disabled={registerMutation.isPending}
                         data-testid="input-email"
                       />
