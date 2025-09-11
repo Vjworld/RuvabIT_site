@@ -4,10 +4,13 @@ import {
   type NewsletterLead, type InsertNewsletterLead, type Order, type InsertOrder,
   type Payment, type InsertPayment, type ReferralPartner, type InsertReferralPartner,
   type NewsCache, type InsertNewsCache, type NewsArchive, type InsertNewsArchive,
-  type NewsSourceStats, type InsertNewsSourceStats
+  type NewsSourceStats, type InsertNewsSourceStats,
+  type SubscriptionPlan, type InsertSubscriptionPlan, 
+  type UserSubscription, type InsertUserSubscription,
+  type SubscriptionPayment, type InsertSubscriptionPayment
 } from "@shared/schema";
 import { db } from "./db";
-import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache, newsArchive, newsSourceStats } from "@shared/schema";
+import { users, blogPosts, pageContents, searchIndex, newsletterLeads, orders, payments, referralPartners, newsCache, newsArchive, newsSourceStats, subscriptionPlans, userSubscriptions, subscriptionPayments } from "@shared/schema";
 import { eq, like, or, desc, and, lt, sql } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
@@ -80,6 +83,24 @@ export interface IStorage {
   updateSourceStats(sourceName: string, apiProvider: string, success: boolean, responseTime?: number): Promise<void>;
   getSourceStats(apiProvider?: string): Promise<NewsSourceStats[]>;
   getSourceStatsByName(sourceName: string, apiProvider: string): Promise<NewsSourceStats | undefined>;
+
+  // Subscription plans operations
+  getSubscriptionPlans(): Promise<SubscriptionPlan[]>;
+  getSubscriptionPlan(id: number): Promise<SubscriptionPlan | undefined>;
+  createSubscriptionPlan(insertPlan: InsertSubscriptionPlan): Promise<SubscriptionPlan>;
+
+  // User subscriptions operations
+  getUserSubscriptions(userId: number): Promise<UserSubscription[]>;
+  getUserActiveSubscription(userId: number): Promise<UserSubscription | undefined>;
+  getUserSubscription(id: number): Promise<UserSubscription | undefined>;
+  createUserSubscription(insertSubscription: InsertUserSubscription): Promise<UserSubscription>;
+  updateUserSubscription(id: number, updates: Partial<InsertUserSubscription>): Promise<UserSubscription | undefined>;
+
+  // Subscription payments operations
+  getSubscriptionPayments(subscriptionId: number): Promise<SubscriptionPayment[]>;
+  getUserPaymentHistory(userId: number): Promise<SubscriptionPayment[]>;
+  createSubscriptionPayment(insertPayment: InsertSubscriptionPayment): Promise<SubscriptionPayment>;
+  updateSubscriptionPayment(id: number, updates: Partial<InsertSubscriptionPayment>): Promise<SubscriptionPayment | undefined>;
 
   // Initialize default data
   initializeDefaultData(): Promise<void>;
@@ -1082,6 +1103,110 @@ export class DatabaseStorage implements IStorage {
       console.error("Error fetching source stats by name:", error);
       throw error;
     }
+  }
+
+  // Subscription Plans operations
+  async getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
+    return await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.isActive, true)).orderBy(subscriptionPlans.sortOrder);
+  }
+
+  async getSubscriptionPlan(id: number): Promise<SubscriptionPlan | undefined> {
+    const [plan] = await db.select().from(subscriptionPlans).where(eq(subscriptionPlans.id, id));
+    return plan;
+  }
+
+  async createSubscriptionPlan(insertPlan: InsertSubscriptionPlan): Promise<SubscriptionPlan> {
+    const [plan] = await db
+      .insert(subscriptionPlans)
+      .values({
+        ...insertPlan,
+        updatedAt: new Date(),
+      })
+      .returning();
+    return plan;
+  }
+
+  // User Subscriptions operations
+  async getUserSubscriptions(userId: number): Promise<UserSubscription[]> {
+    return await db
+      .select()
+      .from(userSubscriptions)
+      .where(eq(userSubscriptions.userId, userId))
+      .orderBy(desc(userSubscriptions.createdAt));
+  }
+
+  async getUserActiveSubscription(userId: number): Promise<UserSubscription | undefined> {
+    const [subscription] = await db
+      .select()
+      .from(userSubscriptions)
+      .where(and(eq(userSubscriptions.userId, userId), eq(userSubscriptions.status, 'active')))
+      .orderBy(desc(userSubscriptions.createdAt))
+      .limit(1);
+    return subscription;
+  }
+
+  async getUserSubscription(id: number): Promise<UserSubscription | undefined> {
+    const [subscription] = await db.select().from(userSubscriptions).where(eq(userSubscriptions.id, id));
+    return subscription;
+  }
+
+  async createUserSubscription(insertSubscription: InsertUserSubscription): Promise<UserSubscription> {
+    const [subscription] = await db
+      .insert(userSubscriptions)
+      .values({
+        ...insertSubscription,
+        updatedAt: new Date(),
+      })
+      .returning();
+    return subscription;
+  }
+
+  async updateUserSubscription(id: number, updates: Partial<InsertUserSubscription>): Promise<UserSubscription | undefined> {
+    const [subscription] = await db
+      .update(userSubscriptions)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(userSubscriptions.id, id))
+      .returning();
+    return subscription;
+  }
+
+  // Subscription Payments operations
+  async getSubscriptionPayments(subscriptionId: number): Promise<SubscriptionPayment[]> {
+    return await db
+      .select()
+      .from(subscriptionPayments)
+      .where(eq(subscriptionPayments.subscriptionId, subscriptionId))
+      .orderBy(desc(subscriptionPayments.createdAt));
+  }
+
+  async getUserPaymentHistory(userId: number): Promise<SubscriptionPayment[]> {
+    return await db
+      .select()
+      .from(subscriptionPayments)
+      .innerJoin(userSubscriptions, eq(subscriptionPayments.subscriptionId, userSubscriptions.id))
+      .where(eq(userSubscriptions.userId, userId))
+      .orderBy(desc(subscriptionPayments.createdAt))
+      .then(results => results.map(result => result.subscription_payments));
+  }
+
+  async createSubscriptionPayment(insertPayment: InsertSubscriptionPayment): Promise<SubscriptionPayment> {
+    const [payment] = await db
+      .insert(subscriptionPayments)
+      .values(insertPayment)
+      .returning();
+    return payment;
+  }
+
+  async updateSubscriptionPayment(id: number, updates: Partial<InsertSubscriptionPayment>): Promise<SubscriptionPayment | undefined> {
+    const [payment] = await db
+      .update(subscriptionPayments)
+      .set(updates)
+      .where(eq(subscriptionPayments.id, id))
+      .returning();
+    return payment;
   }
 }
 

@@ -6,8 +6,9 @@ import { fetchTechnologyNews } from "./news-api-helper";
 import { fetchNewsAPIaiData } from "./newsapi-ai-helper";
 import { archiveNewsArticles } from "./news-archive-helper";
 import { insertReferralPartnerSchema } from "@shared/schema";
-import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema } from "@shared/schema";
+import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema, insertUserSubscriptionSchema, insertSubscriptionPaymentSchema } from "@shared/schema";
 import bcrypt from "bcrypt";
+import { z } from "zod";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import sgMail from '@sendgrid/mail';
@@ -1631,6 +1632,362 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting referral partner:", error);
       res.status(500).json({ error: "Failed to delete referral partner" });
+    }
+  });
+
+  // Subscription API routes
+  
+  // Validation schemas for subscription routes
+  const createSubscriptionSchema = z.object({
+    planId: z.number().int().positive("Plan ID must be a positive integer")
+  });
+
+  const subscriptionPaymentCreateSchema = z.object({
+    subscriptionId: z.number().int().positive("Subscription ID must be a positive integer")
+  });
+
+  const subscriptionPaymentVerifySchema = z.object({
+    razorpay_order_id: z.string().min(1, "Razorpay order ID is required"),
+    razorpay_payment_id: z.string().min(1, "Razorpay payment ID is required"),
+    razorpay_signature: z.string().min(1, "Razorpay signature is required"),
+    orderId: z.string().min(1, "Order ID is required"),
+    subscriptionId: z.number().int().positive("Subscription ID must be a positive integer")
+  });
+  
+  // Get all subscription plans
+  app.get("/api/subscriptions/plans", async (req, res) => {
+    try {
+      const plans = await storage.getSubscriptionPlans();
+      res.json(plans);
+    } catch (error) {
+      console.error("Error fetching subscription plans:", error);
+      res.status(500).json({ error: "Failed to fetch subscription plans" });
+    }
+  });
+
+  // Get specific subscription plan
+  app.get("/api/subscriptions/plans/:id", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.id);
+      const plan = await storage.getSubscriptionPlan(planId);
+      
+      if (!plan) {
+        return res.status(404).json({ error: "Subscription plan not found" });
+      }
+      
+      res.json(plan);
+    } catch (error) {
+      console.error("Error fetching subscription plan:", error);
+      res.status(500).json({ error: "Failed to fetch subscription plan" });
+    }
+  });
+
+  // Create subscription (requires authentication)
+  app.post("/api/subscriptions/create", requireAuth, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+
+      // Validate request body using Zod schema
+      const validation = createSubscriptionSchema.safeParse({
+        planId: parseInt(req.body.planId)
+      });
+
+      if (!validation.success) {
+        return res.status(400).json({ 
+          error: "Invalid request data",
+          details: validation.error.errors.map(err => err.message)
+        });
+      }
+
+      const { planId: numericPlanId } = validation.data;
+
+      // Check if plan exists and get server-side pricing
+      const plan = await storage.getSubscriptionPlan(numericPlanId);
+      if (!plan || !plan.isActive) {
+        return res.status(404).json({ error: "Subscription plan not found or inactive" });
+      }
+
+      // SECURITY FIX: Server derives price from plan data - NO client input accepted
+      const serverAgreedPrice = plan.priceMin; // Price in paise from server-side plan data (using minimum price for fixed plans)
+
+      // Check if user already has an active subscription
+      const existingSubscription = await storage.getUserActiveSubscription(userId);
+      if (existingSubscription) {
+        return res.status(400).json({ error: "User already has an active subscription" });
+      }
+
+      // Calculate next billing date based on plan type
+      const nextBillingDate = plan.billingInterval === 'monthly' 
+        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+        : null;
+
+      // Create subscription with server-derived pricing only
+      const subscription = await storage.createUserSubscription({
+        userId,
+        planId: numericPlanId,
+        status: 'pending',
+        agreedPrice: serverAgreedPrice, // SERVER-SIDE PRICING ONLY - prevents tampering
+        currency: 'INR',
+        billingInterval: plan.billingInterval,
+        nextBillingDate,
+        metadata: { createdVia: 'web', planName: plan.name }
+      });
+
+      res.status(201).json({
+        success: true,
+        subscription: {
+          id: subscription.id,
+          planId: subscription.planId,
+          status: subscription.status,
+          agreedPrice: subscription.agreedPrice,
+          currency: subscription.currency,
+          billingInterval: subscription.billingInterval,
+          nextBillingDate: subscription.nextBillingDate
+        },
+        plan: {
+          name: plan.name,
+          description: plan.description,
+          priceMin: plan.priceMin,
+          priceMax: plan.priceMax
+        },
+        message: "Subscription created successfully"
+      });
+    } catch (error) {
+      console.error("Error creating subscription:", error);
+      res.status(500).json({ error: "Failed to create subscription" });
+    }
+  });
+
+  // Create subscription payment order
+  app.post("/api/subscriptions/payment/create", requireAuth, async (req, res) => {
+    try {
+      if (!razorpay || !razorpayInitialized) {
+        return res.status(503).json({ 
+          error: "Payment service not available",
+          message: "Razorpay is not configured. Please contact support."
+        });
+      }
+
+      const userId = req.session!.userId!;
+
+      // Validate request body using Zod schema
+      const validation = subscriptionPaymentCreateSchema.safeParse({
+        subscriptionId: parseInt(req.body.subscriptionId)
+      });
+
+      if (!validation.success) {
+        return res.status(400).json({ 
+          error: "Invalid request data",
+          details: validation.error.errors.map(err => err.message)
+        });
+      }
+
+      const { subscriptionId } = validation.data;
+
+      // Get subscription and verify ownership
+      const subscription = await storage.getUserSubscription(subscriptionId);
+      if (!subscription || subscription.userId !== userId) {
+        return res.status(404).json({ error: "Subscription not found" });
+      }
+
+      // Get plan details
+      const plan = await storage.getSubscriptionPlan(subscription.planId);
+      if (!plan) {
+        return res.status(404).json({ error: "Subscription plan not found" });
+      }
+
+      // Generate unique order ID
+      const orderId = `SUB_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Create Razorpay order
+      const razorpayOrder = await razorpay.orders.create({
+        amount: subscription.agreedPrice, // Amount already in paise
+        currency: 'INR',
+        receipt: orderId,
+        notes: {
+          subscriptionId: subscription.id.toString(),
+          userId: userId.toString(),
+          planName: plan.name
+        }
+      });
+
+      // Create order in database
+      const order = await storage.createOrder({
+        orderId,
+        amount: subscription.agreedPrice,
+        currency: 'INR',
+        status: 'created',
+        customerEmail: '', // Will be filled from user data
+        serviceType: `subscription_${plan.planType}`,
+        description: `Subscription to ${plan.name} plan`,
+        razorpayOrderId: razorpayOrder.id,
+      });
+
+      res.json({
+        success: true,
+        orderId: order.orderId,
+        razorpayOrderId: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        key: process.env.RAZORPAY_KEY_ID,
+        subscription: {
+          id: subscription.id,
+          planName: plan.name,
+          amount: subscription.agreedPrice
+        }
+      });
+
+    } catch (error) {
+      console.error('Create subscription payment error:', error);
+      res.status(500).json({ error: "Failed to create subscription payment" });
+    }
+  });
+
+  // Verify subscription payment
+  app.post("/api/subscriptions/payment/verify", requireAuth, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+
+      // Validate request body using Zod schema
+      const validation = subscriptionPaymentVerifySchema.safeParse({
+        razorpay_order_id: req.body.razorpay_order_id,
+        razorpay_payment_id: req.body.razorpay_payment_id,
+        razorpay_signature: req.body.razorpay_signature,
+        orderId: req.body.orderId,
+        subscriptionId: parseInt(req.body.subscriptionId)
+      });
+
+      if (!validation.success) {
+        return res.status(400).json({ 
+          error: "Invalid payment verification data",
+          details: validation.error.errors.map(err => err.message)
+        });
+      }
+
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orderId, subscriptionId } = validation.data;
+
+      // Verify signature
+      const secret = process.env.RAZORPAY_KEY_SECRET;
+      if (!secret) {
+        return res.status(500).json({ error: "Payment verification not configured" });
+      }
+      
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(body.toString())
+        .digest('hex');
+
+      if (expectedSignature !== razorpay_signature) {
+        return res.status(400).json({ error: "Invalid payment signature" });
+      }
+
+      if (!razorpay) {
+        return res.status(500).json({ error: "Payment gateway not configured" });
+      }
+
+      // Get payment details from Razorpay
+      const payment = await razorpay.payments.fetch(razorpay_payment_id);
+
+      // Update order status
+      await storage.updateOrder(orderId, {
+        status: 'paid',
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+      });
+
+      // Get subscription and update status to active
+      const subscription = await storage.getUserSubscription(subscriptionId);
+      if (subscription && subscription.userId === userId) {
+        await storage.updateUserSubscription(subscriptionId, {
+          status: 'active',
+          startDate: new Date(),
+          razorpaySubscriptionId: razorpay_payment_id // Use payment ID as reference
+        });
+
+        // Create subscription payment record
+        await storage.createSubscriptionPayment({
+          subscriptionId: subscriptionId,
+          amount: typeof payment.amount === 'string' ? parseInt(payment.amount) : payment.amount,
+          currency: payment.currency,
+          status: 'success',
+          razorpayPaymentId: razorpay_payment_id,
+          razorpayOrderId: razorpay_order_id,
+          paymentMethod: payment.method,
+          billingPeriodStart: new Date(),
+          billingPeriodEnd: subscription.nextBillingDate,
+          paidAt: new Date()
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Subscription payment verified successfully",
+        paymentId: razorpay_payment_id,
+      });
+
+    } catch (error) {
+      console.error('Subscription payment verification error:', error);
+      res.status(500).json({ error: "Failed to verify subscription payment" });
+    }
+  });
+
+  // Get user subscriptions (requires authentication)
+  app.get("/api/subscriptions/my", requireAuth, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const subscriptions = await storage.getUserSubscriptions(userId);
+      res.json(subscriptions);
+    } catch (error) {
+      console.error("Error fetching user subscriptions:", error);
+      res.status(500).json({ error: "Failed to fetch subscriptions" });
+    }
+  });
+
+  // Get user payment history (requires authentication)
+  app.get("/api/subscriptions/payments", requireAuth, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const payments = await storage.getUserPaymentHistory(userId);
+      res.json(payments);
+    } catch (error) {
+      console.error("Error fetching payment history:", error);
+      res.status(500).json({ error: "Failed to fetch payment history" });
+    }
+  });
+
+  // Cancel subscription (requires authentication)
+  app.post("/api/subscriptions/:id/cancel", requireAuth, async (req, res) => {
+    try {
+      const subscriptionId = parseInt(req.params.id);
+      const userId = req.session!.userId!;
+      const { cancelReason } = req.body;
+
+      // Get subscription and verify ownership
+      const subscription = await storage.getUserSubscription(subscriptionId);
+      if (!subscription || subscription.userId !== userId) {
+        return res.status(404).json({ error: "Subscription not found" });
+      }
+
+      if (subscription.status === 'cancelled') {
+        return res.status(400).json({ error: "Subscription is already cancelled" });
+      }
+
+      // Update subscription status
+      const updatedSubscription = await storage.updateUserSubscription(subscriptionId, {
+        status: 'cancelled',
+        cancelReason: cancelReason || 'User requested cancellation',
+        cancelledAt: new Date()
+      });
+
+      res.json({
+        success: true,
+        subscription: updatedSubscription,
+        message: "Subscription cancelled successfully"
+      });
+    } catch (error) {
+      console.error("Error cancelling subscription:", error);
+      res.status(500).json({ error: "Failed to cancel subscription" });
     }
   });
 
