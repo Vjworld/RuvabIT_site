@@ -35,6 +35,7 @@ function Header() {
         { name: 'LangScribe', href: '/langscribe' },
         { name: 'FYPPAL', href: '/fyppal' },
         { name: 'QR Gen Pro', href: 'https://qr-gen.ruvab.it.com', external: true },
+        { name: 'AgeHealthy', href: 'https://agehealthy.in/', external: true },
       ]
     },
     { 

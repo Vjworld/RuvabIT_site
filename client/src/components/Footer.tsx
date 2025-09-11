@@ -99,6 +99,7 @@ function Footer() {
               <li><Link href="/langscribe"><span className="hover:text-white transition-colors cursor-pointer">LangScribe</span></Link></li>
               <li><Link href="/fyppal"><span className="hover:text-white transition-colors cursor-pointer">FYPPAL</span></Link></li>
               <li><a href="https://qr-gen.ruvab.it.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">QR Gen Pro</a></li>
+              <li><a href="https://agehealthy.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">AgeHealthy</a></li>
               <li><Link href="/ai-analytics"><span className="hover:text-white transition-colors cursor-pointer">AI Analytics</span></Link></li>
             </ul>
           </div>
