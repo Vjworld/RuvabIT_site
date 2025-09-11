@@ -273,6 +273,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User registration route with security hardening
+  app.post("/api/auth/register", rateLimiter(5, 300000), async (req, res) => {
+    try {
+      // Sanitize input data
+      if (req.body.username) req.body.username = sanitizeInput(req.body.username);
+      if (req.body.email) req.body.email = sanitizeInput(req.body.email);
+      if (req.body.firstName) req.body.firstName = sanitizeInput(req.body.firstName);
+      if (req.body.lastName) req.body.lastName = sanitizeInput(req.body.lastName);
+
+      // Validate using Zod schema
+      const result = insertUserSchema.safeParse({
+        ...req.body,
+        isAdmin: false, // Ensure non-admin registration
+      });
+      
+      if (!result.success) {
+        return res.status(400).json({ 
+          message: "Invalid registration data", 
+          errors: result.error.errors.map(e => ({ 
+            field: e.path.join('.'), 
+            message: e.message 
+          }))
+        });
+      }
+
+      const user = await storage.createUser(result.data);
+
+      // Auto-login after successful registration
+      req.session.userId = user.id;
+      req.session.isAdmin = user.isAdmin;
+
+      res.status(201).json({
+        success: true,
+        message: "Account created successfully",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isAdmin: user.isAdmin,
+        },
+      });
+    } catch (error) {
+      console.error("Registration error:", maskPII(error));
+      if (error instanceof Error && error.message === "Username or email already exists") {
+        return res.status(409).json({ message: "Username or email already exists" });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   app.post("/api/auth/logout", (req, res) => {
     req.session.destroy((err) => {
       if (err) {
