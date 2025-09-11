@@ -106,6 +106,7 @@ function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/about"><span className="hover:text-white transition-colors cursor-pointer">About Us</span></Link></li>
               <li><Link href="/blog"><span className="hover:text-white transition-colors cursor-pointer">Blog</span></Link></li>
+              <li><Link href="/pricing"><span className="hover:text-white transition-colors cursor-pointer">Pricing</span></Link></li>
               <li><Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer">Contact</span></Link></li>
               {/* <li><Link href="/careers"><span className="hover:text-white transition-colors cursor-pointer">Careers</span></Link></li> */}
             </ul>
