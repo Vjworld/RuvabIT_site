@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'wouter';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -346,12 +347,16 @@ const PricingPage = () => {
             Contact us to discuss your specific needs and get a customized quote based on your website's authority and target audience.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" data-testid="button-contact-sales">
-              Contact for Custom Quote
-            </Button>
-            <Button size="lg" variant="outline" data-testid="button-view-portfolio">
-              View Sample Work
-            </Button>
+            <Link href="/contact">
+              <Button size="lg" data-testid="button-contact-sales">
+                Contact for Custom Quote
+              </Button>
+            </Link>
+            <Link href="/trend-solver">
+              <Button size="lg" variant="outline" data-testid="button-view-portfolio">
+                View Sample Work
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
