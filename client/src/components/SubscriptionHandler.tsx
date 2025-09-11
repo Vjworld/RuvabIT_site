@@ -181,24 +181,10 @@ export function SubscriptionHandler({ planId, planName, onSuccess }: Subscriptio
     }
   };
 
-  const formatPrice = (min: number, max?: number) => {
-    const formatAmount = (amount: number) => `₹${(amount / 100).toLocaleString('en-IN')}`;
-    
-    if (max && max !== min) {
-      return `${formatAmount(min)} - ${formatAmount(max)}`;
-    }
-    return formatAmount(min);
-  };
 
   return (
     <>
       <div className="text-center">
-        {plan && (
-          <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Price: {formatPrice(plan.priceMin, plan.priceMax || undefined)} / {plan.billingInterval}
-          </div>
-        )}
-        
         <button
           onClick={handleSubscribe}
           disabled={isProcessing || planLoading || createSubscriptionMutation.isPending || createPaymentMutation.isPending}
