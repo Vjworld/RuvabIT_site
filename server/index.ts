@@ -66,6 +66,18 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Global error handlers to prevent application crashes
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    console.error('Stack:', error.stack);
+    // Don't exit the process, just log the error
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't exit the process, just log the error
+  });
+
   try {
     // Validate critical environment variables first
     const requiredEnvVars = ['DATABASE_URL', 'SESSION_SECRET'];

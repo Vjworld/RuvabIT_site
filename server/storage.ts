@@ -153,6 +153,11 @@ export class DatabaseStorage implements IStorage {
         .orderBy(desc(blogPosts.publishedAt));
     } catch (error) {
       console.error('Database error fetching blog posts:', error);
+      // If database connection failed, return empty array instead of crashing
+      if (error && typeof error === 'object' && 'code' in error && error.code === '57P01') {
+        console.warn('Database connection terminated, returning empty blog posts array');
+        return [];
+      }
       throw new Error('Failed to fetch blog posts');
     }
   }
