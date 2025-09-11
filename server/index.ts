@@ -1,4 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
+import fs from "fs";
+import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
@@ -116,6 +118,11 @@ app.use((req, res, next) => {
     // Setup Vite AFTER all other routes so the catch-all route
     // doesn't interfere with our QR proxy or API routes
     if (app.get("env") === "development") {
+      // Serve static files in development mode too (for ads.txt, robots.txt, etc.)
+      const distPath = path.resolve(import.meta.dirname, "public");
+      if (fs.existsSync(distPath)) {
+        app.use(express.static(distPath));
+      }
       await setupVite(app, server);
     } else {
       serveStatic(app);
