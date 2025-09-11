@@ -349,6 +349,147 @@ export const insertNewsSourceStatsSchema = createInsertSchema(newsSourceStats).o
   updatedAt: true,
 });
 
+// Subscription Plans table
+export const subscriptionPlans = pgTable("subscription_plans", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(), // Starter, Professional, Bronze, Silver, Gold
+  planType: varchar("plan_type", { length: 50 }).notNull(), // monthly, tiered, per_post
+  priceMin: integer("price_min").notNull(), // Price in INR paise, minimum for ranges
+  priceMax: integer("price_max"), // Maximum for ranges in INR paise, null for fixed pricing
+  currency: varchar("currency", { length: 3 }).default("INR"),
+  billingInterval: varchar("billing_interval", { length: 20 }).default("monthly"), // monthly, one_time
+  description: text("description").notNull(),
+  features: jsonb("features").notNull(), // Array of feature strings
+  
+  // Razorpay plan tracking
+  razorpayPlanId: varchar("razorpay_plan_id", { length: 255 }),
+  
+  isActive: boolean("is_active").default(true).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  // Unique constraints for Razorpay integration
+  uniqueIndex("subscription_plans_razorpay_plan_id_unique").on(table.razorpayPlanId),
+  // Validation constraints
+  // priceMin must be > 0
+  // priceMax must be >= priceMin when not null
+]);
+
+// User Subscriptions table
+export const userSubscriptions = pgTable("user_subscriptions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  planId: integer("plan_id").notNull().references(() => subscriptionPlans.id),
+  status: varchar("status", { length: 50 }).default("pending"), // active, cancelled, expired, pending
+  agreedPrice: integer("agreed_price").notNull(), // Final agreed price in INR paise
+  currency: varchar("currency", { length: 3 }).default("INR"),
+  billingInterval: varchar("billing_interval", { length: 20 }).default("monthly"),
+  
+  // Billing dates
+  startDate: timestamp("start_date").defaultNow().notNull(),
+  endDate: timestamp("end_date"), // For fixed-term subscriptions
+  nextBillingDate: timestamp("next_billing_date"),
+  lastBillingDate: timestamp("last_billing_date"),
+  
+  // Razorpay subscription tracking
+  razorpaySubscriptionId: varchar("razorpay_subscription_id", { length: 255 }),
+  
+  // Metadata
+  metadata: jsonb("metadata"), // Additional subscription details
+  cancelReason: text("cancel_reason"),
+  cancelledAt: timestamp("cancelled_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("user_subscriptions_user_idx").on(table.userId),
+  index("user_subscriptions_plan_idx").on(table.planId),
+  index("user_subscriptions_status_idx").on(table.status),
+  // Unique constraints for Razorpay integration
+  uniqueIndex("user_subscriptions_razorpay_subscription_id_unique").on(table.razorpaySubscriptionId),
+]);
+
+// Subscription Payments table - Track recurring payments
+export const subscriptionPayments = pgTable("subscription_payments", {
+  id: serial("id").primaryKey(),
+  subscriptionId: integer("subscription_id").notNull().references(() => userSubscriptions.id),
+  orderId: integer("order_id").references(() => orders.id), // Link to main orders table
+  amount: integer("amount").notNull(), // Amount in INR paise
+  currency: varchar("currency", { length: 3 }).default("INR"),
+  status: varchar("status", { length: 50 }).notNull(), // success, failed, pending, refunded
+  
+  // Razorpay payment details
+  razorpayPaymentId: varchar("razorpay_payment_id", { length: 255 }),
+  razorpayOrderId: varchar("razorpay_order_id", { length: 255 }),
+  
+  // Payment method details
+  paymentMethod: varchar("payment_method", { length: 50 }), // card, netbanking, wallet, upi
+  paymentDetails: jsonb("payment_details"), // Additional payment method info
+  
+  // Billing period info
+  billingPeriodStart: timestamp("billing_period_start"),
+  billingPeriodEnd: timestamp("billing_period_end"),
+  
+  // Failure handling
+  failureReason: text("failure_reason"),
+  retryCount: integer("retry_count").default(0),
+  nextRetryAt: timestamp("next_retry_at"),
+  
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("subscription_payments_subscription_idx").on(table.subscriptionId),
+  index("subscription_payments_status_idx").on(table.status),
+  index("subscription_payments_paid_at_idx").on(table.paidAt),
+]);
+
+// Subscription plan relations
+export const subscriptionPlansRelations = relations(subscriptionPlans, ({ many }) => ({
+  userSubscriptions: many(userSubscriptions),
+}));
+
+export const userSubscriptionsRelations = relations(userSubscriptions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [userSubscriptions.userId],
+    references: [users.id],
+  }),
+  plan: one(subscriptionPlans, {
+    fields: [userSubscriptions.planId],
+    references: [subscriptionPlans.id],
+  }),
+  payments: many(subscriptionPayments),
+}));
+
+export const subscriptionPaymentsRelations = relations(subscriptionPayments, ({ one }) => ({
+  subscription: one(userSubscriptions, {
+    fields: [subscriptionPayments.subscriptionId],
+    references: [userSubscriptions.id],
+  }),
+  order: one(orders, {
+    fields: [subscriptionPayments.orderId],
+    references: [orders.id],
+  }),
+}));
+
+// Subscription schemas
+export const insertSubscriptionPlanSchema = createInsertSchema(subscriptionPlans).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertUserSubscriptionSchema = createInsertSchema(userSubscriptions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertSubscriptionPaymentSchema = createInsertSchema(subscriptionPayments).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertNewsletterLeadData = z.infer<typeof insertNewsletterLeadSchema>;
 export type Order = typeof orders.$inferSelect;
 export type InsertOrder = z.infer<typeof insertOrderSchema>;
@@ -372,3 +513,11 @@ export type NewsArchive = typeof newsArchive.$inferSelect;
 export type InsertNewsArchive = z.infer<typeof insertNewsArchiveSchema>;
 export type NewsSourceStats = typeof newsSourceStats.$inferSelect;
 export type InsertNewsSourceStats = z.infer<typeof insertNewsSourceStatsSchema>;
+
+// Subscription type exports
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+export type InsertSubscriptionPlan = z.infer<typeof insertSubscriptionPlanSchema>;
+export type UserSubscription = typeof userSubscriptions.$inferSelect;
+export type InsertUserSubscription = z.infer<typeof insertUserSubscriptionSchema>;
+export type SubscriptionPayment = typeof subscriptionPayments.$inferSelect;
+export type InsertSubscriptionPayment = z.infer<typeof insertSubscriptionPaymentSchema>;
