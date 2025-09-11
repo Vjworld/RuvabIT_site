@@ -48,6 +48,7 @@ import LiveChat from "./pages/LiveChat";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
 import APIDocumentationPortal from "./pages/APIDocumentationPortal";
 import AdvancedFeaturesHub from "./pages/AdvancedFeaturesHub";
+import PricingPage from "./pages/PricingPage";
 import ChatWidget from "./components/ChatWidget";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -103,6 +104,7 @@ function Router() {
       <Route path="/about" component={AboutPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/services" component={ServicesPage} />
+      <Route path="/pricing" component={PricingPage} />
 
       {/* Product Pages */}
       <Route path="/trend-solver" component={TrendSolver} />
