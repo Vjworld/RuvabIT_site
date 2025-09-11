@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { SubscriptionHandler } from '@/components/SubscriptionHandler';
 import { Check, Star, Zap, Target } from 'lucide-react';
 
 const PricingPage = () => {
@@ -165,9 +166,10 @@ const PricingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"} data-testid={`button-select-${plan.name.toLowerCase()}`}>
-                    Get Started
-                  </Button>
+                  <SubscriptionHandler 
+                    planId={plan.name === 'Starter' ? 1 : 2} 
+                    planName={plan.name}
+                  />
                 </CardContent>
               </Card>
             ))}
@@ -213,9 +215,10 @@ const PricingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"} data-testid={`button-select-${plan.name.toLowerCase()}-tier`}>
-                    Choose {plan.name}
-                  </Button>
+                  <SubscriptionHandler 
+                    planId={plan.name === 'Bronze' ? 3 : plan.name === 'Silver' ? 4 : 5} 
+                    planName={plan.name}
+                  />
                 </CardContent>
               </Card>
             ))}
@@ -270,9 +273,10 @@ const PricingPage = () => {
                   </div>
                 </div>
                 <div className="mt-8 text-center">
-                  <Button size="lg" data-testid="button-select-per-post">
-                    Request Custom Quote
-                  </Button>
+                  <SubscriptionHandler 
+                    planId={6} 
+                    planName="Per-Post Service"
+                  />
                 </div>
               </CardContent>
             </Card>
