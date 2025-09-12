@@ -382,7 +382,10 @@ export const userSubscriptions = pgTable("user_subscriptions", {
   userId: integer("user_id").notNull().references(() => users.id),
   planId: integer("plan_id").notNull().references(() => subscriptionPlans.id),
   status: varchar("status", { length: 50 }).default("pending"), // active, cancelled, expired, pending
-  agreedPrice: integer("agreed_price").notNull(), // Final agreed price in INR paise
+  agreedPrice: integer("agreed_price").notNull(), // Base price in INR paise (before GST)
+  totalPrice: integer("total_price").notNull(), // Total price including GST in INR paise
+  gstAmount: integer("gst_amount").notNull(), // GST amount in INR paise
+  gstRate: decimal("gst_rate", { precision: 5, scale: 2 }).default("18.00"), // GST rate percentage (18%)
   currency: varchar("currency", { length: 3 }).default("INR"),
   billingInterval: varchar("billing_interval", { length: 20 }).default("monthly"),
   
@@ -415,7 +418,10 @@ export const subscriptionPayments = pgTable("subscription_payments", {
   id: serial("id").primaryKey(),
   subscriptionId: integer("subscription_id").notNull().references(() => userSubscriptions.id),
   orderId: integer("order_id").references(() => orders.id), // Link to main orders table
-  amount: integer("amount").notNull(), // Amount in INR paise
+  amount: integer("amount").notNull(), // Total amount in INR paise (includes GST)
+  baseAmount: integer("base_amount"), // Base amount before tax in INR paise
+  gstAmount: integer("gst_amount"), // GST amount in INR paise
+  gstRate: decimal("gst_rate", { precision: 5, scale: 2 }).default("18.00"), // GST rate percentage (18%)
   currency: varchar("currency", { length: 3 }).default("INR"),
   status: varchar("status", { length: 50 }).notNull(), // success, failed, pending, refunded
   
