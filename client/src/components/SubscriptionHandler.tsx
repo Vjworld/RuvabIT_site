@@ -182,9 +182,53 @@ export function SubscriptionHandler({ planId, planName, onSuccess }: Subscriptio
   };
 
 
+  // Helper function to calculate GST breakdown for display
+  const calculateGSTBreakdown = (baseAmount: number) => {
+    const gstAmount = Math.round(baseAmount * 0.18); // 18% GST
+    const totalAmount = baseAmount + gstAmount;
+    return { baseAmount, gstAmount, totalAmount };
+  };
+
+  const formatIndianCurrency = (amountInPaise: number) => {
+    return `₹${(amountInPaise / 100).toLocaleString('en-IN')}`;
+  };
+
   return (
     <>
       <div className="text-center">
+        {plan && (
+          <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              <strong>{plan.name} Plan</strong> - {plan.billingInterval}
+            </div>
+            {(() => {
+              const breakdown = calculateGSTBreakdown(plan.priceMin);
+              return (
+                <div className="text-sm space-y-1">
+                  <div className="flex justify-between">
+                    <span>Base Price:</span>
+                    <span>{formatIndianCurrency(breakdown.baseAmount)}</span>
+                  </div>
+                  <div className="flex justify-between text-orange-600 dark:text-orange-400">
+                    <span>GST (18%):</span>
+                    <span>+ {formatIndianCurrency(breakdown.gstAmount)}</span>
+                  </div>
+                  <hr className="border-gray-300 dark:border-gray-600" />
+                  <div className="flex justify-between font-semibold text-lg">
+                    <span>Total Amount:</span>
+                    <span className="text-green-600 dark:text-green-400">
+                      {formatIndianCurrency(breakdown.totalAmount)}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    *GST included as per Indian tax regulations
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
+        
         <button
           onClick={handleSubscribe}
           disabled={isProcessing || planLoading || createSubscriptionMutation.isPending || createPaymentMutation.isPending}

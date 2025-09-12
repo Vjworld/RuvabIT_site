@@ -33,6 +33,18 @@ declare global {
   }
 }
 
+// GST calculation helper function
+function calculateGST(baseAmount: number, gstRate: number = 18): { baseAmount: number, gstAmount: number, totalAmount: number } {
+  const gstAmount = Math.round(baseAmount * (gstRate / 100));
+  const totalAmount = baseAmount + gstAmount;
+  
+  return {
+    baseAmount,
+    gstAmount,
+    totalAmount
+  };
+}
+
 // Session middleware
 const PgSession = connectPgSimple(session);
 
@@ -1708,7 +1720,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // SECURITY FIX: Server derives price from plan data - NO client input accepted
-      const serverAgreedPrice = plan.priceMin; // Price in paise from server-side plan data (using minimum price for fixed plans)
+      const basePrice = plan.priceMin; // Price in paise from server-side plan data (using minimum price for fixed plans)
+      
+      // Calculate GST (18% for digital services in India)
+      const gstCalculation = calculateGST(basePrice, 18);
 
       // Check if user already has an active subscription
       const existingSubscription = await storage.getUserActiveSubscription(userId);
@@ -1721,12 +1736,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
         : null;
 
-      // Create subscription with server-derived pricing only
+      // Create subscription with server-derived pricing including GST
       const subscription = await storage.createUserSubscription({
         userId,
         planId: numericPlanId,
         status: 'pending',
-        agreedPrice: serverAgreedPrice, // SERVER-SIDE PRICING ONLY - prevents tampering
+        agreedPrice: gstCalculation.baseAmount, // Base price before GST - prevents tampering
+        totalPrice: gstCalculation.totalAmount, // Total price including 18% GST
+        gstAmount: gstCalculation.gstAmount, // GST amount calculated
         currency: 'INR',
         billingInterval: plan.billingInterval,
         nextBillingDate,
@@ -1799,27 +1816,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate unique order ID
       const orderId = `SUB_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-      // Create Razorpay order
+      // Create Razorpay order using total price including GST
       const razorpayOrder = await razorpay.orders.create({
-        amount: subscription.agreedPrice, // Amount already in paise
+        amount: subscription.totalPrice, // Total amount including GST in paise
         currency: 'INR',
         receipt: orderId,
         notes: {
           subscriptionId: subscription.id.toString(),
           userId: userId.toString(),
-          planName: plan.name
+          planName: plan.name,
+          baseAmount: subscription.agreedPrice.toString(),
+          gstAmount: subscription.gstAmount.toString(),
+          totalAmount: subscription.totalPrice.toString()
         }
       });
 
-      // Create order in database
+      // Create order in database with total amount including GST
       const order = await storage.createOrder({
         orderId,
-        amount: subscription.agreedPrice,
+        amount: subscription.totalPrice, // Store total amount including GST
         currency: 'INR',
         status: 'created',
         customerEmail: '', // Will be filled from user data
         serviceType: `subscription_${plan.planType}`,
-        description: `Subscription to ${plan.name} plan`,
+        description: `Subscription to ${plan.name} plan (₹${subscription.agreedPrice/100} + ₹${subscription.gstAmount/100} GST)`,
         razorpayOrderId: razorpayOrder.id,
       });
 
@@ -1905,10 +1925,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           razorpaySubscriptionId: razorpay_payment_id // Use payment ID as reference
         });
 
-        // Create subscription payment record
+        // Create subscription payment record with GST breakdown
+        const paymentAmount = typeof payment.amount === 'string' ? parseInt(payment.amount) : payment.amount;
+        
         await storage.createSubscriptionPayment({
           subscriptionId: subscriptionId,
-          amount: typeof payment.amount === 'string' ? parseInt(payment.amount) : payment.amount,
+          amount: paymentAmount, // Total amount including GST
+          baseAmount: subscription.agreedPrice, // Base amount before GST
+          gstAmount: subscription.gstAmount, // GST amount
           currency: payment.currency,
           status: 'success',
           razorpayPaymentId: razorpay_payment_id,
