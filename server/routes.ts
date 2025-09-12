@@ -1757,9 +1757,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
           planId: subscription.planId,
           status: subscription.status,
           agreedPrice: subscription.agreedPrice,
+          totalPrice: subscription.totalPrice,
+          gstAmount: subscription.gstAmount,
           currency: subscription.currency,
           billingInterval: subscription.billingInterval,
           nextBillingDate: subscription.nextBillingDate
+        },
+        gstBreakdown: {
+          baseAmount: gstCalculation.baseAmount,
+          gstAmount: gstCalculation.gstAmount,
+          totalAmount: gstCalculation.totalAmount,
+          gstRate: 18,
+          note: "GST included as per Indian tax regulations"
         },
         plan: {
           name: plan.name,
