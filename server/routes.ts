@@ -7,6 +7,7 @@ import { fetchNewsAPIaiData } from "./newsapi-ai-helper";
 import { archiveNewsArticles } from "./news-archive-helper";
 import { insertReferralPartnerSchema } from "@shared/schema";
 import { insertUserSchema, insertBlogPostSchema, insertPageContentSchema, searchSchema, insertOrderSchema, insertUserSubscriptionSchema, insertSubscriptionPaymentSchema } from "@shared/schema";
+import { calculatePricingWithLocation, getTaxInfo, getTaxMessage, formatRupees } from "@shared/pricing";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import session from "express-session";
@@ -33,7 +34,7 @@ declare global {
   }
 }
 
-// GST calculation helper function
+// Legacy GST calculation helper function (kept for backward compatibility)
 function calculateGST(baseAmount: number, gstRate: number = 18): { baseAmount: number, gstAmount: number, totalAmount: number } {
   const gstAmount = Math.round(baseAmount * (gstRate / 100));
   const totalAmount = baseAmount + gstAmount;
@@ -43,6 +44,11 @@ function calculateGST(baseAmount: number, gstRate: number = 18): { baseAmount: n
     gstAmount,
     totalAmount
   };
+}
+
+// Convert pricing amounts from rupees to paise for Razorpay
+function convertToPaise(rupees: number): number {
+  return rupees * 100;
 }
 
 // Session middleware
@@ -1651,7 +1657,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Validation schemas for subscription routes
   const createSubscriptionSchema = z.object({
-    planId: z.number().int().positive("Plan ID must be a positive integer")
+    planId: z.number().int().positive("Plan ID must be a positive integer"),
+    countryCode: z.string().length(2, "Country code must be exactly 2 characters").optional().default("IN")
   });
 
   const subscriptionPaymentCreateSchema = z.object({
@@ -1701,7 +1708,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Validate request body using Zod schema
       const validation = createSubscriptionSchema.safeParse({
-        planId: parseInt(req.body.planId)
+        planId: parseInt(req.body.planId),
+        countryCode: req.body.countryCode || 'IN'
       });
 
       if (!validation.success) {
@@ -1711,7 +1719,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const { planId: numericPlanId } = validation.data;
+      const { planId: numericPlanId, countryCode } = validation.data;
 
       // Check if plan exists and get server-side pricing
       const plan = await storage.getSubscriptionPlan(numericPlanId);
@@ -1719,11 +1727,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Subscription plan not found or inactive" });
       }
 
-      // SECURITY FIX: Server derives price from plan data - NO client input accepted
-      const basePrice = plan.priceMin; // Price in paise from server-side plan data (using minimum price for fixed plans)
+      // Map plan types to pricing calculation names
+      const planTypeMapping: Record<string, string> = {
+        'monthly': 'starter',
+        'yearly': 'professional', 
+        'enterprise': 'gold',
+        'basic': 'bronze',
+        'premium': 'silver',
+        'per_post': 'per-post'
+      };
       
-      // Calculate GST (18% for digital services in India)
-      const gstCalculation = calculateGST(basePrice, 18);
+      // Get the correct plan name for pricing calculation
+      const planName = planTypeMapping[plan.planType] || 'starter';
+      
+      // SECURITY FIX: Server derives price from plan data with location-based tax calculation
+      const locationPricing = calculatePricingWithLocation(planName, countryCode);
+      const taxInfo = getTaxInfo(countryCode);
+      
+      // Convert rupees to paise for database storage (maintain existing format)
+      const basePricePaise = locationPricing.basePaise;
+      const taxPaise = locationPricing.taxPaise; 
+      const totalPricePaise = locationPricing.totalPaise;
 
       // Check if user already has an active subscription
       const existingSubscription = await storage.getUserActiveSubscription(userId);
@@ -1736,18 +1760,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
         : null;
 
-      // Create subscription with server-derived pricing including GST
+      // Create subscription with location-based tax data
       const subscription = await storage.createUserSubscription({
         userId,
         planId: numericPlanId,
         status: 'pending',
-        agreedPrice: gstCalculation.baseAmount, // Base price before GST - prevents tampering
-        totalPrice: gstCalculation.totalAmount, // Total price including 18% GST
-        gstAmount: gstCalculation.gstAmount, // GST amount calculated
+        agreedPrice: basePricePaise, // Base price before tax - prevents tampering
+        totalPrice: totalPricePaise, // Total price including location-based tax
+        gstAmount: taxPaise, // Tax amount (keeping field name for DB compatibility)
         currency: 'INR',
         billingInterval: plan.billingInterval,
         nextBillingDate,
-        metadata: { createdVia: 'web', planName: plan.name }
+        metadata: { 
+          createdVia: 'web', 
+          planName: plan.name,
+          countryCode: countryCode,
+          taxType: taxInfo.name,
+          taxRate: taxInfo.rate,
+          taxDescription: taxInfo.description
+        }
       });
 
       res.status(201).json({
@@ -1763,12 +1794,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           billingInterval: subscription.billingInterval,
           nextBillingDate: subscription.nextBillingDate
         },
-        gstBreakdown: {
-          baseAmount: gstCalculation.baseAmount,
-          gstAmount: gstCalculation.gstAmount,
-          totalAmount: gstCalculation.totalAmount,
-          gstRate: 18,
-          note: "GST included as per Indian tax regulations"
+        taxBreakdown: {
+          baseAmount: basePricePaise,
+          taxAmount: taxPaise,
+          totalAmount: totalPricePaise,
+          taxRate: taxInfo.rate,
+          taxType: taxInfo.name,
+          countryCode: countryCode,
+          note: getTaxMessage(countryCode)
         },
         plan: {
           name: plan.name,
@@ -1835,8 +1868,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId: userId.toString(),
           planName: plan.name,
           baseAmount: subscription.agreedPrice.toString(),
-          gstAmount: subscription.gstAmount.toString(),
-          totalAmount: subscription.totalPrice.toString()
+          taxAmount: subscription.gstAmount.toString(), // Using gstAmount field for tax (database compatibility)
+          totalAmount: subscription.totalPrice.toString(),
+          countryCode: (subscription.metadata && typeof subscription.metadata === 'object' && 'countryCode' in subscription.metadata) ? String(subscription.metadata.countryCode) : 'IN',
+          taxType: (subscription.metadata && typeof subscription.metadata === 'object' && 'taxType' in subscription.metadata) ? String(subscription.metadata.taxType) : 'Tax'
         }
       });
 
@@ -1848,7 +1883,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: 'created',
         customerEmail: '', // Will be filled from user data
         serviceType: `subscription_${plan.planType}`,
-        description: `Subscription to ${plan.name} plan (₹${subscription.agreedPrice/100} + ₹${subscription.gstAmount/100} GST)`,
+        description: `Subscription to ${plan.name} plan (₹${subscription.agreedPrice/100} + ₹${subscription.gstAmount/100} ${(subscription.metadata && typeof subscription.metadata === 'object' && 'taxType' in subscription.metadata) ? String(subscription.metadata.taxType) : 'Tax'})`,
         razorpayOrderId: razorpayOrder.id,
       });
 
@@ -1940,8 +1975,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.createSubscriptionPayment({
           subscriptionId: subscriptionId,
           amount: paymentAmount, // Total amount including GST
-          baseAmount: subscription.agreedPrice, // Base amount before GST
-          gstAmount: subscription.gstAmount, // GST amount
+          baseAmount: subscription.agreedPrice, // Base amount before tax
+          gstAmount: subscription.gstAmount, // Tax amount (keeping field name for DB compatibility)
           currency: payment.currency,
           status: 'success',
           razorpayPaymentId: razorpay_payment_id,

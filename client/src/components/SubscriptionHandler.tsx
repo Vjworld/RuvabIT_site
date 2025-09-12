@@ -6,6 +6,7 @@ import { AuthModal } from '@/components/AuthModal';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Loader2 } from 'lucide-react';
+import { detectUserLocation, getTaxInfo, getTaxMessage, formatRupees, type LocationData } from '@shared/pricing';
 
 declare global {
   interface Window {
@@ -34,9 +35,36 @@ interface SubscriptionHandlerProps {
 export function SubscriptionHandler({ planId, planName, onSuccess }: SubscriptionHandlerProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [userLocation, setUserLocation] = useState<LocationData | null>(null);
+  const [locationLoading, setLocationLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Detect user location on component mount
+  useEffect(() => {
+    const detectLocation = async () => {
+      try {
+        setLocationLoading(true);
+        const location = await detectUserLocation();
+        setUserLocation(location);
+      } catch (error) {
+        console.warn('Location detection failed:', error);
+        // Fallback to India
+        setUserLocation({
+          country: 'India',
+          countryCode: 'IN',
+          region: '',
+          city: '',
+          timezone: 'Asia/Kolkata'
+        });
+      } finally {
+        setLocationLoading(false);
+      }
+    };
+
+    detectLocation();
+  }, []);
 
   // Get plan details
   const { data: plan, isLoading: planLoading } = useQuery<Plan>({
