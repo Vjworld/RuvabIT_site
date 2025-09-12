@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { SubscriptionHandler } from '@/components/SubscriptionHandler';
 import { Check, Star, Zap, Target } from 'lucide-react';
+import GoToTopButton from '@/components/GoToTopButton';
 
 const PricingPage = () => {
   const flatMonthlyPlans = [
@@ -362,6 +363,7 @@ const PricingPage = () => {
       </main>
 
       <Footer />
+      <GoToTopButton />
     </div>
   );
 };
